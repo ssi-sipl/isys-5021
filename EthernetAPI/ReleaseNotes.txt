@@ -1,0 +1,45 @@
+***************************************************************************************
+
+      II    N     N     N     N      OOOO      SSSSS     EEEEE    N     N    TTTTTTT
+     II    NNN   N     NNN   N    OO    OO    S         E        NNN   N       T
+    II    N NN  N     N NN  N    OO    OO    SSSSS     EEE      N NN  N       T
+   II    N  NN N     N  NN N    OO    OO        S     E        N  NN N       T
+  II    N    NN     N    NN      OOOO      SSSSS     EEEEE    N    NN       T
+                         copyright (c) 2017, InnoSenT GmbH
+                                 all rights reserved
+
+***************************************************************************************
+
+    RELEASE NOTES - ethernetAPI.dll
+
+***************************************************************************************
+
+
+    V 1.3                                                                    2018-05-08
+
+    change log:
+
+  - support and example project for iSYS-5020 added
+
+
+***************************************************************************************
+
+
+    V 1.1                                                                    2017-03-17
+
+    change log:
+
+  - bug fixed
+
+
+***************************************************************************************
+
+    V 1.0                                                                    2017-02-20
+
+    change log:
+
+  - first release
+
+  
+
+***************************************************************************************

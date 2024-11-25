@@ -1,0 +1,694 @@
+***************************************************************************************
+
+      II    N     N     N     N      OOOO      SSSSS     EEEEE    N     N    TTTTTTT 
+     II    NNN   N     NNN   N    OO    OO    S         E        NNN   N       T
+    II    N NN  N     N NN  N    OO    OO    SSSSS     EEE      N NN  N       T
+   II    N  NN N     N  NN N    OO    OO        S     E        N  NN N       T
+  II    N    NN     N    NN      OOOO      SSSSS     EEEEE    N    NN       T
+                         copyright (c) 2016-2022, InnoSenT GmbH
+                                 all rights reserved
+
+***************************************************************************************
+
+    RELEASE NOTES - software package:
+
+    supported devices:
+  - iSYS-5021
+***************************************************************************************
+
+
+   iSYS-5021_2023-04-11.zip                                                  2023-04-11
+
+
+   DOCUMENTATION:
+
+  - 181205_DataSheet_iSYS_5021.pdf
+  
+  - iSYS serial interface protocol rev23.pdf
+
+  - iSYS-5021 user manual rev1.pdf
+
+  - iSYS-5xxx Ethernet Targetlist Protocol_rev4.pdf
+
+   
+   GUI:
+
+  - target viewer manual rev13.pdf
+
+  - Target-Viewer_V1.047.exe
+
+
+   ETHERNET_API:
+  
+  - library_v1.3
+  
+  - ethernetAPI_iSYS-5110_example_VC10_x86
+
+  - ethernetAPI_iSYS-5020_example_VC10_x86
+  
+  - EthernetAPI readMe rev4.pdf
+
+
+   FIRMWARE:
+  
+  - iSYS-502x_v1.017.hex
+
+
+   SMART_TRACKER:
+
+  - Documentation
+
+  - Example_Project
+
+  - Include Files
+
+  - InnoSenT_Tracker_Library
+
+
+   PARAMETER-FILE:
+  
+  - standardParameters_5021_TNK_0001_0002.log
+
+   
+   SERIAL_RADAR_API:
+  
+  - library_v7.018
+
+  - serial_radarAPI_demonstrator
+
+  - serial_radarAPI_example_DOTNET_x86
+
+  - serial_radarAPI_example_Qt_x86
+
+  - serial_radarAPI_IDS_example_VC10_x86 
+
+  - serial_radarAPI_iSYS-4001_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5010_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5020_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5110_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6003_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6004_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6005_example_VC10_x86
+  
+  - serial_radarAPI_iSYS-6006_example_VC10_x86
+
+  - serial radarAPI readMe rev18.pdf
+   
+  
+***************************************************************************************
+
+   iSYS-5021_2022-08-16.zip                                                  2022-08-16
+
+
+   DOCUMENTATION:
+
+  - 181205_DataSheet_iSYS_5021.pdf
+  
+  - iSYS serial interface protocol rev23.pdf
+
+  - iSYS-5021 user manual rev1.pdf
+
+  - iSYS-5xxx Ethernet Targetlist Protocol_rev4.pdf
+
+   
+   GUI:
+
+  - target viewer manual rev13.pdf
+
+  - Target-Viewer_V1.047.exe
+
+
+   ETHERNET_API:
+  
+  - library_v1.3
+  
+  - ethernetAPI_iSYS-5110_example_VC10_x86
+
+  - ethernetAPI_iSYS-5020_example_VC10_x86
+  
+  - EthernetAPI readMe rev4.pdf
+
+
+   FIRMWARE:
+  
+  - iSYS-502x_v1.017.hex
+
+
+   SMART_TRACKER:
+
+  - Documentation
+
+  - Example_Project
+
+  - Include Files
+
+  - InnoSenT_Tracker_Library
+
+
+   PARAMETER-FILE:
+  
+  - standardParameters_5021_TNK_0001_0002.log
+
+   
+   SERIAL_RADAR_API:
+  
+  - library_v7.016
+
+  - serial_radarAPI_demonstrator
+
+  - serial_radarAPI_example_DOTNET_x86
+
+  - serial_radarAPI_example_Qt_x86
+
+  - serial_radarAPI_IDS_example_VC10_x86 
+
+  - serial_radarAPI_iSYS-4001_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5010_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5020_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5110_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6003_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6004_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6005_example_VC10_x86
+  
+  - serial_radarAPI_iSYS-6006_example_VC10_x86
+
+  - serial radarAPI readMe rev18.pdf
+   
+  
+***************************************************************************************
+
+
+   iSYS-5021_2021-11-30.zip                                                  2021-11-30
+
+
+   DOCUMENTATION:
+
+  - 181205_DataSheet_iSYS_5021.pdf
+  
+  - iSYS serial interface protocol rev23.pdf
+
+  - iSYS-5021 user manual rev1.pdf
+
+  - iSYS-5xxx Ethernet Targetlist Protocol_rev4.pdf
+
+   
+   GUI:
+
+  - target viewer manual rev13.pdf
+
+  - Target-Viewer_V1.047.exe
+
+
+   ETHERNET_API:
+  
+  - library_v1.3
+  
+  - ethernetAPI_iSYS-5110_example_VC10_x86
+
+  - ethernetAPI_iSYS-5020_example_VC10_x86
+  
+  - EthernetAPI readMe rev4.pdf
+
+
+   FIRMWARE:
+  
+  - iSYS-502x_v1.016.hex
+
+
+   SMART_TRACKER:
+
+  - Documentation
+
+  - Example_Project
+
+  - Include Files
+
+  - InnoSenT_Tracker_Library
+
+
+   PARAMETER-FILE:
+  
+  - standardParameters_5021_TNK_0001_0002.log
+
+   
+   SERIAL_RADAR_API:
+  
+  - library_v7.016
+
+  - serial_radarAPI_demonstrator
+
+  - serial_radarAPI_example_DOTNET_x86
+
+  - serial_radarAPI_example_Qt_x86
+
+  - serial_radarAPI_IDS_example_VC10_x86 
+
+  - serial_radarAPI_iSYS-4001_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5010_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5020_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5110_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6003_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6004_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6005_example_VC10_x86
+  
+  - serial_radarAPI_iSYS-6006_example_VC10_x86
+
+  - serial radarAPI readMe rev18.pdf
+   
+  
+***************************************************************************************
+
+
+   iSYS-5021_2021-03-09.zip                                                  2021-03-09
+
+
+   DOCUMENTATION:
+
+  - 181205_DataSheet_iSYS_5021.pdf
+  
+  - iSYS serial interface protocol rev23.pdf
+
+  - iSYS-5021 user manual rev1.pdf
+
+  - iSYS-5xxx Ethernet Targetlist Protocol_rev4.pdf
+
+   
+   GUI:
+
+  - target viewer manual rev13.pdf
+
+  - Target-Viewer_V1.042.exe
+
+
+   ETHERNET_API:
+  
+  - library_v1.3
+  
+  - ethernetAPI_iSYS-5110_example_VC10_x86
+
+  - ethernetAPI_iSYS-5020_example_VC10_x86
+  
+  - EthernetAPI readMe rev4.pdf
+
+
+   FIRMWARE:
+  
+  - iSYS-502x_v1.011.hex
+
+
+   SMART_TRACKER:
+
+  - Documentation
+
+  - Example_Project
+
+  - Include Files
+
+  - InnoSenT_Tracker_Library
+
+
+   PARAMETER-FILE:
+  
+  - standardParameters_5021_TNK_0001_0002.log
+
+   
+   SERIAL_RADAR_API:
+  
+  - library_v7.016
+
+  - serial_radarAPI_demonstrator
+
+  - serial_radarAPI_example_DOTNET_x86
+
+  - serial_radarAPI_example_Qt_x86
+
+  - serial_radarAPI_IDS_example_VC10_x86 
+
+  - serial_radarAPI_iSYS-4001_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5010_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5020_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5110_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6003_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6004_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6005_example_VC10_x86
+  
+  - serial_radarAPI_iSYS-6006_example_VC10_x86
+
+  - serial radarAPI readMe rev18.pdf
+   
+  
+***************************************************************************************
+
+
+   iSYS-5021_2020-01-08.zip                                                  2020-01-08
+
+
+   DOCUMENTATION:
+
+  - 181205_DataSheet_iSYS_5021.pdf
+  
+  - iSYS serial interface protocol rev19.pdf
+
+  - iSYS-5021 user manual rev1.pdf
+
+  - iSYS-5xxx Ethernet Targetlist Protocol_rev4.pdf
+
+   
+   GUI:
+
+  - target viewer manual rev13.pdf
+
+  - Target-Viewer_V1.042.exe
+
+
+   ETHERNET_API:
+  
+  - library_v1.3
+  
+  - ethernetAPI_iSYS-5110_example_VC10_x86
+
+  - ethernetAPI_iSYS-5020_example_VC10_x86
+  
+  - EthernetAPI readMe rev4.pdf
+
+
+   FIRMWARE:
+  
+  - iSYS-502x_v1.011.hex
+
+
+   SMART_TRACKER:
+
+  - Documentation
+
+  - Example_Project
+
+  - Include Files
+
+  - InnoSenT_Tracker_Library
+
+
+   PARAMETER-FILE:
+  
+  - standardParameters_5021_TNK_0001_0002.log
+
+   
+   SERIAL_RADAR_API:
+  
+  - library_v7.010
+
+  - serial_radarAPI_demonstrator
+
+  - serial_radarAPI_example_DOTNET_x86
+
+  - serial_radarAPI_example_Qt_x86
+
+  - serial_radarAPI_IDS_example_VC10_x86 
+
+  - serial_radarAPI_iSYS-4001_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5010_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5020_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5110_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6003_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6004_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6005_example_VC10_x86
+  
+  - serial_radarAPI_iSYS-6006_example_VC10_x86
+
+  - serial radarAPI readMe rev17.pdf
+   
+  
+***************************************************************************************
+
+
+   iSYS-5021_2019-06-28.zip                                                  2019-06-28
+
+
+   DOCUMENTATION:
+
+  - 181205_DataSheet_iSYS_5021.pdf
+  
+  - iSYS serial interface protocol rev19.pdf
+
+  - iSYS-5021 user manual rev1.pdf
+
+  - iSYS-5xxx Ethernet Targetlist Protocol_rev4.pdf
+
+   
+   GUI:
+
+  - target viewer manual rev13.pdf
+
+  - Target-Viewer_V1.041.exe
+
+
+   ETHERNET_API:
+  
+  - library_v1.3
+  
+  - ethernetAPI_iSYS-5110_example_VC10_x86
+
+  - ethernetAPI_iSYS-5020_example_VC10_x86
+  
+  - EthernetAPI readMe rev4.pdf
+
+
+   FIRMWARE:
+  
+  - iSYS-502x_v1.011.hex
+
+
+   SMART_TRACKER:
+
+  - Documentation
+
+  - Example_Project
+
+  - Include Files
+
+  - InnoSenT_Tracker_Library
+
+   
+   SERIAL_RADAR_API:
+  
+  - library_v7.001
+
+  - serial_radarAPI_demonstrator
+
+  - serial_radarAPI_example_DOTNET_x86
+
+  - serial_radarAPI_example_Qt_x86
+
+  - serial_radarAPI_IDS_example_VC10_x86 
+
+  - serial_radarAPI_iSYS-5010_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5020_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5110_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6003_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6004_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6005_example_VC10_x86
+  
+  - serial_radarAPI_iSYS-6006_example_VC10_x86
+
+  - serial radarAPI readMe rev16.pdf
+   
+  
+***************************************************************************************
+
+   iSYS-5021_2019-04-01.zip                                                  2019-04-01
+
+
+   DOCUMENTATION:
+
+  - 181205_DataSheet_iSYS_5021.pdf
+  
+  - iSYS serial interface protocol rev19.pdf
+
+  - iSYS-5021 user manual rev1.pdf
+
+  - iSYS-5xxx Ethernet Targetlist Protocol_rev4.pdf
+
+   
+   GUI:
+
+  - target viewer manual rev13.pdf
+
+  - Target-Viewer_V1.033.exe
+
+
+   ETHERNET_API:
+  
+  - library_v1.3
+  
+  - ethernetAPI_iSYS-5110_example_VC10_x86
+
+  - ethernetAPI_iSYS-5020_example_VC10_x86
+  
+  - EthernetAPI readMe rev4.pdf
+
+
+   FIRMWARE:
+  
+  - iSYS-502x_v1.010.hex
+
+
+   SMART_TRACKER:
+
+  - Documentation
+
+  - Example_Project
+
+  - Include Files
+
+  - InnoSenT_Tracker_Library
+
+   
+   SERIAL_RADAR_API:
+  
+  - library_v7.001
+
+  - serial_radarAPI_demonstrator
+
+  - serial_radarAPI_example_DOTNET_x86
+
+  - serial_radarAPI_example_Qt_x86
+
+  - serial_radarAPI_IDS_example_VC10_x86 
+
+  - serial_radarAPI_iSYS-5010_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5020_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5110_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6003_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6004_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6005_example_VC10_x86
+  
+  - serial_radarAPI_iSYS-6006_example_VC10_x86
+
+  - serial radarAPI readMe rev16.pdf
+   
+  
+***************************************************************************************
+
+   iSYS-5021_2018-12-06.zip                                                  2018-12-06
+
+
+   DOCUMENTATION:
+
+  - 181205_DataSheet_iSYS_5021.pdf
+  
+  - iSYS serial interface protocol rev19.pdf
+
+  - iSYS-5021 user manual rev1.pdf
+
+  - iSYS-5xxx Ethernet Targetlist Protocol_rev4.pdf
+
+   
+   GUI:
+
+  - target viewer manual rev13.pdf
+
+  - Target-Viewer_V1.033.exe
+
+
+   ETHERNET_API:
+  
+  - library_v1.3
+  
+  - ethernetAPI_iSYS-5110_example_VC10_x86
+
+  - ethernetAPI_iSYS-5020_example_VC10_x86
+  
+  - EthernetAPI readMe rev4.pdf
+
+
+   FIRMWARE:
+  
+  - iSYS-502x_v1.010.hex
+
+
+   SMART_TRACKER:
+
+  - Documentation
+
+  - Example_Project
+
+  - Include Files
+
+  - InnoSenT_Tracker_Library
+
+   
+   SERIAL_RADAR_API:
+  
+  - library_v7.001
+
+  - serial_radarAPI_demonstrator
+
+  - serial_radarAPI_example_DOTNET_x86
+
+  - serial_radarAPI_example_Qt_x86
+
+  - serial_radarAPI_IDS_example_VC10_x86 
+
+  - serial_radarAPI_iSYS-5010_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5020_example_VC10_x86
+
+  - serial_radarAPI_iSYS-5110_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6003_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6004_example_VC10_x86
+
+  - serial_radarAPI_iSYS-6005_example_VC10_x86
+  
+  - serial_radarAPI_iSYS-6006_example_VC10_x86
+
+  - serial radarAPI readMe rev16.pdf
+   
+  
+***************************************************************************************
+
+
+
+
+

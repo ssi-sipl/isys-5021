@@ -1,0 +1,362 @@
+***************************************************************************************
+
+      II    N     N     N     N      OOOO      SSSSS     EEEEE    N     N    TTTTTTT 
+     II    NNN   N     NNN   N    OO    OO    S         E        NNN   N       T
+    II    N NN  N     N NN  N    OO    OO    SSSSS     EEE      N NN  N       T
+   II    N  NN N     N  NN N    OO    OO        S     E        N  NN N       T
+  II    N    NN     N    NN      OOOO      SSSSS     EEEEE    N    NN       T
+                         copyright (c) 2016-2018, InnoSenT GmbH
+                                 all rights reserved
+
+
+***************************************************************************************
+
+    RELEASE NOTES - Target-Viewer:
+
+***************************************************************************************
+
+    V 1.049 								     2023-03-28
+  								     
+    change log:
+
+  - removed reading the hardware versions
+  - added Interference Filter only for GUI in Tracking
+
+***************************************************************************************
+
+    V 1.047 								     2020-02-18
+  								     
+    change log:
+
+  - bugfix: sensitivity settings for 5010/5020 were displayed at 5011/5021
+  - added online updater
+
+***************************************************************************************
+
+    V 1.046 								     2020-01-22
+  								     
+    change log:
+
+  - reset all tracks after playback rewind or loading a new playback file
+
+***************************************************************************************
+
+    V 1.045 								     2020-01-21
+  								     
+    change log:
+
+  - bugfix: serial port combobox in connection dialog 5021,5020
+  - added udp port to ethernet connection dialog
+  - bugfix: start record button disabled after reconnect ethernet
+  - added new MultiMediaKit Module with camera manager
+
+***************************************************************************************
+
+    V 1.044 								     2019-12-16
+  								     
+    change log:
+
+  - adaption of radar beam to product iSYS-5005
+
+***************************************************************************************
+
+    
+    V 1.043                                                                  2019-11-05
+
+    change log:
+
+  - added support for iSYS-5005
+
+
+***************************************************************************************
+
+    
+    V 1.042                                                                  2019-08-01
+
+    change log:
+
+  - synchronized playback improved
+  - added google maps mapviewer
+  - bugfixes in serial configuration
+
+
+***************************************************************************************
+
+    
+    V 1.041                                                                  2019-06-28
+
+    change log:
+
+  - adjustable threshold margin for iSYS-5021 and iSYS-5011 integrated
+  - Smart Tracker Version updated
+
+
+***************************************************************************************
+
+
+    V 1.038                                                                  2019-03-04
+
+    change log:
+
+  - bugfix subpoint alarm/ignore zones in wizard
+  - bugfix connect to iSYS-5021
+
+
+***************************************************************************************
+
+  
+    V 1.036                                                                  2019-01-25
+
+    change log:
+
+  - changed classification icon "other"
+
+
+***************************************************************************************
+
+  
+    V 1.035                                                                  2018-12-06
+
+    change log:
+
+  - Smart Tracker Version updated
+  - bugfix memory leakage
+
+
+***************************************************************************************
+
+  
+    V 1.032                                                                  2018-11-20
+
+    change log:
+
+  - support of iSYS-5011 and iSYS-5021
+  - Smart Tracker integrated
+
+
+***************************************************************************************
+
+
+    V 1.030                                                                  2018-05-17
+
+    change log:
+
+  - added new licensing system
+
+
+***************************************************************************************
+
+  
+    V 1.029                                                                  2018-05-09
+
+    change log:
+
+  - disabled  tracker function
+
+
+***************************************************************************************
+
+  
+    V 1.028                                                                  2018-05-07
+
+    change log:
+
+  - changed iSYS-5020 sensitivity default values
+  - enabled iSYS-5020 RCS and Clusterung Options
+
+
+***************************************************************************************
+
+  
+    V 1.027                                                                  2018-04-24
+
+    change log:
+
+  - set Default Tracker Parameter for iSYS-5020
+  - enabled save/load parameter dialog for iSYS-5020
+  - bugfix iSYS-5020 startframe recognition
+
+
+***************************************************************************************
+
+  
+    V 1.026                                                                  2018-04-10
+
+    change log:
+
+  - added wizard videos
+  - bugfixes
+  - small changes
+
+
+***************************************************************************************
+
+  
+    V 1.025                                                                  2018-04-03
+
+    change log:
+
+  - added switch SPI/ETH for iSYS-5020
+  - changed circle lines for iSYS-5020
+
+
+***************************************************************************************
+  
+    V 1.024                                                                  2018-03-19
+
+    change log:
+
+  - added new Plot with Google Maps support
+  - added basic tracker
+  - added license system
+
+
+***************************************************************************************
+
+  
+    V 1.023                                                                  2018-02-07
+
+    change log:
+
+  - added recording and playback function for iSYS-5010
+
+
+***************************************************************************************
+  
+    V 1.022                                                                  2018-01-09
+
+    change log:
+
+  - bugfix: ethernetapi
+
+
+***************************************************************************************
+
+  
+    V 1.021                                                                  2017-12-19
+
+    change log:
+
+  - added support for iSYS-5020
+
+
+***************************************************************************************
+
+  
+    V 1.020                                                                  2017-11-30
+
+    change log:
+
+  - added sensitivity configuration for near, main and long margin (iSYS-5010)
+
+
+***************************************************************************************
+
+  
+    V 1.019                                                                  2017-03-21
+
+    change log:
+
+  - small bugfixes
+
+
+***************************************************************************************
+
+  
+    V 1.018                                                                  2017-03-17
+
+    change log:
+
+  - support for iSYS-5110 added
+
+
+***************************************************************************************
+
+  
+    V 1.012                                                                  2017-01-12
+
+    change log:
+
+  - activated parameter file upload/download for customers
+  - added save/load last path at firmware update and read/write parameterfile
+
+
+***************************************************************************************
+
+  
+    V 1.011                                                                  2016-12-16
+
+    change log:
+
+  - added function for iESL-2444 support
+
+
+
+***************************************************************************************
+
+  
+    V 1.010                                                                  2016-11-30
+
+    change log:
+
+  - changed colors in plot to recognize moving direction (recedeing, approaching)
+  - added buttons to enable and disable clustering and RCS output
+
+
+
+***************************************************************************************
+
+
+    V 1.008                                                                  2016-11-11
+
+    change log:
+
+  - added frequency channels
+  - added firmware update
+  - added target clustering menu
+
+
+***************************************************************************************
+
+
+    V 1.007                                                                  2016-10-24
+
+    change log:
+
+  - added more frequency channels
+
+
+***************************************************************************************
+
+
+    V 1.006                                                                  2016-10-17
+
+    change log:
+
+  - added frequency channels
+
+
+***************************************************************************************
+
+
+    V 1.005                                                                  2016-10-05
+
+    change log:
+
+  - SPI Beagle Speed improvment
+  - reactivated windows xp support
+
+
+***************************************************************************************
+
+    V 1.003                                                                  2016-08-26
+
+    change log:
+
+  - changed plotting stuff
+  - optimized beagle init to get a smooth target view
+  - set beam to 55 degree and paint it radial
+  - bugfixes
+
+
+***************************************************************************************

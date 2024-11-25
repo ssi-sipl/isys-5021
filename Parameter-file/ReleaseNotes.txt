@@ -1,0 +1,32 @@
+***************************************************************************************
+
+      II    N     N     N     N      OOOO      SSSSS     EEEEE    N     N    TTTTTTT 
+     II    NNN   N     NNN   N    OO    OO    S         E        NNN   N       T
+    II    N NN  N     N NN  N    OO    OO    SSSSS     EEE      N NN  N       T
+   II    N  NN N     N  NN N    OO    OO        S     E        N  NN N       T
+  II    N    NN     N    NN      OOOO      SSSSS     EEEEE    N    NN       T
+                         copyright (c) 2016-2019, InnoSenT GmbH
+                                 all rights reserved
+
+***************************************************************************************
+
+    RELEASE NOTES - iSYS-5021 parameter-file:
+
+***************************************************************************************
+
+
+
+    standardParameters_5021_TNK_0001_0002.log                                2018-11-01
+
+    change log:
+
+  - first release
+
+
+
+***************************************************************************************
+
+
+
+
+

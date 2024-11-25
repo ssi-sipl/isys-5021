@@ -1,0 +1,58 @@
+***************************************************************************************
+
+      II    N     N     N     N      OOOO      SSSSS     EEEEE    N     N    TTTTTTT 
+     II    NNN   N     NNN   N    OO    OO    S         E        NNN   N       T
+    II    N NN  N     N NN  N    OO    OO    SSSSS     EEE      N NN  N       T
+   II    N  NN N     N  NN N    OO    OO        S     E        N  NN N       T
+  II    N    NN     N    NN      OOOO      SSSSS     EEEEE    N    NN       T
+                         copyright (c) 2022, InnoSenT GmbH
+                                 all rights reserved
+
+***************************************************************************************
+
+    RELEASE NOTES - iSYS-502x firmware:
+
+***************************************************************************************
+
+
+
+    iSYS-502x_v1.017.hex                                                     2022-08-16
+
+    change log:
+
+  - fixed bug in internal EOL function  
+
+
+***************************************************************************************
+
+
+
+    iSYS-502x_v1.016.hex                                                     2021-11-30
+
+    change log:
+
+  - fixed bug: periodically sending serial (UART) request could cause a restart of the sensor    
+
+
+***************************************************************************************
+
+
+
+    iSYS-502x_v1.011.hex                                                     2019-06-28
+
+    change log:
+
+  - sensitivity adapted
+
+
+***************************************************************************************
+
+
+    iSYS-502x_v1.010.hex                                                     2018-11-22
+
+    change log:
+
+  - first release
+
+
+***************************************************************************************

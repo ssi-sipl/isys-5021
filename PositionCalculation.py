@@ -1,18 +1,36 @@
 import math
 import datetime
 
+def classify_object_by_signal(signal_strength):
+    """
+    Classify object based on signal strength.
+    Thresholds are assumed and can be adjusted based on real-world calibration.
+    """
+    if signal_strength > 80:
+        return "truck"
+    elif 50 <= signal_strength <= 80:
+        return "car"
+    elif 20 <= signal_strength < 50:
+        return "person"
+    else:
+        return "unknown"
+
 def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A", lat_radar=22.345678, lon_radar=73.123456):
     try:
+        frame_id = data.get("frameid")
         range_m = data.get("range")
         azimuth_deg = data.get("azimuth")
-        obj_class = data.get("classification")
+        signal_strength = data.get("signal_strength")
         timestamp = data.get("timestamp", datetime.datetime.utcnow().isoformat() + "Z")
 
-        if range_m is None or azimuth_deg is None or obj_class is None:
-            raise ValueError("Missing required fields: 'range', 'azimuth', or 'classification'.")
+        if range_m is None or azimuth_deg is None or signal_strength is None:
+            raise ValueError("Missing required fields: 'range', 'azimuth', or 'signal_strength'.")
 
         if not (0 <= azimuth_deg <= 360):
             raise ValueError("Azimuth angle must be between 0 and 360 degrees.")
+        
+        # Classify object based on signal strength
+        obj_class = classify_object_by_signal(signal_strength)
         
         # Convert azimuth to radians
         azimuth_rad = math.radians(azimuth_deg)
@@ -39,7 +57,11 @@ def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A", lat_radar=2
             "object_detected": True,
             "classification": obj_class,
             "latitude": obj_lat,
-            "longitude": obj_lon
+            "longitude": obj_lon,
+            "frame_id": frame_id,
+            "range": range_m,
+            "azimuth": azimuth_deg,
+            "signal_strength": signal_strength
         }
         return result
 
@@ -58,7 +80,7 @@ data_input_150m = {
     "frameid": 101,
     "range": 100,
     "azimuth": 45,
-    "classification": "car",
+    "signal_strength": 75,
     "timestamp": "2025-01-06T12:50:30Z"
 }
 

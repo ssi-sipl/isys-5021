@@ -118,7 +118,8 @@ class SocketManager:
                     "longitude": parsed_data["longitude"],
                     "classification": parsed_data["classification"]
                 })
-
+            
+            print("Value Dict: ", value_dict)
             targets.append(value_dict)
             # print("Target Type: ", type(targets))
         

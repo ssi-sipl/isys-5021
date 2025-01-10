@@ -2,6 +2,9 @@ import math
 import datetime
 import geocoder
 
+# Store radar's location globally
+radar_latlng = None
+
 def classify_object_by_signal(signal_strength):
     signal_strength = abs(signal_strength)
     if signal_strength > 80:
@@ -14,11 +17,14 @@ def classify_object_by_signal(signal_strength):
         return "unknown"
 
 def get_current_location():
-    g = geocoder.ip('me')
-    if g.ok:
-        return g.latlng
-    else:
-        return [0.0, 0.0]  # Default to (0, 0) if location can't be fetched
+    global radar_latlng
+    if radar_latlng is None:
+        g = geocoder.ip('me')
+        if g.ok:
+            radar_latlng = g.latlng  # Fetch and store the radar's location
+        else:
+            radar_latlng = [0.0, 0.0]  # Default to (0, 0) if location can't be fetched
+    return radar_latlng
 
 def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A"):
     try:

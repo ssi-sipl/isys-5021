@@ -1,6 +1,7 @@
 import math
 import datetime
-import geocoder
+# import geocoder
+import requests
 
 # Store radar's location globally
 radar_latlng = None
@@ -16,15 +17,35 @@ def classify_object_by_signal(signal_strength):
     else:
         return "unknown"
 
+# def get_current_location():
+#     global radar_latlng
+#     if radar_latlng is None:
+#         g = geocoder.ip('me', key="c316bcb9bb1ce0")
+#         if g.ok:
+#             radar_latlng = g.latlng  # Fetch and store the radar's location
+#         else:
+#             radar_latlng = [0.0, 0.0]  # Default to (0, 0) if location can't be fetched
+#     return radar_latlng
+
 def get_current_location():
-    global radar_latlng
-    if radar_latlng is None:
-        g = geocoder.ip('me', key="c316bcb9bb1ce0")
-        if g.ok:
-            radar_latlng = g.latlng  # Fetch and store the radar's location
-        else:
-            radar_latlng = [0.0, 0.0]  # Default to (0, 0) if location can't be fetched
-    return radar_latlng
+    try:
+        global radar_latlng
+        if radar_latlng is None:
+            # Send request to IPInfo API with your API key
+            response = requests.get(f'https://ipinfo.io/json?token=c316bcb9bb1ce0')
+            if response.status_code == 200:
+                # Extract the location data from the response
+                data = response.json()
+                location = data.get("loc", "0.0,0.0")
+                lat, lon = map(float, location.split(','))
+                return [lat, lon]
+            else:
+                print("Failed to fetch location")
+                return [0.0, 0.0]  # Default if location can't be fetched
+        return radar_latlng
+    except Exception as e:
+        print(f"Error fetching location: {e}")
+        return [0.0, 0.0]  # Default if there's an error
 
 def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A"):
     try:

@@ -1,11 +1,13 @@
 import math
 import datetime
+import geocoder  # Install using: pip install geocoder
 
 def classify_object_by_signal(signal_strength):
     """
     Classify object based on signal strength.
     Thresholds are assumed and can be adjusted based on real-world calibration.
     """
+    signal_strength = abs(signal_strength)  # Take absolute value before classification
     if signal_strength > 80:
         return "truck"
     elif 50 <= signal_strength <= 80:
@@ -15,20 +17,33 @@ def classify_object_by_signal(signal_strength):
     else:
         return "unknown"
 
-def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A", lat_radar=22.345678, lon_radar=73.123456):
+def get_current_location():
+    """
+    Fetch the current latitude and longitude of the device using geocoder.
+    """
+    g = geocoder.ip('me')
+    if g.ok:
+        return g.latlng  # Returns [latitude, longitude]
+    else:
+        raise RuntimeError("Unable to fetch current location")
+
+def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A"):
     try:
+        # Fetch current radar location
+        lat_radar, lon_radar = get_current_location()
+
         frame_id = data.get("frameid")
         range_m = data.get("range")
         azimuth_deg = data.get("azimuth")
-        signal_strength = abs(data.get("signal_strength", 0))  # Take the absolute value of signal strength
+        signal_strength = data.get("signal_strength")
         timestamp = data.get("timestamp", datetime.datetime.utcnow().isoformat() + "Z")
 
-        if range_m is None or azimuth_deg is None:
-            raise ValueError("Missing required fields: 'range' or 'azimuth'.")
+        if range_m is None or azimuth_deg is None or signal_strength is None:
+            raise ValueError("Missing required fields: 'range', 'azimuth', or 'signal_strength'.")
 
         if not (0 <= azimuth_deg <= 360):
-            azimuth_deg %= 360  # Normalize azimuth to be within 0-360 degrees
-
+            raise ValueError("Azimuth angle must be between 0 and 360 degrees.")
+        
         # Classify object based on signal strength
         obj_class = classify_object_by_signal(signal_strength)
         
@@ -56,11 +71,11 @@ def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A", lat_radar=2
             "timestamp": timestamp,
             "object_detected": True,
             "classification": obj_class,
-            "latitude": round(obj_lat, 8),
-            "longitude": round(obj_lon, 8),
+            "latitude": obj_lat,
+            "longitude": obj_lon,
             "frame_id": frame_id,
-            "range": round(range_m, 2),
-            "azimuth": round(azimuth_deg, 2),
+            "range": range_m,
+            "azimuth": azimuth_deg,
             "signal_strength": signal_strength
         }
         return result
@@ -71,12 +86,15 @@ def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A", lat_radar=2
     except KeyError as ke:
         print(f"KeyError: {ke}")
         return None
+    except RuntimeError as re:
+        print(f"RuntimeError: {re}")
+        return None
     except Exception as e:
         print(f"Unexpected error: {e}")
         return None
 
+# Example usage
 if __name__ == "__main__":
-    # Example usage
     data_input_150m = {
         "frameid": 101,
         "range": 100,

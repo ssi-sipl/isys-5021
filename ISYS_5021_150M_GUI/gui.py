@@ -137,8 +137,8 @@ class RadarApp:
             self.text_display.insert(tk.END, f"Serial {idx}:\n")
                 
                 # Insert all parameters from the target object
-            self.text_display.insert(tk.END, f"Radar ID: {target['radar_id']}\n")
-            self.text_display.insert(tk.END, f"Area ID: {target['area_id']}\n")
+            # self.text_display.insert(tk.END, f"Radar ID: {target['radar_id']}\n")
+            # self.text_display.insert(tk.END, f"Area ID: {target['area_id']}\n")
             self.text_display.insert(tk.END, f"Timestamp: {target['timestamp']}\n")
             self.text_display.insert(tk.END, f"Object Detected: {'Yes' if target['object_detected'] else 'No'}\n")
             self.text_display.insert(tk.END, f"Signal Strength: {target['signal_strength']} dB\n")

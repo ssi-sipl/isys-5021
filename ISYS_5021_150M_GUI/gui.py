@@ -93,12 +93,16 @@ class RadarApp:
             for idx, target in enumerate(serials, start=1):
                 
                 direction = "Static" if target["velocity"] == 0 else "Incoming" if target["velocity"] > 0 else "Outgoing"
-                self.text_display.insert(tk.END, f"\nFrame ID: {frame_id}\n"f"Serial {idx}: \n"
-                                             f"Signal Strength: {target['signal_strength']} dB\n"
-                                             f"Range: {target['range']} m\n"
-                                             f"Velocity: {target['velocity']} m/s\n"
-                                             f"Direction: {direction}\n"
-                                             f"Azimuth: {target['azimuth']}°\n")
+                self.text_display.insert(tk.END, f"\nFrame ID: {frame_id}\n")
+                self.text_display.insert(tk.END, f"Serial {idx}:\n")
+                self.text_display.insert(tk.END, f"Signal Strength: {target['signal_strength']} dB\n")
+                self.text_display.insert(tk.END, f"Range: {target['range']} m\n")
+                self.text_display.insert(tk.END, f"Velocity: {target['velocity']} m/s\n")
+                self.text_display.insert(tk.END, f"Direction: {direction}\n")
+                self.text_display.insert(tk.END, f"Azimuth: {target['azimuth']}°\n")
+                self.text_display.insert(tk.END, f"Latitude: {target['latitude']}\n")
+                self.text_display.insert(tk.END, f"Longitude: {target['longitude']}\n")
+                self.text_display.insert(tk.END, f"Classification: {target['classification']}\n")
                 
             self.text_display.insert(tk.END, "-" * 50 + "\n")
         else:

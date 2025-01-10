@@ -1,6 +1,8 @@
 import socket
 import struct
 import threading
+import datetime
+from ..PositionCalculation import parse_isys5021_data  # Importing the lat-lon parser
 
 class SocketManager:
     def __init__(self, local_ip, local_port, data_callback):
@@ -105,8 +107,18 @@ class SocketManager:
                 'range': round(range_, 2),
                 'velocity': round(velocity, 2),
                 'azimuth': round(azimuth, 2),
+                'timestamp': datetime.datetime.utcnow().isoformat() + "Z"
             }
-            
+
+            # Call the lat-lon parser
+            parsed_data = parse_isys5021_data(value_dict)
+            if parsed_data:
+                value_dict.update({
+                    "latitude": parsed_data["latitude"],
+                    "longitude": parsed_data["longitude"],
+                    "classification": parsed_data["classification"]
+                })
+
             targets.append(value_dict)
             # print("Target Type: ", type(targets))
         

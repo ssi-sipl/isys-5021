@@ -7,11 +7,11 @@ radar_latlng = None
 
 def classify_object_by_signal(signal_strength):
     signal_strength = abs(signal_strength)
-    if signal_strength > 80:
+    if signal_strength > 50:  # Objects with high signal strength
         return "truck"
-    elif 50 <= signal_strength <= 80:
+    elif 30 <= signal_strength <= 50:  # Medium signal strength
         return "car"
-    elif 20 <= signal_strength < 50:
+    elif 10 <= signal_strength < 30:  # Weak signal strength, maybe a person
         return "person"
     else:
         return "unknown"

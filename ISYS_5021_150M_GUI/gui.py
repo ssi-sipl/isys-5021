@@ -91,6 +91,8 @@ class RadarApp:
             self.text_display.insert(tk.END, "-" * 50 + "\n")
             
             for idx, target in enumerate(serials, start=1):
+
+                print(f"Target: {target}")
                 
                 direction = "Static" if target["velocity"] == 0 else "Incoming" if target["velocity"] > 0 else "Outgoing"
                 self.text_display.insert(tk.END, f"\nFrame ID: {frame_id}\n")

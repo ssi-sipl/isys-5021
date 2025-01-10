@@ -23,7 +23,7 @@ def get_current_location():
     """
     g = geocoder.ip('me')
     if g.ok:
-        print("Radar's Lat Long: ", g.latlng[0], g.latlng[1])
+        # print("Radar's Lat Long: ", g.latlng[0], g.latlng[1])
         return g.latlng  # Returns [latitude, longitude]
     else:
         raise RuntimeError("Unable to fetch current location")
@@ -46,7 +46,8 @@ def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A"):
             raise ValueError("Azimuth angle must be between 0 and 360 degrees.")
         
         # Classify object based on signal strength
-        obj_class = classify_object_by_signal(signal_strength)
+        
+        obj_class = classify_object_by_signal(abs(signal_strength))
         
         # Convert azimuth to radians
         azimuth_rad = math.radians(azimuth_deg)

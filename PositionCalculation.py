@@ -50,7 +50,7 @@ def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A"):
         obj_class = classify_object_by_signal(abs(signal_strength))
         
         # Convert azimuth to radians
-        azimuth_rad = math.radians(azimuth_deg)
+        azimuth_rad = math.radians(abs(azimuth_deg))
         
         # Calculate (x, y) coordinates relative to the radar
         x = range_m * math.cos(azimuth_rad)

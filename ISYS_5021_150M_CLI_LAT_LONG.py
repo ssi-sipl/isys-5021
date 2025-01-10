@@ -60,7 +60,7 @@ def parse_data_packet(data):
                 "longitude": parsed_data["longitude"],
                 "classification": parsed_data["classification"]
             })
-        
+
         targets.append(target)
 
     if targets:

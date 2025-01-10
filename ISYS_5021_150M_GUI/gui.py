@@ -8,7 +8,7 @@ import json
 class RadarApp:
     def __init__(self):
         self.root = tk.Tk()
-        self.root.title("150M DATA PARSER (ISYS 5021)")
+        self.root.title("150M DATA PARSER (ISYS 5021) Lat Long")
         self.data_manager = DataManager()
         self.socket_manager = SocketManager("192.168.252.2", 2050, self.process_data)
         self.build_gui()

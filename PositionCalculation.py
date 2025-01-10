@@ -23,6 +23,7 @@ def get_current_location():
     """
     g = geocoder.ip('me')
     if g.ok:
+        print("Radar's Lat Long: ", g.latlng[0], g.latlng[1])
         return g.latlng  # Returns [latitude, longitude]
     else:
         raise RuntimeError("Unable to fetch current location")

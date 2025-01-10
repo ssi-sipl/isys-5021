@@ -2,7 +2,7 @@ import socket
 import struct
 import threading
 import datetime
-from ..PositionCalculation import parse_isys5021_data  # Importing the lat-lon parser
+from PositionCalculation import parse_isys5021_data  # Importing the lat-lon parser
 
 class SocketManager:
     def __init__(self, local_ip, local_port, data_callback):

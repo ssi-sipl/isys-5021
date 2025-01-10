@@ -97,6 +97,12 @@ class RadarApp:
                 direction = "Static" if target["velocity"] == 0 else "Incoming" if target["velocity"] > 0 else "Outgoing"
                 self.text_display.insert(tk.END, f"\nFrame ID: {frame_id}\n")
                 self.text_display.insert(tk.END, f"Serial {idx}:\n")
+                
+                # Insert all parameters from the target object
+                self.text_display.insert(tk.END, f"Radar ID: {target['radar_id']}\n")
+                self.text_display.insert(tk.END, f"Area ID: {target['area_id']}\n")
+                self.text_display.insert(tk.END, f"Timestamp: {target['timestamp']}\n")
+                self.text_display.insert(tk.END, f"Object Detected: {'Yes' if target['object_detected'] else 'No'}\n")
                 self.text_display.insert(tk.END, f"Signal Strength: {target['signal_strength']} dB\n")
                 self.text_display.insert(tk.END, f"Range: {target['range']} m\n")
                 self.text_display.insert(tk.END, f"Velocity: {target['velocity']} m/s\n")
@@ -105,6 +111,8 @@ class RadarApp:
                 self.text_display.insert(tk.END, f"Latitude: {target['latitude']}\n")
                 self.text_display.insert(tk.END, f"Longitude: {target['longitude']}\n")
                 self.text_display.insert(tk.END, f"Classification: {target['classification']}\n")
+                self.text_display.insert(tk.END, f"Distance to Target: {target['distance_to_target']} m\n")
+
                 
             self.text_display.insert(tk.END, "-" * 50 + "\n")
         else:

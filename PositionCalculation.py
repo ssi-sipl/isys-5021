@@ -1,6 +1,5 @@
 import math
 import datetime
-# import geocoder
 import requests
 
 # Store radar's location globally
@@ -16,16 +15,6 @@ def classify_object_by_signal(signal_strength):
         return "person"
     else:
         return "unknown"
-
-# def get_current_location():
-#     global radar_latlng
-#     if radar_latlng is None:
-#         g = geocoder.ip('me', key="c316bcb9bb1ce0")
-#         if g.ok:
-#             radar_latlng = g.latlng  # Fetch and store the radar's location
-#         else:
-#             radar_latlng = [0.0, 0.0]  # Default to (0, 0) if location can't be fetched
-#     return radar_latlng
 
 def get_current_location():
     try:
@@ -47,6 +36,20 @@ def get_current_location():
         print(f"Error fetching location: {e}")
         return [0.0, 0.0]  # Default if there's an error
 
+def haversine_distance(lat1, lon1, lat2, lon2):
+    """Calculate the great-circle distance between two points on the Earth's surface."""
+    # Radius of the Earth in kilometers
+    R = 6371.0
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    delta_phi = math.radians(lat2 - lat1)
+    delta_lambda = math.radians(lon2 - lon1)
+
+    a = math.sin(delta_phi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    return R * c * 1000  # Return distance in meters
+
 def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A"):
     try:
         lat_radar, lon_radar = get_current_location()
@@ -63,14 +66,23 @@ def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A"):
         azimuth_deg = azimuth_deg % 360
 
         obj_class = classify_object_by_signal(signal_strength)
+
+        # Updated latitude and longitude calculation
         azimuth_rad = math.radians(azimuth_deg)
         x = range_m * math.cos(azimuth_rad)
         y = range_m * math.sin(azimuth_rad)
-        earth_radius = 6371000
+        earth_radius = 6371000  # Earth's radius in meters
+
+        # Calculate the change in latitude and longitude
         delta_lat = (y / earth_radius) * (180 / math.pi)
         delta_lon = (x / (earth_radius * math.cos(math.radians(lat_radar)))) * (180 / math.pi)
+
+        # Calculate target's latitude and longitude
         obj_lat = lat_radar + delta_lat
         obj_lon = lon_radar + delta_lon
+
+        # Calculate the distance from the radar to the detected target
+        distance_to_target = haversine_distance(lat_radar, lon_radar, obj_lat, obj_lon)
 
         result = {
             "radar_id": radar_id,
@@ -83,7 +95,8 @@ def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A"):
             "frame_id": frame_id,
             "range": range_m,
             "azimuth": azimuth_deg,
-            "signal_strength": signal_strength
+            "signal_strength": signal_strength,
+            "distance_to_target": distance_to_target
         }
         return result
 
@@ -100,7 +113,8 @@ def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A"):
             "frame_id": data.get("frameid"),
             "range": data.get("range"),
             "azimuth": data.get("azimuth"),
-            "signal_strength": data.get("signal_strength")
+            "signal_strength": data.get("signal_strength"),
+            "distance_to_target": None
         }
 
 # Example usage

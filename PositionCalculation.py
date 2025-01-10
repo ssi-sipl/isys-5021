@@ -19,7 +19,7 @@ def classify_object_by_signal(signal_strength):
 def get_current_location():
     global radar_latlng
     if radar_latlng is None:
-        g = geocoder.ip('me')
+        g = geocoder.ip('me', key="c316bcb9bb1ce0")
         if g.ok:
             radar_latlng = g.latlng  # Fetch and store the radar's location
         else:

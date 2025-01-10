@@ -90,6 +90,7 @@ def parse_isys5021_data(data, radar_id="iSYS5021", area_id="Zone A"):
             "signal_strength": signal_strength,
             "distance_to_target": distance_to_target  # Adding the distance to the target
         }
+        print(f"Result: {result}")        
         return result
 
     except Exception as e:

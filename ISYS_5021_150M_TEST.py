@@ -86,9 +86,10 @@ def parse_data_packet(data, frame_id):
             'azimuth': round(azimuth, 2),
         })
     
-    print(f"Frame ID: {frame_id}")
+   
     
     if targets:
+        print(f"Frame ID: {frame_id}")
         print("Detected Targets:")
         print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)'}")
         print("-" * 110)
@@ -110,9 +111,10 @@ def process_packet(header_data, data_packet):
     calculated_checksum = calculate_checksum(data_packet, targets, bytes_per_target)
     
     if calculated_checksum != expected_checksum:
-        print(f"Checksum: Not Okay")
+        # print(f"Checksum: Not Okay")
+        pass
     else:
-        print(f"Checksum: Okay")
+        # print(f"Checksum: Okay")
         parse_data_packet(data_packet, frame_id=frame_id)
 
 # Main Loop
@@ -129,7 +131,7 @@ def main():
         while True:
             header_data, addr = sock.recvfrom(header_size)
             data_packet, addr = sock.recvfrom(data_packet_size)
-            print("Packet Recieved")
+            # print("Packet Recieved")
             process_packet(header_data, data_packet)
             print("-" * 50)
 

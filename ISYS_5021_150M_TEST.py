@@ -78,12 +78,21 @@ def parse_data_packet(data, frame_id):
 
         # Apply Kalman filter for velocity tracking
         filtered_velocity = kalman_filter_velocity.update(velocity)
+
+        # calculating the x and y position of the target
+        azimuth_angle_radians = math.radians(azimuth)
+    
+        # Calculate the x and y positions using trigonometry
+        x = range_ * math.cos(azimuth_angle_radians)
+        y = range_ * math.sin(azimuth_angle_radians)
         
         targets.append({
             'signal_strength': round(signal_strength, 2),
             'range': round(range_, 2),
             'velocity': round(filtered_velocity, 2),
             'azimuth': round(azimuth, 2),
+            'x': round(x, 2),   
+            'y': round(y, 2)
         })
     
    
@@ -91,11 +100,11 @@ def parse_data_packet(data, frame_id):
     if targets:
         print(f"Frame ID: {frame_id}")
         print("Detected Targets:")
-        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)'}")
+        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25}")
         print("-" * 110)
         for idx, target in enumerate(targets, start=1):
             direction = "Static" if target["velocity"] == 0 else "Incomming" if target["velocity"] > 0 else "Outgoing"
-            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {direction:<15} {target['azimuth']}")
+            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {direction:<15} {target['azimuth']:<25} {target['x']} {target['y']:<25}")
                     
         print("-" * 50)
 

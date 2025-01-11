@@ -98,29 +98,28 @@ def parse_data_packet(data, frame_id):
 # Global list to store targets in real-time
 all_targets = []
 
-# Plotting setup
-fig, ax = plt.subplots(figsize=(8, 8))
-ax.set_xlim(-max_range, max_range)
-ax.set_ylim(-max_range, max_range)
-ax.set_aspect('equal')
-ax.set_xlabel("X (meters)")
-ax.set_ylabel("Y (meters)")
-ax.set_title(f"Radar Detection Area (Azimuth: ±{max_azimuth}°, Range: {max_range}m)")
+# Radar Plot Setup
+fig = plt.figure(figsize=(8, 8))
+ax = fig.add_subplot(111, polar=True)
+ax.set_xlim(-math.radians(max_azimuth), math.radians(max_azimuth))  # Set azimuth limits
+ax.set_ylim(0, max_range)  # Set range limits
+ax.set_title(f"Radar Field of Vision (±{max_azimuth}° Azimuth, {max_range}m Range)")
 
-# Function to update the plot in real-time
+# Function to update the radar plot in real-time
 def update_plot(frame):
     ax.clear()
-    ax.set_xlim(-max_range, max_range)
-    ax.set_ylim(-max_range, max_range)
-    ax.set_aspect('equal')
-    ax.set_xlabel("X (meters)")
-    ax.set_ylabel("Y (meters)")
-    ax.set_title(f"Radar Detection Area (Azimuth: ±{max_azimuth}°, Range: {max_range}m)")
+    ax.set_xlim(-math.radians(max_azimuth), math.radians(max_azimuth))  # Set azimuth limits
+    ax.set_ylim(0, max_range)  # Set range limits
+    ax.set_title(f"Radar Field of Vision (±{max_azimuth}° Azimuth, {max_range}m Range)")
+
+    # Plot the radar field of vision (light blue filled region)
+    ax.fill_between(np.linspace(-math.radians(max_azimuth), math.radians(max_azimuth), 100),
+                    0, max_range, color='lightblue', alpha=0.5)
     
-    # Plot detected targets
-    x_vals = [target['x'] for target in all_targets]
-    y_vals = [target['y'] for target in all_targets]
-    ax.scatter(x_vals, y_vals, color='red', label="Detected Target")
+    # Plot detected targets on the radar field
+    for target in all_targets:
+        azimuth_angle_radians = math.radians(target['azimuth'])
+        ax.plot(azimuth_angle_radians, target['range'], 'ro')  # Plot targets as red dots
 
 # Main Loop
 def main():

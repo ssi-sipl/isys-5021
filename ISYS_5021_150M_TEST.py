@@ -54,13 +54,13 @@ def parse_header(data):
         header_format, data[:header_size]
     )
     
-    print(f"Frame ID: {frame_id}")
-    print(f"Number of Targets: {targets}")
+    # print(f"Frame ID: {frame_id}")
+    # print(f"Number of Targets: {targets}")
     
-    return detections, targets, data_packets, checksum, bytes_per_target
+    return detections, targets, data_packets, checksum, bytes_per_target, frame_id
 
 # Parse Data Packet
-def parse_data_packet(data):
+def parse_data_packet(data, frame_id):
     target_format = '<ffffII'  # Signal Strength, Range, Velocity, Azimuth, Reserved1, Reserved2
     target_size = struct.calcsize(target_format)
     target_list = data[4:]
@@ -86,6 +86,8 @@ def parse_data_packet(data):
             'azimuth': round(azimuth, 2),
         })
     
+    print(f"Frame ID: {frame_id}")
+    
     if targets:
         print("Detected Targets:")
         print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)'}")
@@ -94,11 +96,12 @@ def parse_data_packet(data):
             direction = "Static" if target["velocity"] == 0 else "Incomming" if target["velocity"] > 0 else "Outgoing"
             print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {direction:<15} {target['azimuth']}")
     else:
-        print("No valid targets detected in this packet.")
+        pass
+        # print("No valid targets detected in this packet.")
 
 # Process Packet
 def process_packet(header_data, data_packet):
-    detections, targets, data_packets, expected_checksum, bytes_per_target = parse_header(header_data)
+    detections, targets, data_packets, expected_checksum, bytes_per_target, frame_id = parse_header(header_data)
     
     if targets is None:
         return
@@ -110,7 +113,7 @@ def process_packet(header_data, data_packet):
         print(f"Checksum: Not Okay")
     else:
         print(f"Checksum: Okay")
-        parse_data_packet(data_packet)
+        parse_data_packet(data_packet, frame_id=frame_id)
 
 # Main Loop
 def main():

@@ -5,7 +5,7 @@ import numpy as np
 
 # Define thresholds for valid detection
 SNR_THRESHOLD = 3  # Example SNR threshold (in dB)
-SIGNAL_STRENGTH_THRESHOLD = 0.5  # Minimum valid signal strength (in dB)
+SIGNAL_STRENGTH_THRESHOLD = 10  # Minimum valid signal strength (in dB)
 
 # Simple Moving Average Filter
 def moving_average_filter(data, window_size=5):

@@ -88,10 +88,10 @@ def parse_data_packet(data):
     
     if targets:
         print("Detected Targets:")
+        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)'}")
+        print("-" * 110)
         for idx, target in enumerate(targets, start=1):
             direction = "Static" if target["velocity"] == 0 else "Incomming" if target["velocity"] > 0 else "Outgoing"
-            print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)'}")
-            print("-" * 110)
             print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {direction:<15} {target['azimuth']}")
     else:
         print("No valid targets detected in this packet.")

@@ -96,6 +96,9 @@ def parse_data_packet(data, frame_id):
         for idx, target in enumerate(targets, start=1):
             direction = "Static" if target["velocity"] == 0 else "Incomming" if target["velocity"] > 0 else "Outgoing"
             print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {direction:<15} {target['azimuth']}")
+                    
+        print("-" * 50)
+
     else:
         pass
         # print("No valid targets detected in this packet.")
@@ -133,7 +136,7 @@ def main():
             data_packet, addr = sock.recvfrom(data_packet_size)
             # print("Packet Recieved")
             process_packet(header_data, data_packet)
-            print("-" * 50)
+            # print("-" * 50)
 
 if __name__ == "__main__":
     main()

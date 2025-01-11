@@ -4,7 +4,7 @@ import math
 import numpy as np
 
 # Define thresholds for valid detection
-SNR_THRESHOLD = 3  # Example SNR threshold (in dB)
+SNR_THRESHOLD = 3  # Example SNR threshold (in dB) Signal-to-Noise Ratio (SNR) 
 SIGNAL_STRENGTH_THRESHOLD = 10  # Minimum valid signal strength (in dB)
 
 # Simple Moving Average Filter

@@ -9,6 +9,10 @@ import matplotlib.animation as animation
 SNR_THRESHOLD = 3  # Example SNR threshold (in dB)
 SIGNAL_STRENGTH_THRESHOLD = 10  # Minimum valid signal strength (in dB)
 
+RADAR_LAT = 22.3072  # Example radar latitude
+RADAR_LONG = 73.1812  # Example radar longitude
+EARTH_R = 6371000 # Earth radius in meters
+
 # Radar parameters
 max_range = 150  # Maximum detection range in meters
 max_azimuth = 75  # Maximum azimuth angle in degrees
@@ -83,6 +87,18 @@ def parse_data_packet(data, frame_id):
         # Calculate the x and y positions using trigonometry
         x = range_ * math.cos(azimuth_angle_radians)
         y = range_ * math.sin(azimuth_angle_radians)
+
+        # Calculate the latitude and longitude of the object            
+        
+        radar_lat_rad = math.radians(RADAR_LAT) # Convert radar latitude to radians
+        
+        # Calculate change in latitude and longitude in degrees
+        delta_lat_deg = y / 111139
+        delta_lon_deg = x / (111139 * math.cos(radar_lat_rad))
+        
+        # Final coordinates of the object
+        object_lat = RADAR_LAT + delta_lat_deg
+        object_lon = RADAR_LONG + delta_lon_deg
         
         targets.append({
             'signal_strength': round(signal_strength, 2),
@@ -90,17 +106,19 @@ def parse_data_packet(data, frame_id):
             'velocity': round(filtered_velocity, 2),
             'azimuth': round(azimuth, 2),
             'x': round(x, 2),   
-            'y': round(y, 2)
+            'y': round(y, 2),
+            'latitude': round(object_lat, 6),
+            'longitude': round(object_lon, 6)
         })
     
     if targets:
         print(f"Frame ID: {frame_id}")
         print("Detected Targets:")
-        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25}")
+        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25} {'Latitude':<25} {'Longitude':<25}")
         print("-" * 150)
         for idx, target in enumerate(targets, start=1):
             direction = "Static" if target["velocity"] == 0 else "Incomming" if target["velocity"] > 0 else "Outgoing"
-            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {direction:<15} {target['azimuth']:<25} {target['x']} {target['y']:<25}")
+            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {direction:<15} {target['azimuth']:<25} {target['x']} {target['y']:<25} {target['latitude']:<25} {target['longitude']:<25}")
                     
         print("-" * 50)
     

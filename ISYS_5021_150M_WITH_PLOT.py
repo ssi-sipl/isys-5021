@@ -93,6 +93,17 @@ def parse_data_packet(data, frame_id):
             'y': round(y, 2)
         })
     
+    if targets:
+        print(f"Frame ID: {frame_id}")
+        print("Detected Targets:")
+        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25}")
+        print("-" * 150)
+        for idx, target in enumerate(targets, start=1):
+            direction = "Static" if target["velocity"] == 0 else "Incomming" if target["velocity"] > 0 else "Outgoing"
+            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {direction:<15} {target['azimuth']:<25} {target['x']} {target['y']:<25}")
+                    
+        print("-" * 50)
+    
     return targets
 
 # Global list to store targets in real-time

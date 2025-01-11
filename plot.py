@@ -15,6 +15,8 @@ y_coords = [target["y"] for target in detected_targets]
 # Plot the data
 plt.figure(figsize=(8, 6))
 plt.scatter(x_coords, y_coords, c='blue', label="Detected Targets", s=100, edgecolors='black')
+plt.xlim(1,150)
+plt.ylim(1,150)
 
 # Labels and title
 plt.title("Radar Data: Detected Targets", fontsize=16)

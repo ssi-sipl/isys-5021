@@ -130,7 +130,7 @@ def update_plot(frame):
     # Plot detected targets on the radar field
     for target in all_targets:
         azimuth_angle_radians = math.radians(target['azimuth'])
-        ax.plot(azimuth_angle_radians, target['range'], 'ro')  # Plot targets as red dots
+        ax.plot(azimuth_angle_radians, target['range'], 'ro', markersize=2) 
 
 # Main Loop
 def main():

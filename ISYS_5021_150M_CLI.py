@@ -4,6 +4,7 @@ import math
 import json
 import signal
 import sys
+import threading
 
 targets_data = []  # List to store valid targets
 output_file = "detected_targets.json"
@@ -57,9 +58,39 @@ def parse_header(data):
     
     return detections, targets, data_packets, checksum, bytes_per_target
 
+def process_and_print_targets(targets, frame_id, number_of_data_packet):
+    """
+    Append targets to targets_data and print them in parallel.
+    """
+    def append_to_global():
+        global targets_data
+        targets_data.extend(targets)
+
+    def print_targets():
+        print("Serial List:")
+        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)'}")
+        print("-" * 110)
+        for idx, target in enumerate(targets, start=1):
+            # direction = "Static" if target["velocity"]==0 else "Incomming" if target["velocity"]>0 else "Outgoing"
+            
+            
+            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {target['direction']:<15}  {target['azimuth']}")
+
+    # Create threads for appending and printing
+    append_thread = threading.Thread(target=append_to_global)
+    print_thread = threading.Thread(target=print_targets)
+
+    # Start the threads
+    append_thread.start()
+    print_thread.start()
+
+    # Wait for both threads to finish
+    append_thread.join()
+    print_thread.join()
+
 def parse_data_packet(data):
     global targets_data
-    
+
     target_format = '<ffffII'  # Signal Strength, Range, Velocity, Azimuth, Reserved1, Reserved2
     target_size = struct.calcsize(target_format)
 
@@ -85,17 +116,10 @@ def parse_data_packet(data):
         }
 
         targets.append(target_info)
-        targets_data.append(target_info)
+        
     
     if targets:
-        print("Serial List:")
-        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)'}")
-        print("-" * 110)
-        for idx, target in enumerate(targets, start=1):
-            direction = "Static" if target["velocity"]==0 else "Incomming" if target["velocity"]>0 else "Outgoing"
-            
-            
-            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {direction:<15}  {target['azimuth']}")
+        process_and_print_targets(targets, frame_id, number_of_data_packet)
     else:
         print(f"Frame ID: {frame_id}, Data Packet Number: {number_of_data_packet} contains no valid targets.")
 

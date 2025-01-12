@@ -1,6 +1,26 @@
 import socket
 import struct
 import math
+import json
+import signal
+import sys
+
+targets_data = []  # List to store valid targets
+output_file = "detected_targets.json"
+
+def save_to_json():
+    with open(output_file, "w") as file:
+        json.dump(targets_data, file, indent=4)
+    print(f"Data saved to {output_file}")
+
+def signal_handler(sig, frame):
+    print("\nCtrl+C detected! Saving data and exiting...")
+    save_to_json()
+    sys.exit(0)
+
+# Register the signal handler for graceful shutdown
+signal.signal(signal.SIGINT, signal_handler)
+
 
 def calculate_checksum(data, nrOfTargets, bytesPerTarget):
     # List of targets (42 targets per packet)
@@ -38,6 +58,8 @@ def parse_header(data):
     return detections, targets, data_packets, checksum, bytes_per_target
 
 def parse_data_packet(data):
+    global targets_data
+    
     target_format = '<ffffII'  # Signal Strength, Range, Velocity, Azimuth, Reserved1, Reserved2
     target_size = struct.calcsize(target_format)
 
@@ -52,12 +74,18 @@ def parse_data_packet(data):
         if signal_strength == 0 and range_ == 0 and velocity == 0 and azimuth == 0:
             continue
         
-        targets.append({
+        target_info = {
+            'frame_id': frame_id,
+            'packet_number': number_of_data_packet,
             'signal_strength': round(signal_strength, 2),
             'range': round(range_, 2),
             'velocity': round(velocity, 2),
             'azimuth': round(azimuth, 2),
-        })
+            'direction': "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing"
+        }
+
+        targets.append(target_info)
+        targets_data.append(target_info)
     
     if targets:
         print("Serial List:")

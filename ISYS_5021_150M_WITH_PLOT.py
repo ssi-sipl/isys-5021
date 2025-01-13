@@ -63,9 +63,15 @@ class KalmanFilter:
 def calculate_checksum(data, nrOfTargets, bytesPerTarget):
     target_list = data[4:]
     checksum = 0
-    for i in range(nrOfTargets * bytesPerTarget):
-        checksum += target_list[i]
-        checksum &= 0xFFFFFFFF
+
+    try:
+        for i in range(nrOfTargets * bytesPerTarget):
+            checksum += target_list[i]
+            checksum &= 0xFFFFFFFF
+        
+    except IndexError:
+         print("Warning: Index out of range while calculating checksum. Ignoring and continuing...")
+
     return checksum
 
 def process_and_print_targets(targets, frame_id):

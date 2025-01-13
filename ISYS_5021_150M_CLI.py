@@ -24,13 +24,19 @@ signal.signal(signal.SIGINT, signal_handler)
 
 
 def calculate_checksum(data, nrOfTargets, bytesPerTarget):
-    # List of targets (42 targets per packet)
     target_list = data[4:]
     checksum = 0
-    for i in range(nrOfTargets * bytesPerTarget):
-        checksum += target_list[i]
-        checksum &= 0xFFFFFFFF  # Ensure it fits within a 32-bit boundary
+
+    try:
+        for i in range(nrOfTargets * bytesPerTarget):
+            checksum += target_list[i]
+            checksum &= 0xFFFFFFFF
+        
+    except IndexError:
+         print("Warning: Index out of range while calculating checksum. Ignoring and continuing...")
+
     return checksum
+
     
 def parse_header(data):
     """

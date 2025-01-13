@@ -8,6 +8,10 @@ import signal
 import sys
 import json
 import threading
+from datetime import datetime
+import pytz
+
+ist_timezone = pytz.timezone('Asia/Kolkata')
 
 # Define thresholds for valid detection
 SNR_THRESHOLD = 3  # Example SNR threshold (in dB)
@@ -158,18 +162,25 @@ def parse_data_packet(data, frame_id):
         object_lat = RADAR_LAT + delta_lat_deg
         object_lon = RADAR_LONG + delta_lon_deg
 
+        ist_timestamp = datetime.now(ist_timezone)
+
         target_info = {
+            'radar_id': "radar-pune",
+            'aread_id': "area-1",
             'frame_id': frame_id,
+            'timestamp': ist_timestamp,
             'signal_strength': round(signal_strength, 2),
             'range': round(range_, 2),
             'velocity': round(filtered_velocity, 2),
             'azimuth': round(azimuth, 2),
+            'distance': round(range_, 2),
+            'direction': "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing",
             'classification': "Unknown",
+            'zone': 0,
             'x': round(x, 2),   
             'y': round(y, 2),
             'latitude': round(object_lat, 6),
             'longitude': round(object_lon, 6),
-            'direction': "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing"
         }
 
         targets.append(target_info)

@@ -173,7 +173,7 @@ def parse_data_packet(data, frame_id):
         }
 
         targets.append(target_info)
-        target_data.append(target_info)
+        targets_data.append(target_info)
         
     
     if targets:

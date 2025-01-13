@@ -13,8 +13,8 @@ import threading
 SNR_THRESHOLD = 3  # Example SNR threshold (in dB)
 SIGNAL_STRENGTH_THRESHOLD = 10  # Minimum valid signal strength (in dB)
 
-RADAR_LAT = 22.3072  # Example radar latitude
-RADAR_LONG = 73.1812  # Example radar longitude
+RADAR_LAT = 18.507873561293987  # Example radar latitude
+RADAR_LONG = 73.87621690992766  # Example radar longitude
 EARTH_R = 6371000 # Earth radius in meters
 
 # Radar parameters

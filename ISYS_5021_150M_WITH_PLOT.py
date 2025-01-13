@@ -168,7 +168,7 @@ def parse_data_packet(data, frame_id):
             'radar_id': "radar-pune",
             'aread_id': "area-1",
             'frame_id': frame_id,
-            'timestamp': ist_timestamp,
+            'timestamp': str(ist_timestamp),
             'signal_strength': round(signal_strength, 2),
             'range': round(range_, 2),
             'velocity': round(filtered_velocity, 2),

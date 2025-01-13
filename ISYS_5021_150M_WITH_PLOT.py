@@ -226,24 +226,28 @@ def main():
         sock.bind((local_ip, local_port))
         print(f"Listening on {local_ip}:{local_port}...")
         
-        # Set up real-time plotting
-        ani = animation.FuncAnimation(fig, update_plot, interval=500)
+        try:
+            # Set up real-time plotting
+            ani = animation.FuncAnimation(fig, update_plot, interval=500)
 
-        while True:
-            header_data, addr = sock.recvfrom(header_size)
-            data_packet, addr = sock.recvfrom(data_packet_size)
-            detections, targets, data_packets, checksum, bytes_per_target, frame_id = parse_header(header_data)
-            
-            packet_data = header_data + data_packet
-            calculated_checksum = calculate_checksum(data_packet, targets, bytes_per_target)
-            
-            if calculated_checksum == checksum:
-                # Parse and update the targets
-                targets = parse_data_packet(data_packet, frame_id=frame_id)
-                all_targets.extend(targets)
+            while True:
+                header_data, addr = sock.recvfrom(header_size)
+                data_packet, addr = sock.recvfrom(data_packet_size)
+                detections, targets, data_packets, checksum, bytes_per_target, frame_id = parse_header(header_data)
+                
+                packet_data = header_data + data_packet
+                calculated_checksum = calculate_checksum(data_packet, targets, bytes_per_target)
+                
+                if calculated_checksum == checksum:
+                    # Parse and update the targets
+                    targets = parse_data_packet(data_packet, frame_id=frame_id)
+                    all_targets.extend(targets)
 
-            # Wait for the next frame
-            plt.pause(0.1)  # Pause to allow animation to update
+                # Wait for the next frame
+                plt.pause(0.1)  # Pause to allow animation to update
+        except Exception as e:
+            print(f"Error: {e}... Continuing...")
+            
 
 if __name__ == "__main__":
     main()

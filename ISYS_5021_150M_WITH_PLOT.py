@@ -164,6 +164,7 @@ def parse_data_packet(data, frame_id):
             'range': round(range_, 2),
             'velocity': round(filtered_velocity, 2),
             'azimuth': round(azimuth, 2),
+            'classification': "Unknown",
             'x': round(x, 2),   
             'y': round(y, 2),
             'latitude': round(object_lat, 6),

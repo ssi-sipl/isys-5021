@@ -9,8 +9,25 @@ import sys
 import json
 from datetime import datetime
 import pytz
+import paho.mqtt.client as mqtt
 
 ist_timezone = pytz.timezone('Asia/Kolkata')
+# MQTT Setup
+MQTT_BROKER = "localhost"  # Change to your broker's IP address if needed
+MQTT_PORT = 1883
+MQTT_CHANNEL = "radar_surveillance"
+
+mqtt_client = mqtt.Client()
+
+try:
+    mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
+    mqtt_client.loop_start()
+    print("Channel: ", MQTT_CHANNEL)
+    print(f"Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
+    
+except Exception as e:
+    print(f"Failed to connect to MQTT broker: {e}")
+    sys.exit(1)
 
 # Define thresholds for valid detection
 SNR_THRESHOLD = 3  # Example SNR threshold (in dB)
@@ -27,6 +44,8 @@ max_azimuth = 75  # Maximum azimuth angle in degrees
 targets_data = []  # List to store valid targets
 output_file = "detected_targets.json"
 
+
+
 def save_to_json():
     with open(output_file, "w") as file:
         json.dump(targets_data, file, indent=4)
@@ -35,11 +54,21 @@ def save_to_json():
 def signal_handler(sig, frame):
     print("\nCtrl+C detected! Saving data and exiting...")
     save_to_json()
+    print("Disconnecting from MQTT broker...")
+    mqtt_client.loop_stop()
+    mqtt_client.disconnect()
     sys.exit(0)
+
 
 # Register the signal handler for graceful shutdown
 signal.signal(signal.SIGINT, signal_handler)
 
+def publish_target(target):
+    try:
+        mqtt_client.publish(MQTT_CHANNEL, json.dumps(target))
+        print(f"Published target: {target}")
+    except Exception as e:
+        print(f"Failed to publish target: {e}")
 
 # Simple Moving Average Filter
 def moving_average_filter(data, window_size=5):
@@ -153,6 +182,8 @@ def parse_data_packet(data, frame_id):
 
         targets.append(target_info)
         targets_data.append(target_info)
+        
+        publish_target(target_info)
         
     
     if targets:

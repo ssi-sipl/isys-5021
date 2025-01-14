@@ -7,8 +7,25 @@ import signal
 import sys
 import pytz
 import datetime
+import paho.mqtt.client as mqtt
+
 
 ist_timezone = pytz.timezone('Asia/Kolkata')
+
+MQTT_BROKER = "localhost"  # Change to your broker's IP address if needed
+MQTT_PORT = 1883
+MQTT_CHANNEL = "radar_surveillance"
+
+mqtt_client = mqtt.Client()
+
+try:
+    mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
+    mqtt_client.loop_start()
+    print("Channel: ", MQTT_CHANNEL)
+    print(f"Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
+except Exception as e:
+    print(f"Failed to connect to MQTT broker: {e}")
+    sys.exit(1)
 
 # Define thresholds for valid detection
 # Define thresholds for valid detection
@@ -34,10 +51,20 @@ def save_to_json():
 def signal_handler(sig, frame):
     print("\nCtrl+C detected! Saving data and exiting...")
     save_to_json()
+    print("Disconnecting from MQTT broker...")
+    mqtt_client.loop_stop()
+    mqtt_client.disconnect()
     sys.exit(0)
 
 # Register the signal handler for graceful shutdown
 signal.signal(signal.SIGINT, signal_handler)
+
+def publish_target(target):
+    try:
+        mqtt_client.publish(MQTT_CHANNEL, json.dumps(target))
+        print(f"Published target: {target}")
+    except Exception as e:
+        print(f"Failed to publish target: {e}")
 
 # Simple Moving Average Filter
 def moving_average_filter(data, window_size=5):
@@ -159,6 +186,9 @@ def parse_data_packet(data, frame_id):
 
         targets.append(target_info)
         targets_data.append(target_info)
+
+        publish_target(target_info)
+
 
         
     

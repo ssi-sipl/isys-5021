@@ -7,7 +7,6 @@ import matplotlib.animation as animation
 import signal
 import sys
 import json
-import threading
 from datetime import datetime
 import pytz
 
@@ -17,8 +16,8 @@ ist_timezone = pytz.timezone('Asia/Kolkata')
 SNR_THRESHOLD = 3  # Example SNR threshold (in dB)
 SIGNAL_STRENGTH_THRESHOLD = 10  # Minimum valid signal strength (in dB)
 
-RADAR_LAT = 18.507873561293987  # Example radar latitude
-RADAR_LONG = 73.87621690992766  # Example radar longitude
+RADAR_LAT = 18.507873561293987  # Pune radar latitude
+RADAR_LONG = 73.87621690992766  # Pune radar longitude
 EARTH_R = 6371000 # Earth radius in meters
 
 # Radar parameters
@@ -77,37 +76,6 @@ def calculate_checksum(data, nrOfTargets, bytesPerTarget):
          print("Warning: Index out of range while calculating checksum. Ignoring and continuing...")
 
     return checksum
-
-def process_and_print_targets(targets, frame_id):
-    """
-    Append targets to targets_data and print them in parallel.
-    """
-    def append_to_global():
-        global targets_data
-        targets_data.extend(targets)
-
-    def print_targets():
-        print(f"Frame ID: {frame_id}")
-        print("Detected Targets:")
-        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25} {'Latitude':<25} {'Longitude':<25}")
-        print("-" * 150)
-        for idx, target in enumerate(targets, start=1):
-            direction = "Static" if target["velocity"] == 0 else "Incomming" if target["velocity"] > 0 else "Outgoing"
-            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {direction:<15} {target['azimuth']:<25} {target['x']} {target['y']:<25} {target['latitude']:<25} {target['longitude']:<25}")
-                    
-        print("-" * 50)
-                    
-    # Create threads for appending and printing
-    append_thread = threading.Thread(target=append_to_global)
-    print_thread = threading.Thread(target=print_targets)
-
-    # Start the threads
-    append_thread.start()
-    print_thread.start()
-
-    # Wait for both threads to finish
-    append_thread.join()
-    print_thread.join()
 
 # Parse Header
 def parse_header(data):

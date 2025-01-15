@@ -14,7 +14,7 @@ def main():
     client.on_connect = on_connect
     client.on_message = on_message
 
-    client.connect("localhost", 1883, 60)
+    client.connect("192.168.1.53", 1883, 60) # ip to the rpi4
     client.loop_start()
 
     try:

@@ -6,7 +6,7 @@ import json
 import signal
 import sys
 import pytz
-import datetime
+from datetime import datetime
 import paho.mqtt.client as mqtt
 
 

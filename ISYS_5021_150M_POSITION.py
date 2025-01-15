@@ -216,7 +216,7 @@ def process_packet(header_data, data_packet):
     
     if calculated_checksum != expected_checksum:
         # print(f"Checksum: Not Okay")
-        pass
+        return
     else:
         # print(f"Checksum: Okay")
         parse_data_packet(data_packet, frame_id=frame_id)

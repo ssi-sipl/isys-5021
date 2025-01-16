@@ -5,15 +5,35 @@ import numpy as np
 import json
 import signal
 import sys
-import threading
+import pytz
+from datetime import datetime
+import paho.mqtt.client as mqtt
+
+
+ist_timezone = pytz.timezone('Asia/Kolkata')
+
+MQTT_BROKER = "localhost"  # Change to your broker's IP address if needed
+MQTT_PORT = 1883
+MQTT_CHANNEL = "radar_surveillance"
+
+mqtt_client = mqtt.Client()
+
+try:
+    mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
+    mqtt_client.loop_start()
+    print("Channel: ", MQTT_CHANNEL)
+    print(f"Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
+except Exception as e:
+    print(f"Failed to connect to MQTT broker: {e}")
+    sys.exit(1)
 
 # Define thresholds for valid detection
 # Define thresholds for valid detection
 SNR_THRESHOLD = 3  # Example SNR threshold (in dB)
 SIGNAL_STRENGTH_THRESHOLD = 10  # Minimum valid signal strength (in dB)
 
-RADAR_LAT = 22.3072  # Example radar latitude
-RADAR_LONG = 73.1812  # Example radar longitude
+RADAR_LAT = 18.507873561293987  # Pune radar latitude
+RADAR_LONG = 73.87621690992766  # Pune radar longitude
 EARTH_R = 6371000 # Earth radius in meters
 
 # Radar parameters
@@ -31,10 +51,20 @@ def save_to_json():
 def signal_handler(sig, frame):
     print("\nCtrl+C detected! Saving data and exiting...")
     save_to_json()
+    print("Disconnecting from MQTT broker...")
+    mqtt_client.loop_stop()
+    mqtt_client.disconnect()
     sys.exit(0)
 
 # Register the signal handler for graceful shutdown
 signal.signal(signal.SIGINT, signal_handler)
+
+def publish_target(target):
+    try:
+        mqtt_client.publish(MQTT_CHANNEL, json.dumps(target))
+        print(f"Published target: {target}")
+    except Exception as e:
+        print(f"Failed to publish target: {e}")
 
 # Simple Moving Average Filter
 def moving_average_filter(data, window_size=5):
@@ -94,36 +124,6 @@ def parse_header(data):
     
     return detections, targets, data_packets, checksum, bytes_per_target, frame_id
 
-def process_and_print_targets(targets, frame_id):
-    """
-    Append targets to targets_data and print them in parallel.
-    """
-    def append_to_global():
-        global targets_data
-        targets_data.extend(targets)
-
-    def print_targets():
-        print(f"Frame ID: {frame_id}")
-        print("Detected Targets:")
-        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25} {'Latitude':<25} {'Longitude':<25}")
-        print("-" * 150)
-        for idx, target in enumerate(targets, start=1):
-            # direction = "Static" if target["velocity"] == 0 else "Incomming" if target["velocity"] > 0 else "Outgoing"
-            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['velocity']:<25} {target['direction']:<15} {target['azimuth']:<25} {target['x']} {target['y']:<25} {target['latitude']:<25} {target['longitude']:<25}")
-                    
-        print("-" * 50)
-    # Create threads for appending and printing
-    append_thread = threading.Thread(target=append_to_global)
-    print_thread = threading.Thread(target=print_targets)
-
-    # Start the threads
-    append_thread.start()
-    print_thread.start()
-
-    # Wait for both threads to finish
-    append_thread.join()
-    print_thread.join()
-
 # Parse Data Packet
 def parse_data_packet(data, frame_id):
     target_format = '<ffffII'  # Signal Strength, Range, Velocity, Azimuth, Reserved1, Reserved2
@@ -163,24 +163,46 @@ def parse_data_packet(data, frame_id):
         object_lat = RADAR_LAT + delta_lat_deg
         object_lon = RADAR_LONG + delta_lon_deg
 
+        ist_timestamp = datetime.now(ist_timezone)
+
         target_info = {
+            'radar_id': "radar-pune",
+            'area_id': "area-1",
             'frame_id': frame_id,
+            'timestamp': str(ist_timestamp),
             'signal_strength': round(signal_strength, 2),
             'range': round(range_, 2),
-            'velocity': round(filtered_velocity, 2),
-            'azimuth': round(azimuth, 2),
+            'speed': round(filtered_velocity, 2),
+            'aizmuth_angle': round(azimuth, 2),
+            'distance': round(range_, 2),
+            'direction': "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing",
+            'classification': "Unknown",
+            'zone': 0,
             'x': round(x, 2),   
             'y': round(y, 2),
             'latitude': round(object_lat, 6),
             'longitude': round(object_lon, 6),
-            'direction': "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing"
         }
 
         targets.append(target_info)
+        targets_data.append(target_info)
+
+        publish_target(target_info)
+
+
         
     
     if targets:
-        process_and_print_targets(targets, frame_id)
+        # process_and_print_targets(targets, frame_id)
+        print(f"Frame ID: {frame_id}")
+        print("Detected Targets:")
+        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25} {'Latitude':<25} {'Longitude':<25}")
+        print("-" * 150)
+        for idx, target in enumerate(targets, start=1):
+            direction = "Static" if target["speed"] == 0 else "Incomming" if target["speed"] > 0 else "Outgoing"
+            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['speed']:<25} {direction:<15} {target['aizmuth_angle']:<25} {target['x']} {target['y']:<25} {target['latitude']:<25} {target['longitude']:<25}")
+                    
+        print("-" * 50)
 
 # Process Packet
 def process_packet(header_data, data_packet):
@@ -194,7 +216,7 @@ def process_packet(header_data, data_packet):
     
     if calculated_checksum != expected_checksum:
         # print(f"Checksum: Not Okay")
-        pass
+        return
     else:
         # print(f"Checksum: Okay")
         parse_data_packet(data_packet, frame_id=frame_id)

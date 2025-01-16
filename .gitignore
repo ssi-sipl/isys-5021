@@ -1,3 +1,7 @@
 ./ISYS_5021_150M_GUI/__pycache__
 
 .venv
+
+/Classification/classification_model_2.pkl
+/Classification/custom_radar_classification_dataset.csv
+/Classification/dataset.npy

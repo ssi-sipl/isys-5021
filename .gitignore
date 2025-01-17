@@ -2,6 +2,6 @@
 
 .venv
 
-/Classification/classification_model_2.pkl
+/Classification/classification_model.pkl
 /Classification/custom_radar_classification_dataset.csv
 /Classification/dataset.npy

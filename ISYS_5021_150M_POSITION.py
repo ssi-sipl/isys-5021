@@ -166,7 +166,11 @@ def parse_data_packet(data, frame_id):
         object_lon = RADAR_LONG + delta_lon_deg
 
         classification = classification_pipeline(range_, filtered_velocity, azimuth)
-        classification = "others" if classification=="uav" else classification
+
+        if classification=="uav":
+            classification="others"
+        elif classification=="bicycle":
+            classification=="person"
 
         ist_timestamp = datetime.now(ist_timezone)
 
@@ -243,7 +247,7 @@ def main():
             # print("Packet Recieved")
             process_packet(header_data, data_packet)
             # print("-" * 50)
-            time.sleep(0.2)
+            # time.sleep(2)
             
 
 if __name__ == "__main__":

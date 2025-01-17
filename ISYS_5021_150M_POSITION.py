@@ -201,11 +201,11 @@ def parse_data_packet(data, frame_id):
         # process_and_print_targets(targets, frame_id)
         print(f"Frame ID: {frame_id}")
         print("Detected Targets:")
-        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25} {'Latitude':<25} {'Longitude':<25}")
+        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25} {'Latitude':<25} {'Longitude':<25} {"Classification:<25"}")
         print("-" * 150)
         for idx, target in enumerate(targets, start=1):
             direction = "Static" if target["speed"] == 0 else "Incomming" if target["speed"] > 0 else "Outgoing"
-            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['speed']:<25} {direction:<15} {target['aizmuth_angle']:<25} {target['x']} {target['y']:<25} {target['latitude']:<25} {target['longitude']:<25}")
+            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['speed']:<25} {direction:<15} {target['aizmuth_angle']:<25} {target['x']} {target['y']:<25} {target['latitude']:<25} {target['longitude']:<25} {target['classification']}")
                     
         print("-" * 50)
 

@@ -16,4 +16,4 @@ def classification_pipeline(range,velocity,azimuth):
     return predictions[0]
 
 if __name__ == "__main__":
-    classification_pipeline(88.3,-15.4, 0.13)
+    print(classification_pipeline(123,50, 12))

@@ -21,7 +21,7 @@ x, y = shuffle(x, y, random_state=56)
 x, y = shuffle(x, y, random_state=78)
 print("Shuffling Completed.")
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.5, random_state=42)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.7, random_state=42)
 print("\nData Split Complete:")
 print(f"Training Samples: {len(x_train)}, Testing Samples: {len(x_test)}")
 

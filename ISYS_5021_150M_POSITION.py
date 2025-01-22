@@ -170,7 +170,7 @@ def parse_data_packet(data, frame_id):
         if classification=="uav":
             classification="others"
         elif classification=="bicycle":
-            classification=="person"
+            classification="person"
 
         ist_timestamp = datetime.now(ist_timezone)
 

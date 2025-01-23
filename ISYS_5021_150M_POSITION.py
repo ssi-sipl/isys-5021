@@ -35,8 +35,8 @@ except Exception as e:
 SNR_THRESHOLD = 3  # Example SNR threshold (in dB)
 SIGNAL_STRENGTH_THRESHOLD = 10  # Minimum valid signal strength (in dB)
 
-RADAR_LAT = 18.507873561293987  # Pune radar latitude
-RADAR_LONG = 73.87621690992766  # Pune radar longitude
+RADAR_LAT = 34.011125  #  radar latitude
+RADAR_LONG = 74.01219  #  radar longitude
 EARTH_R = 6371000 # Earth radius in meters
 
 # Radar parameters
@@ -247,7 +247,6 @@ def main():
             # print("Packet Recieved")
             process_packet(header_data, data_packet)
             # print("-" * 50)
-            time.sleep(2)
             
 
 if __name__ == "__main__":

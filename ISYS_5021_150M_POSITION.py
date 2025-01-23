@@ -8,6 +8,9 @@ import sys
 import pytz
 from datetime import datetime
 import paho.mqtt.client as mqtt
+from Classification.CLASSIFICATION_PIPELINE import classification_pipeline
+import time
+
 
 
 ist_timezone = pytz.timezone('Asia/Kolkata')
@@ -163,6 +166,13 @@ def parse_data_packet(data, frame_id):
         object_lat = RADAR_LAT + delta_lat_deg
         object_lon = RADAR_LONG + delta_lon_deg
 
+        classification = classification_pipeline(range_, filtered_velocity, azimuth)
+
+        if classification=="uav":
+            classification="others"
+        elif classification=="bicycle":
+            classification="person"
+
         ist_timestamp = datetime.now(ist_timezone)
 
         target_info = {
@@ -176,7 +186,7 @@ def parse_data_packet(data, frame_id):
             'aizmuth_angle': round(azimuth, 2),
             'distance': round(range_, 2),
             'direction': "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing",
-            'classification': "Unknown",
+            'classification': classification, # ['vehicle', 'person', 'bicycle', 'others']
             'zone': 0,
             'x': round(x, 2),   
             'y': round(y, 2),
@@ -196,11 +206,10 @@ def parse_data_packet(data, frame_id):
         # process_and_print_targets(targets, frame_id)
         print(f"Frame ID: {frame_id}")
         print("Detected Targets:")
-        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25} {'Latitude':<25} {'Longitude':<25}")
+        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25} {'Latitude':<25} {'Longitude':<25} {'Classification':<25}")
         print("-" * 150)
-        for idx, target in enumerate(targets, start=1):
-            direction = "Static" if target["speed"] == 0 else "Incomming" if target["speed"] > 0 else "Outgoing"
-            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['speed']:<25} {direction:<15} {target['aizmuth_angle']:<25} {target['x']} {target['y']:<25} {target['latitude']:<25} {target['longitude']:<25}")
+        for idx, target in enumerate(targets, start=1):        
+            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['speed']:<25} {target['direction']:<15} {target['aizmuth_angle']:<25} {target['x']} {target['y']:<25} {target['latitude']:<25} {target['longitude']:<25} {target['classification']}")
                     
         print("-" * 50)
 
@@ -238,6 +247,8 @@ def main():
             # print("Packet Recieved")
             process_packet(header_data, data_packet)
             # print("-" * 50)
+            time.sleep(2)
+            
 
 if __name__ == "__main__":
     main()

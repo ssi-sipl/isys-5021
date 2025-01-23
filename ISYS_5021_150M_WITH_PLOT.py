@@ -10,6 +10,7 @@ import json
 from datetime import datetime
 import pytz
 import paho.mqtt.client as mqtt
+from Classification.CLASSIFICATION_PIPELINE import classification_pipeline
 
 ist_timezone = pytz.timezone('Asia/Kolkata')
 # MQTT Setup
@@ -159,6 +160,9 @@ def parse_data_packet(data, frame_id):
         object_lat = RADAR_LAT + delta_lat_deg
         object_lon = RADAR_LONG + delta_lon_deg
 
+        classification = classification_pipeline(range_, filtered_velocity, azimuth)
+        classification = "others" if classification=="uav" else classification
+
         ist_timestamp = datetime.now(ist_timezone)
 
         target_info = {
@@ -172,7 +176,7 @@ def parse_data_packet(data, frame_id):
             'azimuth': round(azimuth, 2),
             'distance': round(range_, 2),
             'direction': "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing",
-            'classification': "Unknown",
+            'classification': classification,
             'zone': 0,
             'x': round(x, 2),   
             'y': round(y, 2),

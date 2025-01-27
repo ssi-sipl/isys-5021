@@ -9,16 +9,11 @@ import pytz
 from datetime import datetime
 import paho.mqtt.client as mqtt
 from Classification.CLASSIFICATION_PIPELINE import classification_pipeline
-import time
-
-
+from config import *
 
 ist_timezone = pytz.timezone('Asia/Kolkata')
 
-MQTT_BROKER = "localhost"  # Change to your broker's IP address if needed
-MQTT_PORT = 1883
-MQTT_CHANNEL = "radar_surveillance"
-
+targets_data = []  # List to store valid targets
 mqtt_client = mqtt.Client()
 
 try:
@@ -30,26 +25,11 @@ except Exception as e:
     print(f"Failed to connect to MQTT broker: {e}")
     sys.exit(1)
 
-# Define thresholds for valid detection
-# Define thresholds for valid detection
-SNR_THRESHOLD = 3  # Example SNR threshold (in dB)
-SIGNAL_STRENGTH_THRESHOLD = 10  # Minimum valid signal strength (in dB)
-
-RADAR_LAT = 34.011125  #  radar latitude
-RADAR_LONG = 74.01219  #  radar longitude
-EARTH_R = 6371000 # Earth radius in meters
-
-# Radar parameters
-max_range = 150  # Maximum detection range in meters
-max_azimuth = 75  # Maximum azimuth angle in degrees
-
-targets_data = []  # List to store valid targets
-output_file = "detected_targets.json"
 
 def save_to_json():
-    with open(output_file, "w") as file:
+    with open(OUTPUT_FILE, "w") as file:
         json.dump(targets_data, file, indent=4)
-    print(f"Data saved to {output_file}")
+    print(f"Data saved to {OUTPUT_FILE}")
 
 def signal_handler(sig, frame):
     print("\nCtrl+C detected! Saving data and exiting...")
@@ -232,14 +212,12 @@ def process_packet(header_data, data_packet):
 
 # Main Loop
 def main():
-    local_ip = "192.168.252.2"
-    local_port = 2050
     header_size = 256
     data_packet_size = 1012
     
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
-        sock.bind((local_ip, local_port))
-        print(f"Listening on {local_ip}:{local_port}...")
+        sock.bind((LOCAL_IP, LOCAL_PORT))
+        print(f"Listening on {LOCAL_IP}:{LOCAL_PORT}...")
         
         while True:
             header_data, addr = sock.recvfrom(header_size)

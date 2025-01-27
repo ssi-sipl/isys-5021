@@ -1,91 +1,78 @@
-ISYS-5021 150M Data Parser
-==========================
+# isys-5021
 
-This repository contains a **CLI** and a **GUI** implementation for parsing radar data from the **ISYS-5021 Radar System**. Both versions read radar data packets, validate checksums, and display parsed target details, including signal strength, range, velocity, direction, and azimuth.
+## Table of Contents
 
-Repository Structure
---------------------
-#### CLI implementation
- `├── ISYS_5021_150M_CLI.py`        
-#### Folder containing GUI implementation      
-    `└── ISYS_150M_GUI`                
-#### Main entry point for the GUI      
-    `├── main.py`                  
-#### GUI design and functionality      
-    `├── gui.py`                   
-#### Handles saving/loading data      
-    `├── data_manager.py`          
-#### Manages radar socket connection  
-    `└── socket_manager.py`  
+1. [Overview](#overview)
+2. [Radar Config](#radar-config)
+3. [Important Files](#important-files)
+4. [Configuration](#configuration)
+5. [Usage](#usage)
 
-Features
---------
+## Overview
 
-*   Parse and validate radar data packets.
-    
-*   Extract and display:
-    
-    *   Frame ID
-        
-    *   Signal Strength (dB)
-        
-    *   Range (m)
-        
-    *   Velocity (m/s) with direction (Incoming/Outgoing/Static)
-        
-    *   Azimuth angle (°)
-        
-*   **CLI Version**:
-    
-    *   Displays parsed results in the terminal.
-        
-*   **GUI Version**:
-    
-    *   Interactive interface for starting/stopping the server.
-        
-    *   Displays target data in a formatted table.
-        
-    *   Save parsed data to JSON.
-        
-    *   View historical data by Frame ID.
-        
+This repository contains scripts to interface with the radar device, parse its data, and display it using CLI interfaces.
 
-Usage
------
+## Radar Config
 
-### CLI Version
+- **IP Address:** 192.168.252.10
+- **Port:** 2050
 
-1.  `python ISYS\_5021\_150M\_CLI.py`
-    
-2.  View the parsed radar data directly in the terminal.
-    
+## Important Files
 
-### GUI Version
+- **main.py**: The main script to run the radar interface.
+- **config.py**: Contains configuration variables for the radar.
+- **subscriber.py**: Subscribes to radar data and processes it.
 
-1.  `cd ISYS\_150M\_GUI`
-    
-2.  `python main.py`
-    
-3.  Use the interactive interface:
-    
-    *   **Connect**: Start listening to radar data.
-        
-    *   **Disconnect**: Stop listening.
-        
-    *   **Save to JSON**: Save parsed data.
-        
-    *   **View Historical Data**: View previous frames using Frame IDs.
-        
+## Configuration
 
-Notes
------
+The `config.py` file contains variables that can be adjusted to configure the radar and its data parsing behavior. Below are the key variables:
 
-*   Ensure the radar device is configured to send data to the specified IP and port.
-    
-*   Adjust IP and port settings in the scripts as needed. Default settings:
-    
-    *   IP: 192.168.252.2
-        
-    *   Port: 2050
-        
-*   Data parsing is based on the ISYS-5021 radar documentation. Ensure compatibility with the radar's output format.
+### MQTT Configuration
+
+- `SEND_MQTT`: Boolean flag to enable or disable sending data via MQTT. Default is `False`.
+- `MQTT_BROKER`: The IP address of the MQTT broker. Default is `"localhost"`.
+- `MQTT_PORT`: The port number to connect to the MQTT broker. Default is `1883`.
+- `MQTT_CHANNEL`: The MQTT channel to publish radar data. Default is `"radar_surveillance"`.
+- `MQTT_BROKER_SUBSCRIBER`: The IP address of the MQTT broker for the subscriber. Default is `"localhost"`.
+
+### Radar Configuration
+
+- `RADAR_ID`: The unique identifier for the radar device. Default is `"radar-isys5021"`.
+- `AREA_ID`: The identifier for the area being monitored by the radar. Default is `"area-1"`.
+- `RADAR_LAT`: The latitude coordinate of the radar's location. Default is `34.011125`.
+- `RADAR_LONG`: The longitude coordinate of the radar's location. Default is `74.01219`.
+- `LOCAL_IP`: The static IP of the Ethernet. Default is `"192.168.252.2"`.
+- `LOCAL_PORT`: The port number for local communication. Default is `2050`.
+
+### Detection Thresholds
+
+- `SNR_THRESHOLD`: The minimum signal-to-noise ratio for valid detection. Default is `3`.
+- `SIGNAL_STRENGTH_THRESHOLD`: The minimum valid signal strength in dB. Default is `10`.
+
+### Constants
+
+- `EARTH_R`: The Earth's radius in meters. Default is `6371000`.
+
+### Output Configuration
+
+- `OUTPUT_FILE`: The file where detected targets data will be saved. Default is `"detected_targets.json"`.
+
+### Basic Information
+
+- `MAX_RANGE`: The maximum detection range in meters. Default is `150`.
+- `MAX_AZIMUTH`: The maximum azimuth angle in degrees. Default is `75`.
+
+## Usage
+
+1. **Run Main Script**: Execute `main.py` to start the radar interface.
+
+   ```sh
+   python main.py
+   ```
+
+2. **Configuration**: Adjust settings in `config.py` as needed.
+
+3. **Subscriber**: Use `subscriber.py` to handle radar data subscriptions.
+   ```sh
+   python subscriber.py
+   ```

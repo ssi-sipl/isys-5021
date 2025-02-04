@@ -104,8 +104,8 @@ def parse_header(data):
 
 
     
-    print(f"Frame ID: {frame_id}")
-    print(f"Number of Targets: {targets}")
+    # print(f"Frame ID: {frame_id}")
+    # print(f"Number of Targets: {targets}")
     
     return detections, targets, data_packets, checksum, bytes_per_target, frame_id
 
@@ -183,7 +183,7 @@ def parse_data_packet(data, frame_id):
             'latitude': round(object_lat, 6),
             'longitude': round(object_lon, 6),
         }
-        print("target_info: ", target_info)
+        # print("target_info: ", target_info)
 
         targets.append(target_info)
         targets_data.append(target_info)
@@ -192,7 +192,7 @@ def parse_data_packet(data, frame_id):
 
 
         
-    print("Targets: ", len(targets))
+    # print("Targets: ", len(targets))
 
     if targets:
         # process_and_print_targets(targets, frame_id)

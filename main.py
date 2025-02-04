@@ -222,7 +222,10 @@ def main():
         while True:
             header_data, addr = sock.recvfrom(header_size)
             data_packet, addr = sock.recvfrom(data_packet_size)
-            print("Packet Recieved")
+            if header_data:
+                print("Header Data Received: ", len(header_data))
+            if data_packet:
+                print("Data Packet Received: ", len(data_packet))
             process_packet(header_data, data_packet)
             # print("-" * 50)
             

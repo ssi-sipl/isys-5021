@@ -45,7 +45,7 @@ signal.signal(signal.SIGINT, signal_handler)
 def publish_target(target):
     try:
         mqtt_client.publish(MQTT_CHANNEL, json.dumps(target))
-        print(f"Published target: {target}")
+        # print(f"Published target: {target}")
     except Exception as e:
         print(f"Failed to publish target: {e}")
 

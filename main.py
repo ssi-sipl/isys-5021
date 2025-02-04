@@ -235,7 +235,7 @@ def main():
             header_data, addr = sock.recvfrom(header_size)
             data_packet, addr = sock.recvfrom(data_packet_size)
             if header_data and data_packet:
-                print("Packet Received")
+                # print("Packet Received")
                 
                 process_packet(header_data, data_packet)
             # print("-" * 50)

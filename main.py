@@ -124,7 +124,7 @@ def parse_data_packet(data, frame_id):
 
         # Filter targets below signal strength threshold
         if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
-            print("Low Signal Strength. Ignoring target...")
+            # print("Low Signal Strength. Ignoring target...")
             continue
 
         # Apply Kalman filter for velocity tracking

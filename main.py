@@ -101,9 +101,11 @@ def parse_header(data):
     frame_id, fw_major, fw_fix, fw_minor, detections, targets, checksum, bytes_per_target, data_packets = struct.unpack(
         header_format, data[:header_size]
     )
+
+
     
-    # print(f"Frame ID: {frame_id}")
-    # print(f"Number of Targets: {targets}")
+    print(f"Frame ID: {frame_id}")
+    print(f"Number of Targets: {targets}")
     
     return detections, targets, data_packets, checksum, bytes_per_target, frame_id
 
@@ -222,11 +224,10 @@ def main():
         while True:
             header_data, addr = sock.recvfrom(header_size)
             data_packet, addr = sock.recvfrom(data_packet_size)
-            if header_data:
-                print("Header Data Received: ", len(header_data))
-            if data_packet:
-                print("Data Packet Received: ", len(data_packet))
-            process_packet(header_data, data_packet)
+            if header_data and data_packet:
+                print("Packet Received")
+                
+                process_packet(header_data, data_packet)
             # print("-" * 50)
             
 

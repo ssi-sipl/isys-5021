@@ -120,7 +120,7 @@ def parse_data_packet(data, frame_id):
     
     for i in range(42):  # 42 targets per packet
         target_data = target_list[i * target_size:(i + 1) * target_size]
-        signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
+        signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, len(target_data))
 
         # Filter targets below signal strength threshold
         if signal_strength < SIGNAL_STRENGTH_THRESHOLD:

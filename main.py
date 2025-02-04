@@ -119,12 +119,12 @@ def parse_data_packet(data, frame_id):
     kalman_filter_velocity = KalmanFilter()
     
     for i in range(42):  # 42 targets per packet
-        print("In the FOR LOOP")
         target_data = target_list[i * target_size:(i + 1) * target_size]
         signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
 
         # Filter targets below signal strength threshold
         if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
+            print("Low Signal Strength. Ignoring target...")
             continue
 
         # Apply Kalman filter for velocity tracking
@@ -186,6 +186,7 @@ def parse_data_packet(data, frame_id):
 
         
     print("Targets: ", len(targets))
+
     if targets:
         # process_and_print_targets(targets, frame_id)
         print(f"Frame ID: {frame_id}")

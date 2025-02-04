@@ -119,6 +119,7 @@ def parse_data_packet(data, frame_id):
     kalman_filter_velocity = KalmanFilter()
     
     for i in range(42):  # 42 targets per packet
+        print("In the FOR LOOP")
         target_data = target_list[i * target_size:(i + 1) * target_size]
         signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
 
@@ -175,6 +176,7 @@ def parse_data_packet(data, frame_id):
             'latitude': round(object_lat, 6),
             'longitude': round(object_lon, 6),
         }
+        print("target_info: ", target_info)
 
         targets.append(target_info)
         targets_data.append(target_info)

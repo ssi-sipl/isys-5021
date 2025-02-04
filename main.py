@@ -206,7 +206,7 @@ def process_packet(header_data, data_packet):
     calculated_checksum = calculate_checksum(data_packet, targets, bytes_per_target)
     
     if calculated_checksum != expected_checksum:
-        # print(f"Checksum: Not Okay")
+        print(f"Checksum: Not Okay")
         return
     else:
         # print(f"Checksum: Okay")

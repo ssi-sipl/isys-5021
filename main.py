@@ -119,6 +119,13 @@ def parse_data_packet(data, frame_id):
     kalman_filter_velocity = KalmanFilter()
     
     for i in range(42):  # 42 targets per packet
+        start = i * target_size
+        end = start + target_size
+
+        if end > len(target_list):
+            print(f"Warning: Not enough data to extract target {i}. Skipping.")
+            break  # Stop processing if data is insufficient
+
         target_data = target_list[i * target_size:(i + 1) * target_size]
         signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
 

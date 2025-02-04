@@ -45,7 +45,7 @@ signal.signal(signal.SIGINT, signal_handler)
 def publish_target(target):
     try:
         mqtt_client.publish(MQTT_CHANNEL, json.dumps(target))
-        print(f"Published target: {target}")
+        # print(f"Published target: {target}")
     except Exception as e:
         print(f"Failed to publish target: {e}")
 
@@ -101,6 +101,8 @@ def parse_header(data):
     frame_id, fw_major, fw_fix, fw_minor, detections, targets, checksum, bytes_per_target, data_packets = struct.unpack(
         header_format, data[:header_size]
     )
+
+
     
     # print(f"Frame ID: {frame_id}")
     # print(f"Number of Targets: {targets}")
@@ -117,11 +119,19 @@ def parse_data_packet(data, frame_id):
     kalman_filter_velocity = KalmanFilter()
     
     for i in range(42):  # 42 targets per packet
+        start = i * target_size
+        end = start + target_size
+
+        if end > len(target_list):
+            print(f"Warning: Not enough data to extract target {i}. Skipping.")
+            break  # Stop processing if data is insufficient
+
         target_data = target_list[i * target_size:(i + 1) * target_size]
         signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
 
         # Filter targets below signal strength threshold
         if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
+            # print("Low Signal Strength. Ignoring target...")
             continue
 
         # Apply Kalman filter for velocity tracking
@@ -173,6 +183,7 @@ def parse_data_packet(data, frame_id):
             'latitude': round(object_lat, 6),
             'longitude': round(object_lon, 6),
         }
+        # print("target_info: ", target_info)
 
         targets.append(target_info)
         targets_data.append(target_info)
@@ -181,7 +192,8 @@ def parse_data_packet(data, frame_id):
 
 
         
-    
+    # print("Targets: ", len(targets))
+
     if targets:
         # process_and_print_targets(targets, frame_id)
         print(f"Frame ID: {frame_id}")
@@ -222,8 +234,10 @@ def main():
         while True:
             header_data, addr = sock.recvfrom(header_size)
             data_packet, addr = sock.recvfrom(data_packet_size)
-            # print("Packet Recieved")
-            process_packet(header_data, data_packet)
+            if header_data and data_packet:
+                # print("Packet Received")
+                
+                process_packet(header_data, data_packet)
             # print("-" * 50)
             
 

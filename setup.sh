@@ -30,7 +30,7 @@ set_static_ip() {
     sudo ip route add default via "$gateway"
 
     # Check if the IP was set successfully
-    if ip addr show "$interface" | grep -q "$ip_address"; then
+    if ip addr show "$interface/24" | grep -q "$ip_address"; then
         echo "Static IP address set successfully: $ip_address"
     else
         echo "Error: Failed to set static IP address."

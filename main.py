@@ -16,14 +16,17 @@ ist_timezone = pytz.timezone('Asia/Kolkata')
 targets_data = []  # List to store valid targets
 mqtt_client = mqtt.Client()
 
-try:
-    mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
-    mqtt_client.loop_start()
-    print("Channel: ", MQTT_CHANNEL)
-    print(f"Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
-except Exception as e:
-    print(f"Failed to connect to MQTT broker: {e}")
-    sys.exit(1)
+mqtt_client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
+
+if SEND_MQTT:
+    try:
+        mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
+        mqtt_client.loop_start()
+        print("Channel: ", MQTT_CHANNEL)
+        print(f"Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
+    except Exception as e:
+        print(f"Failed to connect to MQTT broker: {e}")
+        sys.exit(1)
 
 
 def save_to_json():
@@ -188,7 +191,8 @@ def parse_data_packet(data, frame_id):
         targets.append(target_info)
         targets_data.append(target_info)
 
-        publish_target(target_info)
+        if SEND_MQTT:
+            publish_target(target_info)
 
 
         

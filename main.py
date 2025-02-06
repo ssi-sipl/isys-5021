@@ -15,12 +15,10 @@ ist_timezone = pytz.timezone('Asia/Kolkata')
 
 targets_data = []  # List to store valid targets
 
+is_connected_to_mqtt_flag = False
 
-if SEND_MQTT:
-    mqtt_client = mqtt.Client()
-    mqtt_client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
-    is_connected_to_mqtt_flag = False
-    def on_connect(client, userdata, flags, rc):
+
+def on_connect(client, userdata, flags, rc):
         global is_connected_to_mqtt_flag
         if rc == 0:
             print(f"✅ Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
@@ -36,7 +34,12 @@ if SEND_MQTT:
             client.loop_stop()
             client.disconnect()
             raise SystemExit("Exiting due to connection failure.")
-    
+
+
+if SEND_MQTT:
+    mqtt_client = mqtt.Client()
+    mqtt_client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
+     
     try:
         mqtt_client.on_connect = on_connect
         mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
@@ -267,6 +270,11 @@ def main():
 if __name__ == "__main__":
     if SEND_MQTT:
         if is_connected_to_mqtt_flag:
+            print("MQTT enabled. Starting main loop...")
             main()
+        else:
+            print("Failed to connect to MQTT broker. Exiting...")
+            sys.exit(1)
     else:
+        print("MQTT disabled. Starting main loop...")
         main()

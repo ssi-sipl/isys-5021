@@ -21,6 +21,7 @@ if SEND_MQTT:
     mqtt_client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
     is_connected_to_mqtt_flag = False
     def on_connect(client, userdata, flags, rc):
+        global is_connected_to_mqtt_flag
         if rc == 0:
             print(f"✅ Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
             client.subscribe(MQTT_CHANNEL)

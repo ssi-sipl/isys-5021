@@ -24,10 +24,14 @@ def on_connect(client, userdata, flags, rc):
         client.subscribe(MQTT_CHANNEL)
     elif rc == 5:
         print("❌ Connection refused: Not authorized. Check your username/password.")
-        sys.exit(1)  # Exit if authentication fails
+        client.loop_stop()  # Stop the MQTT loop
+        client.disconnect()  # Disconnect cleanly
+        raise SystemExit("Exiting due to authentication failure.")  # Stop script execution
     else:
         print(f"⚠️ Connection failed with result code {rc}")
-        sys.exit(1)
+        client.loop_stop()
+        client.disconnect()
+        raise SystemExit("Exiting due to connection failure.")
 
 if SEND_MQTT:
     try:

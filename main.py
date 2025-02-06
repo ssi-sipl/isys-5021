@@ -14,26 +14,27 @@ from config import *
 ist_timezone = pytz.timezone('Asia/Kolkata')
 
 targets_data = []  # List to store valid targets
-mqtt_client = mqtt.Client()
 
-mqtt_client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
-
-def on_connect(client, userdata, flags, rc):
-    if rc == 0:
-        print(f"✅ Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
-        client.subscribe(MQTT_CHANNEL)
-    elif rc == 5:
-        print("❌ Connection refused: Not authorized. Check your username/password.")
-        client.loop_stop()  # Stop the MQTT loop
-        client.disconnect()  # Disconnect cleanly
-        raise SystemExit("Exiting due to authentication failure.")  # Stop script execution
-    else:
-        print(f"⚠️ Connection failed with result code {rc}")
-        client.loop_stop()
-        client.disconnect()
-        raise SystemExit("Exiting due to connection failure.")
 
 if SEND_MQTT:
+    mqtt_client = mqtt.Client()
+    mqtt_client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
+    is_connected_to_mqtt_flag = False
+    def on_connect(client, userdata, flags, rc):
+        if rc == 0:
+            print(f"✅ Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
+            client.subscribe(MQTT_CHANNEL)
+        elif rc == 5:
+            print("❌ Connection refused: Not authorized. Check your username/password.")
+            client.loop_stop()  # Stop the MQTT loop
+            client.disconnect()  # Disconnect cleanly
+            raise SystemExit("Exiting due to authentication failure.")  # Stop script execution
+        else:
+            print(f"⚠️ Connection failed with result code {rc}")
+            client.loop_stop()
+            client.disconnect()
+            raise SystemExit("Exiting due to connection failure.")
+    
     try:
         mqtt_client.on_connect = on_connect
         mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
@@ -262,4 +263,8 @@ def main():
             
 
 if __name__ == "__main__":
-    main()
+    if SEND_MQTT:
+        if is_connected_to_mqtt_flag:
+            main()
+    else:
+        main()

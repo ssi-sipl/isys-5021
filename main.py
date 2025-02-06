@@ -24,6 +24,7 @@ if SEND_MQTT:
         if rc == 0:
             print(f"✅ Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
             client.subscribe(MQTT_CHANNEL)
+            is_connected_to_mqtt_flag = True
         elif rc == 5:
             print("❌ Connection refused: Not authorized. Check your username/password.")
             client.loop_stop()  # Stop the MQTT loop

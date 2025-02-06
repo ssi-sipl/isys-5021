@@ -15,15 +15,15 @@ ist_timezone = pytz.timezone('Asia/Kolkata')
 
 targets_data = []  # List to store valid targets
 
-is_connected_to_mqtt_flag = False
+# is_connected_to_mqtt_flag = False
 
 
 def on_connect(client, userdata, flags, rc):
-        global is_connected_to_mqtt_flag
+        # global is_connected_to_mqtt_flag
         if rc == 0:
             print(f"✅ Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
             client.subscribe(MQTT_CHANNEL)
-            is_connected_to_mqtt_flag = True
+            # is_connected_to_mqtt_flag = True
         elif rc == 5:
             print("❌ Connection refused: Not authorized. Check your username/password.")
             client.loop_stop()  # Stop the MQTT loop
@@ -268,13 +268,4 @@ def main():
             
 
 if __name__ == "__main__":
-    if SEND_MQTT:
-        if is_connected_to_mqtt_flag:
-            print("MQTT enabled. Starting main loop...")
-            main()
-        else:
-            print("Failed to connect to MQTT broker. Exiting...")
-            sys.exit(1)
-    else:
-        print("MQTT disabled. Starting main loop...")
-        main()
+    main()

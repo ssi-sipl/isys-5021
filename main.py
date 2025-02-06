@@ -15,9 +15,6 @@ ist_timezone = pytz.timezone('Asia/Kolkata')
 
 targets_data = []  # List to store valid targets
 
-# is_connected_to_mqtt_flag = False
-
-
 def on_connect(client, userdata, flags, rc):
         # global is_connected_to_mqtt_flag
         if rc == 0:

@@ -6,6 +6,8 @@ import json
 import signal
 import sys
 import pytz
+import serial
+import json
 from datetime import datetime
 import paho.mqtt.client as mqtt
 from Classification.CLASSIFICATION_PIPELINE import classification_pipeline
@@ -14,6 +16,49 @@ from config import *
 ist_timezone = pytz.timezone('Asia/Kolkata')
 
 targets_data = []  # List to store valid targets
+
+# --- CONFIGURATION ---
+SERIAL_PORT = "/dev/ttyUSB0"  # Change if necessary
+BAUD_RATE = 57600  # Must match receiver settings
+
+# Attempt to initialize the serial connection
+try:
+    ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+except serial.SerialException as e:
+    print(f"[ERROR] Failed to open serial port {SERIAL_PORT}: {e}")
+    ser = None  # Prevents using an invalid serial object
+
+def transmit_target_uart(target):
+    if ser is None:
+        print("[ERROR] Serial port is not available. Cannot send data.")
+        return
+
+    try:
+        # Attempt to serialize the data
+        try:
+            json_data = json.dumps(target)
+        except (TypeError, ValueError) as e:
+            print(f"[ERROR] JSON serialization failed: {e}")
+            return
+        
+        # Attempt to encode the data
+        try:
+            encoded_data = (json_data + "\n").encode('utf-8')
+        except UnicodeEncodeError as e:
+            print(f"[ERROR] Encoding to UTF-8 failed: {e}")
+            return
+        
+        # Attempt to write to the serial port
+        try:
+            ser.write(encoded_data)
+            print(f"[INFO] Sent over UART: {json_data}")
+        except serial.SerialTimeoutException as e:
+            print(f"[ERROR] Serial write timeout: {e}")
+        except serial.SerialException as e:
+            print(f"[ERROR] Serial write failed: {e}")
+
+    except Exception as e:
+        print(f"[ERROR] Unexpected error in publish_target: {e}")
 
 def on_connect(client, userdata, flags, rc):
         # global is_connected_to_mqtt_flag
@@ -212,6 +257,8 @@ def parse_data_packet(data, frame_id):
 
         if SEND_MQTT:
             publish_target(target_info)
+        
+        transmit_target_uart(target_info)
 
 
         

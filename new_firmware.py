@@ -289,7 +289,7 @@ def main():
     RADAR_PORT = 2050
     
     # radar = iSYS5021Radar("./Docs/EthernetAPI/library_v1.3/Linux_x64/libethernetAPI.so")
-    radar = iSYS5021Radar("Docs/EthernetAPI/library_v1.3/Windows_msvc_2017_x64/ethernetAPI.dll")
+    radar = iSYS5021Radar("Docs/EthernetAPI/library_v1.3/Linux_aarch64/libethernetAPI.so")
     try:
         print(f"Radar API Version: {radar._get_api_version()}")
 

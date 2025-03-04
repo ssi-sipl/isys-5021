@@ -4,6 +4,7 @@ from filterpy.kalman import KalmanFilter
 import uuid
 import time
 from datetime import datetime, timedelta
+from config import *
 
 class RadarTarget:
     def __init__(self, target_info, track_id=None):
@@ -283,7 +284,7 @@ def process_and_track_targets(targets, tracker):
     # Add tracking-related info to each target
     for target in tracked_targets:
         # Calculate additional metrics if needed
-        if target['speed'] > 0.5:  # If moving
+        if target['speed'] > 0.5 and target['signal_strength'] > SIGNAL_STRENGTH_THRESHOLD:  # If moving
             # Predict position in 2 seconds
             x_future = target['x'] + 2 * target['speed'] * np.cos(np.radians(target['aizmuth_angle']))
             y_future = target['y'] + 2 * target['speed'] * np.sin(np.radians(target['aizmuth_angle']))
@@ -298,5 +299,6 @@ def process_and_track_targets(targets, tracker):
                 if v_radial < 0:  # Target is approaching
                     tca = -target['range'] / v_radial if v_radial != 0 else float('inf')
                     target['time_to_closest_approach'] = round(tca, 2)  # in seconds
+
     
     return tracked_targets

@@ -164,12 +164,12 @@ def parse_data_packet(data, frame_id):
         target_data = target_list[i * target_size:(i + 1) * target_size]
         signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
 
-        if velocity == 0 :
-            # cluter filtering
-            continue
-        # Filter targets below signal strength threshold
-        if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
-            continue
+        # if velocity == 0 :
+        #     # cluter filtering
+        #     continue
+        # # Filter targets below signal strength threshold
+        # if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
+        #     continue
 
         # Apply Kalman filter for velocity tracking
         filtered_velocity = kalman_filter_velocity.update(velocity)

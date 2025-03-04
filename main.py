@@ -221,8 +221,8 @@ def parse_data_packet(data, frame_id):
         # Apply object tracking to the detected targets
         tracked_targets = process_and_track_targets(targets, radar_tracker)
         
-        for target in tracked_targets:
-            print (target)
+        # for target in tracked_targets:
+        #     print (target)
 
         # Publish tracked targets via MQTT if enabled
         if SEND_MQTT:

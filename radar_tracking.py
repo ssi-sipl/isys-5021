@@ -292,6 +292,7 @@ def process_and_track_targets(targets, tracker):
             y_future = target['y'] + 2 * target['speed'] * np.sin(np.radians(target['aizmuth_angle']))
             target['predicted_x'] = x_future
             target['predicted_y'] = y_future
+            target['aizmuth_angle'] = max(-75, min(target['aizmuth_angle'], 75)) # keep the azimuth in range
             
             # Calculate time to closest approach (TCA) for targets moving toward radar
             # TCA is useful for collision avoidance or alerting

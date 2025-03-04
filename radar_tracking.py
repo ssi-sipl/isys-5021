@@ -74,28 +74,53 @@ class RadarTarget:
         
         return kf
     
+    # def update(self, detection):
+    #     """Update target with new detection"""
+    #     # Update Kalman filter
+    #     z = np.array([detection['x'], detection['y']])
+    #     self.kf.predict()
+    #     self.kf.update(z)
+        
+    #     # Update target properties
+    #     self.last_detection = detection
+    #     self.detection_history.append(detection)
+    #     self.last_update_time = time.time()
+    #     self.consecutive_misses = 0
+        
+    #     # Update classification
+    #     self.classification_history.append(detection['classification'])
+    #     if detection['classification'] in self.classification_counts:
+    #         self.classification_counts[detection['classification']] += 1
+    #     else:
+    #         self.classification_counts[detection['classification']] = 1
+            
+    #     # Update most frequent classification
+    #     self.classified_as = max(self.classification_counts, key=self.classification_counts.get)
+
     def update(self, detection):
         """Update target with new detection"""
         # Update Kalman filter
         z = np.array([detection['x'], detection['y']])
         self.kf.predict()
         self.kf.update(z)
-        
+
         # Update target properties
         self.last_detection = detection
         self.detection_history.append(detection)
         self.last_update_time = time.time()
         self.consecutive_misses = 0
-        
+
         # Update classification
         self.classification_history.append(detection['classification'])
-        if detection['classification'] in self.classification_counts:
-            self.classification_counts[detection['classification']] += 1
-        else:
-            self.classification_counts[detection['classification']] = 1
-            
+        self.classification_counts[detection['classification']] = self.classification_counts.get(detection['classification'], 0) + 1
+
         # Update most frequent classification
         self.classified_as = max(self.classification_counts, key=self.classification_counts.get)
+
+        # Ensure signal strength is updated
+        if 'signal_strength' in detection:
+            self.last_detection['signal_strength'] = detection['signal_strength']
+
     
     def predict(self):
         """Predict next position without measurement update"""
@@ -141,7 +166,7 @@ class RadarTarget:
         return state
 
 class RadarTracker:
-    def __init__(self, max_distance=5.0, max_age=2, hit_threshold=3):
+    def __init__(self, max_distance=0.5, max_age=2, hit_threshold=3):
         """
         Initialize tracker
         

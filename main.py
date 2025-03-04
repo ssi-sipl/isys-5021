@@ -1,3 +1,5 @@
+import numpy as np
+from radar_tracking import RadarTracker, process_and_track_targets
 import socket
 import struct
 import math
@@ -11,9 +13,12 @@ import paho.mqtt.client as mqtt
 from Classification.CLASSIFICATION_PIPELINE import classification_pipeline
 from config import *
 
+
 ist_timezone = pytz.timezone('Asia/Kolkata')
 
 targets_data = []  # List to store valid targets
+
+radar_tracker = RadarTracker(max_distance=5.0, max_age=3, hit_threshold=2)
 
 def on_connect(client, userdata, flags, rc):
         # global is_connected_to_mqtt_flag
@@ -56,9 +61,19 @@ def save_to_json():
 def signal_handler(sig, frame):
     print("\nCtrl+C detected! Saving data and exiting...")
     save_to_json()
-    print("Disconnecting from MQTT broker...")
-    mqtt_client.loop_stop()
-    mqtt_client.disconnect()
+    
+    # Save tracked targets
+    tracked_targets = [track.get_state() for track in radar_tracker.tracks]
+    with open("tracked_targets.json", "w") as file:
+        json.dump(tracked_targets, file, indent=4)
+    print("Tracked targets saved to tracked_targets.json")
+    
+    # Disconnect MQTT
+    if SEND_MQTT:
+        print("Disconnecting from MQTT broker...")
+        mqtt_client.loop_stop()
+        mqtt_client.disconnect()
+    
     sys.exit(0)
 
 # Register the signal handler for graceful shutdown
@@ -124,8 +139,6 @@ def parse_header(data):
         header_format, data[:header_size]
     )
 
-
-    
     # print(f"Frame ID: {frame_id}")
     # print(f"Number of Targets: {targets}")
     
@@ -153,33 +166,24 @@ def parse_data_packet(data, frame_id):
 
         # Filter targets below signal strength threshold
         if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
-            # print("Low Signal Strength. Ignoring target...")
             continue
 
         # Apply Kalman filter for velocity tracking
         filtered_velocity = kalman_filter_velocity.update(velocity)
 
-        # calculating the x and y position of the target
+        # Calculate the x and y position of the target
         azimuth_angle_radians = math.radians(azimuth)
-    
-        # Calculate the x and y positions using trigonometry
         x = range_ * math.cos(azimuth_angle_radians)
         y = range_ * math.sin(azimuth_angle_radians)
 
         # Calculate the latitude and longitude of the object            
-        
-        radar_lat_rad = math.radians(RADAR_LAT) # Convert radar latitude to radians
-        
-        # Calculate change in latitude and longitude in degrees
+        radar_lat_rad = math.radians(RADAR_LAT)
         delta_lat_deg = y / 111139
         delta_lon_deg = x / (111139 * math.cos(radar_lat_rad))
-        
-        # Final coordinates of the object
         object_lat = RADAR_LAT + delta_lat_deg
         object_lon = RADAR_LONG + delta_lon_deg
 
         classification = classification_pipeline(range_, filtered_velocity, azimuth)
-
         if classification=="uav":
             classification="others"
         elif classification=="bicycle":
@@ -198,35 +202,40 @@ def parse_data_packet(data, frame_id):
             'aizmuth_angle': round(azimuth, 2),
             'distance': round(range_, 2),
             'direction': "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing",
-            'classification': classification, # ['vehicle', 'person', 'bicycle', 'others']
+            'classification': classification,
             'zone': 0,
             'x': round(x, 2),   
             'y': round(y, 2),
             'latitude': round(object_lat, 6),
             'longitude': round(object_lon, 6),
         }
-        # print("target_info: ", target_info)
 
         targets.append(target_info)
         targets_data.append(target_info)
-
-        if SEND_MQTT:
-            publish_target(target_info)
-
-
         
-    # print("Targets: ", len(targets))
-
     if targets:
-        # process_and_print_targets(targets, frame_id)
+        # Apply object tracking to the detected targets
+        tracked_targets = process_and_track_targets(targets, radar_tracker)
+        
+        # Publish tracked targets via MQTT if enabled
+        if SEND_MQTT:
+            for target in tracked_targets:
+                publish_target(target)
+        
+        # Display the tracked targets
         print(f"Frame ID: {frame_id}")
-        print("Detected Targets:")
-        print(f"{'Serial':<8} {'Signal Strength (dB)':<25} {'Range (m)':<15} {'Velocity (m/s)':<25} {'Direction':<15} {'Azimuth (Deg)':<25} {'x (m) y (m)':<25} {'Latitude':<25} {'Longitude':<25} {'Classification':<25}")
-        print("-" * 150)
-        for idx, target in enumerate(targets, start=1):        
-            print(f"{idx:<8} {target['signal_strength']:<25} {target['range']:<15} {target['speed']:<25} {target['direction']:<15} {target['aizmuth_angle']:<25} {target['x']} {target['y']:<25} {target['latitude']:<25} {target['longitude']:<25} {target['classification']}")
-                    
-        print("-" * 50)
+        print(f"Detected Targets: {len(targets)}, Tracked Targets: {len(tracked_targets)}")
+        print(f"{'ID':<6} {'Track ID':<10} {'Range':<8} {'Speed':<8} {'Angle':<8} {'Class':<10} {'X':<8} {'Y':<8}")
+        print("-" * 80)
+        
+        for idx, target in enumerate(tracked_targets, start=1):
+            track_id = target.get('track_id', 'New')
+            print(f"{idx:<6} {track_id:<10} {target['range']:<8.1f} {target['speed']:<8.1f} "
+                  f"{target['aizmuth_angle']:<8.1f} {target['tracked_classification']:<10} "
+                  f"{target['x']:<8.1f} {target['y']:<8.1f}")
+        
+        print("-" * 80)
+
 
 # Process Packet
 def process_packet(header_data, data_packet):

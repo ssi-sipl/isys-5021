@@ -18,6 +18,8 @@ ist_timezone = pytz.timezone('Asia/Kolkata')
 
 targets_data = []  # List to store valid targets
 
+tracked_targets_list = []
+
 radar_tracker = RadarTracker(max_distance=5.0, max_age=3, hit_threshold=2)
 
 def on_connect(client, userdata, flags, rc):

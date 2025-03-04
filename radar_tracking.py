@@ -300,7 +300,7 @@ def process_and_track_targets(targets, tracker):
                 if v_radial < 0:  # Target is approaching
                     tca = -target['range'] / v_radial if v_radial != 0 else float('inf')
                     target['time_to_closest_approach'] = round(tca, 2)  # in seconds
-            print("FROM PROCESS TRACK TARGETS: ", target)
+            # print("FROM PROCESS TRACK TARGETS: ", target)
             filtered_targets.append(target)
     
     return filtered_targets

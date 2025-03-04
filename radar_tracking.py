@@ -303,4 +303,4 @@ def process_and_track_targets(targets, tracker):
             print("FROM PROCESS TRACK TARGETS: ", target)
             filtered_targets.append(target)
     
-    return tracked_targets
+    return filtered_targets

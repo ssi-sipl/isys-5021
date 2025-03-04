@@ -239,7 +239,7 @@ def parse_data_packet(data, frame_id):
             track_id = target.get('track_id', 'New')
             print(f"{idx:<6} {track_id:<10} {target['range']:<8.1f} {target['speed']:<8.1f} "
                   f"{target['aizmuth_angle']:<8.1f} {target['tracked_classification']:<10} "
-                  f"{target['x']:<8.1f} {target['y']:<8.1f} {target["signal_strength"]}")
+                  f"{target['x']:<8.1f} {target['y']:<8.1f} {target['signal_strength']}")
         
         print("-" * 80)
 

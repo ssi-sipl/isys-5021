@@ -168,7 +168,7 @@ def parse_data_packet(data, frame_id):
         if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
             continue
 
-        if filtered_velocity == 0 ors velocity == 0 :
+        if filtered_velocity == 0 or velocity == 0 :
             # cluter filtering
             continue
         # Apply Kalman filter for velocity tracking

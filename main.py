@@ -166,10 +166,8 @@ def parse_data_packet(data, frame_id):
         target_data = target_list[i * target_size:(i + 1) * target_size]
         signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
 
-        if azimuth < -75:
-            continue
-        elif azimuth > 75:
-            continue
+        azimuth = max(-75, min(azimuth, 75)) # keep the azimuth in range
+        
         # if velocity == 0 :
         #     # cluter filtering
         #     continue

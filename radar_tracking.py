@@ -44,12 +44,12 @@ class RadarTarget:
         
         # Measurement noise
         kf.R = np.array([
-            [1.0, 0],
-            [0, 1.0]
+            [5.0, 0],
+            [0, 5.0]
         ])
         
         # Process noise
-        q = 0.01  # process noise
+        q = 0.001  # process noise
         kf.Q = np.array([
             [q/4*dt**4, 0, q/2*dt**3, 0, q/2*dt**2, 0],
             [0, q/4*dt**4, 0, q/2*dt**3, 0, q/2*dt**2],
@@ -70,7 +70,7 @@ class RadarTarget:
         ]).reshape(6, 1)
         
         # Initial covariance
-        kf.P = np.eye(6) * 10
+        kf.P = np.eye(6) * 50
         
         return kf
     

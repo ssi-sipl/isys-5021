@@ -141,7 +141,7 @@ class RadarTarget:
         return state
 
 class RadarTracker:
-    def __init__(self, max_distance=5.0, max_age=5, hit_threshold=3):
+    def __init__(self, max_distance=5.0, max_age=2, hit_threshold=3):
         """
         Initialize tracker
         

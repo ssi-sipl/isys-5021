@@ -2,7 +2,7 @@ import numpy as np
 from typing import List, Dict, Any
 
 class RadarObjectClassifier:
-    def __init__(self, initial_rules=None):
+    def __init__(self):
         """
         Initialize the radar object classifier with more realistic rules
         """
@@ -21,7 +21,7 @@ class RadarObjectClassifier:
         }
         
         # Dynamic rules that can be updated based on environment
-        self.rules = initial_rules or self.default_rules
+        self.rules = self.default_rules
         
         # Classification confidence tracking
         self.classification_confidence = {}

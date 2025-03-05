@@ -296,7 +296,7 @@ def process_and_track_targets(targets, tracker):
             
             # Calculate time to closest approach (TCA) for targets moving toward radar
             # TCA is useful for collision avoidance or alerting
-            if target['speed'] > 0 and target['range'] > 0:
+            if abs(target['speed']) > 0 and target['range'] > 0:
                 # Radial velocity component
                 v_radial = target['speed'] * np.cos(np.radians(target['aizmuth_angle']))
                 if v_radial < 0:  # Target is approaching

@@ -163,7 +163,7 @@ def calculate_checksum(data, nrOfTargets, bytesPerTarget):
             checksum &= 0xFFFFFFFF
         
     except IndexError:
-         print("Warning: Index out of range while calculating checksum. Ignoring and continuing...")
+         return 0
 
     return checksum
 

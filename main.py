@@ -265,19 +265,21 @@ def parse_data_packet(data, frame_id):
             for target in tracked_targets:
                 publish_target(target)
         
+
         # Display the tracked targets
-        print(f"Frame ID: {frame_id}")
-        print(f"Detected Targets: {len(targets)}, Tracked Targets: {len(tracked_targets)}")
-        print(f"{'ID':<6} {'Track ID':<10} {'Range':<8} {'Speed':<8} {'Angle':<8} {'Class':<10} {'X':<8} {'Y':<8} {'Signal Strenght':<20} {'TCA':<10}")
-        print("-" * 80)
-        
-        for idx, target in enumerate(tracked_targets, start=1):
-            track_id = target.get('track_id', 'New')
-            print(f"{idx:<6} {track_id:<10} {target['range']:<8.1f} {target['speed']:<8.1f} "
-                  f"{target['aizmuth_angle']:<8.1f} {target['tracked_classification']:<10} "
-                  f"{target['x']:<8.1f} {target['y']:<8.1f} {target['signal_strength']} {target['time_to_closest_approach']:<10}")
-        
-        print("-" * 80)
+        if len(tracked_targets) != 0:
+            print(f"Frame ID: {frame_id}")
+            print(f"Detected Targets: {len(targets)}, Tracked Targets: {len(tracked_targets)}")
+            print(f"{'ID':<6} {'Track ID':<10} {'Range':<8} {'Speed':<8} {'Angle':<8} {'Class':<10} {'X':<8} {'Y':<8} {'Signal Strenght':<20} {'TCA':<10}")
+            print("-" * 80)
+            
+            for idx, target in enumerate(tracked_targets, start=1):
+                track_id = target.get('track_id', 'New')
+                print(f"{idx:<6} {track_id:<10} {target['range']:<8.1f} {target['speed']:<8.1f} "
+                    f"{target['aizmuth_angle']:<8.1f} {target['tracked_classification']:<10} "
+                    f"{target['x']:<8.1f} {target['y']:<8.1f} {target['signal_strength']} {target['time_to_closest_approach']:<10}")
+            
+            print("-" * 80)
 
 
 # Process Packet

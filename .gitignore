@@ -5,3 +5,5 @@
 /Classification/classification_model.pkl
 /Classification/custom_radar_classification_dataset.csv
 /Classification/dataset.npy
+
+detected_targets.json

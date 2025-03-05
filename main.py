@@ -268,7 +268,7 @@ def parse_data_packet(data, frame_id):
         # Display the tracked targets
         print(f"Frame ID: {frame_id}")
         print(f"Detected Targets: {len(targets)}, Tracked Targets: {len(tracked_targets)}")
-        print(f"{'ID':<6} {'Track ID':<10} {'Range':<8} {'Speed':<8} {'Angle':<8} {'Class':<10} {'X':<8} {'Y':<8} {'Signal Strenght':<20}" {'TCA':<10})
+        print(f"{'ID':<6} {'Track ID':<10} {'Range':<8} {'Speed':<8} {'Angle':<8} {'Class':<10} {'X':<8} {'Y':<8} {'Signal Strenght':<20} {'TCA':<10}")
         print("-" * 80)
         
         for idx, target in enumerate(tracked_targets, start=1):

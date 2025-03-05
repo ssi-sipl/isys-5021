@@ -286,7 +286,7 @@ def process_and_track_targets(targets, tracker):
     # Add tracking-related info to each target
     for target in tracked_targets:
         # Calculate additional metrics if needed
-        if target['speed'] > 0.2 and target['signal_strength'] > SIGNAL_STRENGTH_THRESHOLD:  # If moving
+        if abs(target['speed']) > 0.2 and target['signal_strength'] > SIGNAL_STRENGTH_THRESHOLD:  # If moving
             # Predict position in 2 seconds
             x_future = target['x'] + 2 * target['speed'] * np.cos(np.radians(target['aizmuth_angle']))
             y_future = target['y'] + 2 * target['speed'] * np.sin(np.radians(target['aizmuth_angle']))
@@ -296,7 +296,7 @@ def process_and_track_targets(targets, tracker):
             
             # Calculate time to closest approach (TCA) for targets moving toward radar
             # TCA is useful for collision avoidance or alerting
-            if abs(target['speed']) > 0 and target['range'] > 0:
+            if target['speed'] > 0 and target['range'] > 0:
                 # Radial velocity component
                 v_radial = target['speed'] * np.cos(np.radians(target['aizmuth_angle']))
                 if v_radial < 0:  # Target is approaching

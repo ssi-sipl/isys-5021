@@ -225,9 +225,9 @@ def parse_data_packet(data, frame_id):
         #     classification="others"
         # elif classification=="bicycle":
         #     classification="person"
-        scaled_signal_strength = signal_strength/100.0
+        scaled_signal_strength = round(signal_strength, 2)/100.0
 
-        classification = classifier.classify_object({'range': range, 'velocity': abs(velocity), 'signal_strength': scaled_signal_strength})
+        classification = classifier.classify_object({'range': round(range_, 2), 'velocity': round(filtered_velocity, 2), 'signal_strength': scaled_signal_strength})
 
         ist_timestamp = datetime.now(ist_timezone)
 

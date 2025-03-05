@@ -59,8 +59,6 @@ if SEND_MQTT:
 import json
 import os
 
-OUTPUT_FILE = "radar_data.json"  # Define the output file
-
 def save_to_json():
     """
     Append new radar data to the existing JSON file instead of overwriting it.

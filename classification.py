@@ -38,6 +38,15 @@ class RadarObjectClassifier:
         """
         # Probabilistic classification
         classification_scores = {}
+        # Ensure required keys exist in the measurement dictionary
+        print(f"Debug: measuremment", measurement)
+        required_keys = ['range', 'velocity', 'signal_strength']
+        if not all(key in measurement for key in required_keys):
+            print(f"Debug: Missing keys in measurement - {measurement}")
+            return 'others'  # Default classification if data is incomplete
+
+        print(f"Debug: self.rules = {self.rules}")
+
         for class_type, rule_set in self.rules.items():
             score = 0
             

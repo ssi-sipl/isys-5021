@@ -59,43 +59,43 @@ if SEND_MQTT:
 import json
 import os
 
-def save_to_json():
-    """
-    Append new radar data to the existing JSON file instead of overwriting it.
-    
-    Args:
-        targets_data (list or dict): The new radar data to save.
-    """
-    # Check if the file exists and has data
-    if os.path.exists(OUTPUT_FILE) and os.path.getsize(OUTPUT_FILE) > 0:
-        with open(OUTPUT_FILE, "r") as file:
-            try:
-                existing_data = json.load(file)  # Load existing JSON data
-            except json.JSONDecodeError:
-                existing_data = []  # Handle empty or corrupted file
-    else:
-        existing_data = []
-
-    # Ensure it's a list to append data properly
-    if isinstance(existing_data, dict):
-        existing_data = [existing_data]  # Convert dict to list for consistency
-    
-    # Append new data
-    if isinstance(targets_data, list):
-        existing_data.extend(targets_data)
-    else:
-        existing_data.append(targets_data)
-
-    # Write updated data back to the file
-    with open(OUTPUT_FILE, "w") as file:
-        json.dump(existing_data, file, indent=4)
-
-    print(f"Data appended to {OUTPUT_FILE}")
-
 # def save_to_json():
-#     with open(OUTPUT_FILE, "w") as file:
-#         json.dump(targets_data, file, indent=4)
-#     print(f"Data saved to {OUTPUT_FILE}")
+    # """
+    # Append new radar data to the existing JSON file instead of overwriting it.
+    
+    # Args:
+    #     targets_data (list or dict): The new radar data to save.
+    # """
+    # # Check if the file exists and has data
+    # if os.path.exists(OUTPUT_FILE) and os.path.getsize(OUTPUT_FILE) > 0:
+    #     with open(OUTPUT_FILE, "r") as file:
+    #         try:
+    #             existing_data = json.load(file)  # Load existing JSON data
+    #         except json.JSONDecodeError:
+    #             existing_data = []  # Handle empty or corrupted file
+    # else:
+    #     existing_data = []
+
+    # # Ensure it's a list to append data properly
+    # if isinstance(existing_data, dict):
+    #     existing_data = [existing_data]  # Convert dict to list for consistency
+    
+    # # Append new data
+    # if isinstance(targets_data, list):
+    #     existing_data.extend(targets_data)
+    # else:
+    #     existing_data.append(targets_data)
+
+    # # Write updated data back to the file
+    # with open(OUTPUT_FILE, "w") as file:
+    #     json.dump(existing_data, file, indent=4)
+
+    # print(f"Data appended to {OUTPUT_FILE}")
+
+def save_to_json():
+    with open(OUTPUT_FILE, "w") as file:
+        json.dump(targets_data, file, indent=4)
+    print(f"Data saved to {OUTPUT_FILE}")
 
 def signal_handler(sig, frame):
     print("\nCtrl+C detected! Saving data and exiting...")

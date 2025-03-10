@@ -194,6 +194,8 @@ def parse_data_packet(data, frame_id):
         classification = classification_pipeline(range_, filtered_velocity, azimuth)
         if classification=="uav":
             classification="others"
+        if classification=="vehicle":
+            classification="elephant"
         elif classification=="bicycle":
             classification="person"
 

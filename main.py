@@ -12,6 +12,7 @@ from datetime import datetime
 import paho.mqtt.client as mqtt
 from Classification.CLASSIFICATION_PIPELINE import classification_pipeline
 from config import *
+import serial
 
 
 ist_timezone = pytz.timezone('Asia/Kolkata')
@@ -21,6 +22,45 @@ targets_data = []  # List to store valid targets
 tracked_targets_list = []
 
 radar_tracker = RadarTracker(max_distance=5.0, max_age=3, hit_threshold=2)
+
+# Attempt to initialize the serial connection
+try:
+    ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+except serial.SerialException as e:
+    print(f"[ERROR] Failed to open serial port {SERIAL_PORT}: {e}")
+    ser = None  # Prevents using an invalid serial object
+
+def transmit_target_uart(target):
+    if ser is None:
+        print("[ERROR] Serial port is not available. Cannot send data.")
+        return
+
+    try:
+        # Attempt to serialize the data
+        try:
+            json_data = json.dumps(target)
+        except (TypeError, ValueError) as e:
+            print(f"[ERROR] JSON serialization failed: {e}")
+            return
+        
+        # Attempt to encode the data
+        try:
+            encoded_data = (json_data + "\n").encode('utf-8')
+        except UnicodeEncodeError as e:
+            print(f"[ERROR] Encoding to UTF-8 failed: {e}")
+            return
+        
+        # Attempt to write to the serial port
+        try:
+            ser.write(encoded_data)
+            print(f"[INFO] Sent over UART: {json_data}")
+        except serial.SerialTimeoutException as e:
+            print(f"[ERROR] Serial write timeout: {e}")
+        except serial.SerialException as e:
+            print(f"[ERROR] Serial write failed: {e}")
+
+    except Exception as e:
+        print(f"[ERROR] Unexpected error in publish_target: {e}")
 
 def on_connect(client, userdata, flags, rc):
         # global is_connected_to_mqtt_flag
@@ -225,26 +265,24 @@ def parse_data_packet(data, frame_id):
         # Apply object tracking to the detected targets
         tracked_targets = process_and_track_targets(targets, radar_tracker)
         
-        # for target in tracked_targets:
-        #     print (target)
-
-        # Publish tracked targets via MQTT if enabled
-        if SEND_MQTT:
-            for target in tracked_targets:
-                publish_target(target)
-        
-        # Display the tracked targets
         print(f"Frame ID: {frame_id}")
         print(f"Detected Targets: {len(targets)}, Tracked Targets: {len(tracked_targets)}")
         print(f"{'ID':<6} {'Track ID':<10} {'Range':<8} {'Speed':<8} {'Angle':<8} {'Class':<10} {'X':<8} {'Y':<8} {'Signal Strenght':<20}")
         print("-" * 80)
-        
         for idx, target in enumerate(tracked_targets, start=1):
+
+            if SEND_MQTT:
+                publish_target(target)
+            
+            if SEND_UART:
+                transmit_target_uart(target)
+
             track_id = target.get('track_id', 'New')
+
             print(f"{idx:<6} {track_id:<10} {target['range']:<8.1f} {target['speed']:<8.1f} "
-                  f"{target['aizmuth_angle']:<8.1f} {target['tracked_classification']:<10} "
-                  f"{target['x']:<8.1f} {target['y']:<8.1f} {target['signal_strength']}")
-        
+                    f"{target['aizmuth_angle']:<8.1f} {target['tracked_classification']:<10} "
+                    f"{target['x']:<8.1f} {target['y']:<8.1f} {target['signal_strength']}")
+            
         print("-" * 80)
 
 

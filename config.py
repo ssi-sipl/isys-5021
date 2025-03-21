@@ -1,12 +1,16 @@
-#MQTT Configuration
+# MQTT Configuration
 SEND_MQTT = False
 MQTT_BROKER = "localhost"  # Change to your broker's IP address if needed
 MQTT_PORT = 1883
 MQTT_CHANNEL = "radar_surveillance"
 MQTT_BROKER_SUBSCRIBER = "localhost" # Change to your broker's IP address
-MQTT_USERNAME = ""
-MQTT_PASSWORD = ""
+MQTT_USERNAME = "rad"
+MQTT_PASSWORD = "gxuvimr"
 
+# Serial Port Configuration
+SEND_UART = False
+SERIAL_PORT = "/dev/ttyUSB0"  # Change if necessary
+BAUD_RATE = 57600  # Must match receiver settings
 
 # Radar Configuration
 RADAR_ID = "radar-isys5021"

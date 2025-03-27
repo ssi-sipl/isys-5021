@@ -26,6 +26,7 @@ radar_tracker = RadarTracker(max_distance=5.0, max_age=3, hit_threshold=2)
 # Attempt to initialize the serial connection
 try:
     ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+    print("Serial Port Opened!")
 except serial.SerialException as e:
     print(f"[ERROR] Failed to open serial port {SERIAL_PORT}: {e}")
     ser = None  # Prevents using an invalid serial object

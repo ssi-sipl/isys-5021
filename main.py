@@ -21,6 +21,8 @@ targets_data = []  # List to store valid targets
 
 tracked_targets_list = []
 
+final_data = []
+
 radar_tracker = RadarTracker(max_distance=5.0, max_age=3, hit_threshold=2)
 
 # Attempt to initialize the serial connection
@@ -271,6 +273,8 @@ def parse_data_packet(data, frame_id):
         print(f"{'ID':<6} {'Track ID':<10} {'Range':<8} {'Speed':<8} {'Angle':<8} {'Class':<10} {'X':<8} {'Y':<8} {'Signal Strenght':<20}")
         print("-" * 80)
         for idx, target in enumerate(tracked_targets, start=1):
+
+            final_data.append(target)
 
             if SEND_MQTT:
                 publish_target(target)

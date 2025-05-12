@@ -112,6 +112,10 @@ def signal_handler(sig, frame):
     with open("tracked_targets.json", "w") as file:
         json.dump(tracked_targets, file, indent=4)
     print("Tracked targets saved to tracked_targets.json")
+
+    with open("final_data.json", "w") as file:
+        json.dump(final_data, file, indent=4)
+    print("Final data saved to final_data.json")
     
     # Disconnect MQTT
     if SEND_MQTT:

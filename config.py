@@ -21,10 +21,14 @@ RADAR_LONG = 74.01219  #  radar longitude
 LOCAL_IP = "192.168.252.2" # Static IP of the Ethernet
 LOCAL_PORT = 2050
 
-
 # Define thresholds for valid detection
 SNR_THRESHOLD = 3  
 SIGNAL_STRENGTH_THRESHOLD = 18  # Minimum valid signal strength (in dB)
+
+# Thresholds for tracking
+MAX_DISTANCE = 4 # Maximum distance between objects in meters
+MAX_AGE = 4 # Maximum age of a target in frames
+HIT_THRESHOLD = 2 # Minimum hit probability for a target to be considered valid in frames
 
 # constants
 EARTH_R = 6371000 # Earth radius in meters

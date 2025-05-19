@@ -21,7 +21,7 @@ targets_data = []  # List to store valid targets
 
 tracked_targets_list = []
 
-radar_tracker = RadarTracker(max_distance=8.0, max_age=5, hit_threshold=2)
+radar_tracker = RadarTracker(max_distance=MAX_DISTANCE, max_age=MAX_AGE, hit_threshold=HIT_THRESHOLD)
 
 # Attempt to initialize the serial connection
 try:

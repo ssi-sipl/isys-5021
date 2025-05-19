@@ -221,7 +221,23 @@ class RadarTracker:
             for j, detection in enumerate(detections):
                 # Calculate Euclidean distance
                 dist = np.sqrt((predicted['x'] - detection['x'])**2 + 
-                              (predicted['y'] - detection['y'])**2)
+                            (predicted['y'] - detection['y'])**2)
+                
+                # Add velocity-based prediction to improve association
+                # This helps with faster moving targets
+                vx = track.kf.x[2, 0]  # Velocity x component
+                vy = track.kf.x[3, 0]  # Velocity y component
+                
+                # Adjust distance based on velocity prediction
+                if abs(vx) > 0.5 or abs(vy) > 0.5:  # If target is moving significantly
+                    # Predict where the target should be based on velocity
+                    pred_x = detection['x'] + vx * 0.1  # 0.1s prediction
+                    pred_y = detection['y'] + vy * 0.1
+                    pred_dist = np.sqrt((pred_x - detection['x'])**2 + (pred_y - detection['y'])**2)
+                    
+                    # Favor associations that align with predicted motion
+                    dist = dist * 0.8 + pred_dist * 0.2
+                
                 distance_matrix[i, j] = dist
         
         # Associate using greedy nearest neighbor
@@ -258,9 +274,16 @@ class RadarTracker:
     def _cleanup_tracks(self):
         """Remove old tracks"""
         current_time = time.time()
-        self.tracks = [track for track in self.tracks 
-                      if (current_time - track.last_update_time < self.max_age and 
-                          track.consecutive_misses < 5)]
+        
+        # More sophisticated track cleanup logic
+        self.tracks = [track for track in self.tracks if (
+            # Keep track if it was recently updated
+            (current_time - track.last_update_time < self.max_age) and 
+            # Or if it has many detections but temporarily lost
+            ((len(track.detection_history) >= self.hit_threshold * 2) and track.consecutive_misses < 10) or
+            # Or if normal tracking criteria are met
+            (track.consecutive_misses < 5)
+        )]
     
     def get_tracks(self):
         """Get list of current tracks"""

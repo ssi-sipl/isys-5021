@@ -81,8 +81,9 @@ def parse_data_packet(data, frame_id):
         # if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
         #     continue
 
-        if round(signal_strength, 2) == 0 or round(velocity,2) == 0:
+        if round(signal_strength, 2) == 0 or round(velocity,2) == 0 or round(signal_strength,2 ) < 4:
             continue
+
 
 
 

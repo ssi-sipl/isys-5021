@@ -1,10 +1,10 @@
 # MQTT Configuration
 SEND_MQTT = False
-MQTT_BROKER = "localhost"  # Change to your broker's IP address if needed
+MQTT_BROKER = "192.168.1.40"  # Change to your broker's IP address if needed
 MQTT_PORT = 1883
 MQTT_CHANNEL = "radar_surveillance"
 MQTT_BROKER_SUBSCRIBER = "localhost" # Change to your broker's IP address
-MQTT_USERNAME = "rad"
+MQTT_USERNAME = "dro"
 MQTT_PASSWORD = "gxuvimr"
 
 # Serial Port Configuration

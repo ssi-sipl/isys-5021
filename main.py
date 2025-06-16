@@ -217,7 +217,7 @@ def parse_data_packet(data, frame_id):
         #     continue
 
         # Apply Kalman filter for velocity tracking
-        filtered_velocity = kalman_filter_velocity.update(velocity)
+        # filtered_velocity = kalman_filter_velocity.update(velocity)
 
 
         # Calculate the x and y position of the target
@@ -232,7 +232,7 @@ def parse_data_packet(data, frame_id):
         object_lat = RADAR_LAT + delta_lat_deg
         object_lon = RADAR_LONG + delta_lon_deg
 
-        classification = classification_pipeline(range_, filtered_velocity, azimuth)
+        classification = classification_pipeline(range_, velocity, azimuth)
         if classification=="uav":
             classification="others"
         elif classification=="bicycle":
@@ -247,7 +247,7 @@ def parse_data_packet(data, frame_id):
             'timestamp': str(ist_timestamp),
             'signal_strength': round(signal_strength, 2),
             'range': round(range_, 2),
-            'speed': round(filtered_velocity, 2),
+            'speed': round(velocity, 2),
             'aizmuth_angle': round(azimuth, 2),
             'distance': round(range_, 2),
             'direction': "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing",

@@ -138,6 +138,9 @@ class RadarTarget:
         # Calculate azimuth from velocity vector
         azimuth = np.degrees(np.arctan2(vy, vx))
         range_val = np.sqrt(x**2 + y**2)
+
+        print("Raw azimuth:", self.last_detection['aizmuth_angle'], "→ Computed azimuth:", azimuth)
+
         
         return {
             'x': x,

@@ -219,6 +219,9 @@ def parse_data_packet(data, frame_id):
         # Apply Kalman filter for velocity tracking
         # filtered_velocity = kalman_filter_velocity.update(velocity)
 
+        if round(signal_strength, 2) == 0 or not( SIGNAL_STRENGTH_THRESHOLD < round(signal_strength,2 ) < 15) or velocity == 0:
+            continue
+
 
         # Calculate the x and y position of the target
         azimuth_angle_radians = math.radians(azimuth)

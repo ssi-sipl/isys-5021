@@ -293,7 +293,7 @@ def process_and_track_targets(targets, tracker):
     # Add tracking-related info to each target
     for target in tracked_targets:
         # Calculate additional metrics if needed
-        if abs(target['speed']) > 0 and target['signal_strength'] > SIGNAL_STRENGTH_THRESHOLD:  # If moving
+        if abs(target['speed']) > 0 and SIGNAL_STRENGTH_THRESHOLD < target['signal_strength'] < 15 :  # If moving
             # Predict position in 2 seconds
             x_future = target['x'] + 2 * target['speed'] * np.cos(np.radians(target['aizmuth_angle']))
             y_future = target['y'] + 2 * target['speed'] * np.sin(np.radians(target['aizmuth_angle']))

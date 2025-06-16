@@ -81,6 +81,9 @@ def parse_data_packet(data, frame_id):
         # if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
         #     continue
 
+        if signal_strength == 0:
+            continue
+
 
 
         # Calculate the x and y position of the target

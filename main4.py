@@ -201,6 +201,9 @@ def parse_data_packet(data, frame_id):
         elif classification=="bicycle":
             classification="person"
 
+        if classification != "person" and PERSON_ONLY:
+            continue
+
         ist_timestamp = datetime.now(ist_timezone)
 
         target_info = {

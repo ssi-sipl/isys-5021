@@ -31,6 +31,7 @@ MAX_SIGNAL_STRENGTH = 100  # Maximum valid signal strength (in dB)
 # Features ( if both are false, all targets will be detected )
 DETECT_ONLY_STATIC = False  # Only detect static targets
 DETECT_ONLY_MOVING = False  # Only detect moving targets
+PERSON_ONLY = False
 
 DEBUG_MODE = True  # Enable debug mode for data logging
 

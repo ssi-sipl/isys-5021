@@ -224,7 +224,7 @@ def parse_data_packet(data, frame_id):
         if round(signal_strength, 2) == 0 or not( SIGNAL_STRENGTH_THRESHOLD < round(signal_strength,2 ) < 15):
             continue
 
-        print(f"[T{frame_id}] Azimuth: {azimuth:.2f}°, Range: {range_:.2f}m, Velocity: {velocity:.2f} m/s, Signal: {signal_strength:.2f}")
+        # print(f"[T{frame_id}] Azimuth: {azimuth:.2f}°, Range: {range_:.2f}m, Velocity: {velocity:.2f} m/s, Signal: {signal_strength:.2f}")
 
 
         # Calculate the x and y position of the target

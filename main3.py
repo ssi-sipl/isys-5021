@@ -72,6 +72,10 @@ def parse_data_packet(data, frame_id):
         target_data = target_list[i * target_size:(i + 1) * target_size]
         signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
 
+        print(f"Target {i+1}: Signal Strength: {signal_strength}, Range: {range_}, Velocity: {velocity}, Azimuth: {azimuth}")
+        print("-" * 50)
+    
+
         
 
         # if velocity == 0 :
@@ -133,17 +137,17 @@ def parse_data_packet(data, frame_id):
     if targets:
         # Apply object tracking to the detected targets
         
-        print("-" * 80)
-        print(f"Frame ID: {frame_id}")
-        print(f"Detected Targets: {len(targets)}")
-        print(f"{'Signal Strength':<20} {'Range (m)':<10} {'velocity (m/s)':<10} {'Azimuth (deg)':<15} {'Direction':<10}")
+        # print("-" * 80)
+        # print(f"Frame ID: {frame_id}")
+        # print(f"Detected Targets: {len(targets)}")
+        # print(f"{'Signal Strength':<20} {'Range (m)':<10} {'velocity (m/s)':<10} {'Azimuth (deg)':<15} {'Direction':<10}")
 
-        print("-" * 80)
+        # print("-" * 80)
 
-        for target in targets:
-            print(f"{target['signal_strength']:<20} {target['range']:<10.1f} {target['velocity']:<10.1f} "
-                  f"{target['aizmuth_angle']:<15.1f} {target['direction']:<10}")
-        print("-" * 80)
+        # for target in targets:
+        #     print(f"{target['signal_strength']:<20} {target['range']:<10.1f} {target['velocity']:<10.1f} "
+        #           f"{target['aizmuth_angle']:<15.1f} {target['direction']:<10}")
+        # print("-" * 80)
 
 
 

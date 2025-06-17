@@ -12,17 +12,11 @@ SIGNAL_STRENGTH_MIN = 0.005
 class Track:
     def __init__(self, detection):
         self.track_id = next(track_id_counter)
-        # self.range = detection['range']
-        # self.azimuth = detection['azimuth']
-        # self.signal_strength = detection['signal_strength']
         self.data = detection.copy()
         self.missed_frames = 0
         self.confidence = 1
 
     def update(self, detection):
-        # self.range = detection['range']
-        # self.azimuth = detection['azimuth']
-        # self.signal_strength = detection['signal_strength']
         self.data.update(detection)
         self.missed_frames = 0
         self.confidence += 1
@@ -36,10 +30,22 @@ class Track:
         })
         return state
 
+    @property
+    def range(self):
+        return self.data.get('range', 0)
+
+    @property
+    def azimuth(self):
+        return self.data.get('aizmuth_angle', 0)
+
+    @property
+    def signal_strength(self):
+        return self.data.get('signal_strength', 0)
+
 def is_match(det, track):
     return (
         abs(det['range'] - track.range) < RANGE_THRESHOLD and
-        abs(det['azimuth'] - track.azimuth) < AZIMUTH_THRESHOLD
+        abs(det['aizmuth_angle'] - track.azimuth) < AZIMUTH_THRESHOLD
     )
 
 def update_tracks(detections, tracks):

@@ -2,7 +2,7 @@
 import socket
 import struct
 import math
-from config import LOCAL_IP, LOCAL_PORT
+from config import *
 
 
 def calculate_checksum(data, nrOfTargets, bytesPerTarget):
@@ -82,8 +82,8 @@ def parse_data_packet(data, frame_id):
         #     # cluter filtering
         #     continue
         # # Filter targets below signal strength threshold
-        # if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
-        #     continue
+        if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
+            continue
 
  
 

@@ -208,17 +208,13 @@ def parse_data_packet(data, frame_id):
             'frame_id': frame_id,
             'timestamp': str(ist_timestamp),
             'signal_strength': round(signal_strength, 2),
-            'range': round(range_, 2),
-            'speed': round(velocity, 2),
-            'aizmuth_angle': round(azimuth, 2),
-            'distance': round(range_, 2),
+            'velocity': round(velocity, 2),
             'direction': "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing",
             'classification': classification,
-            'zone': 0,
-            'x': round(x, 2),   
-            'y': round(y, 2),
             'latitude': round(object_lat, 6),
             'longitude': round(object_lon, 6),
+            'range': round(range_, 2),
+            'azimuth': round(azimuth, 2),
         }
 
         raw_detections.append(target_info)

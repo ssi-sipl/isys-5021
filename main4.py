@@ -225,13 +225,13 @@ def parse_data_packet(data, frame_id):
 
     print(f"Frame ID: {frame_id}")
     print(f"Detected Targets: {len(raw_detections)}, Tracked Targets: {len(radar_tracker)}")        
-    print(f"{'ID':<6} {'Track ID':<10} {'Range':<8} {'Speed':<8} {'Angle':<8} {'Class':<10} {'Signal Strenght':<20}")
+    {'Track ID':<10} {'Range':<8} {'Speed':<8} {'Angle':<8} {'Class':<10} {'Signal Strenght':<20} {"Confidence":<10} {"Missed Frames":<10})
     
     print("-" * 80)
     for track in radar_tracker:
         tracked_data = track.get_state()
         # print(f"Tracked Target: {tracked_data}")
-        print(f"{tracked_data['frame_id']<6} {tracked_data['track_id']:<10} {tracked_data['range']:<8} {tracked_data['velocity']:<8} {tracked_data['azimuth']:<8} {tracked_data['classification']:<10} {tracked_data['signal_strength']:<20}")
+        print(f"{tracked_data['track_id']:<10} {tracked_data['range']:<8} {tracked_data['velocity']:<8} {tracked_data['azimuth']:<8} {tracked_data['classification']:<10} {tracked_data['signal_strength']:<20} {tracked_data['confidence']:<10} {tracked_data['missed_frames']:<10}")
         
         
 # Process Packet

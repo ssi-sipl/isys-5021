@@ -206,6 +206,8 @@ def parse_data_packet(data, frame_id):
 
         target_data = target_list[i * target_size:(i + 1) * target_size]
         signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
+        print(f"[T{frame_id}] Azimuth: {azimuth:.2f}°, Range: {range_:.2f}m, Velocity: {velocity:.2f} m/s, Signal: {signal_strength:.2f}")
+
 
         
 

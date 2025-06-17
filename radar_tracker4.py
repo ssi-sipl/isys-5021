@@ -13,14 +13,14 @@ class Track:
     def __init__(self, detection):
         self.track_id = next(track_id_counter)
         self.range = detection['range']
-        self.azimuth = detection['azimuth']
+        self.azimuth = detection['aizmuth_angle']
         self.signal_strength = detection['signal_strength']
         self.missed_frames = 0
         self.confidence = 1
 
     def update(self, detection):
         self.range = detection['range']
-        self.azimuth = detection['azimuth']
+        self.azimuth = detection['aizmuth_angle']
         self.signal_strength = detection['signal_strength']
         self.missed_frames = 0
         self.confidence += 1
@@ -29,7 +29,7 @@ class Track:
         return {
             "track_id": self.track_id,
             "range": self.range,
-            "azimuth": self.azimuth,
+            "aizmuth_angle": self.azimuth,
             "signal_strength": self.signal_strength,
             "confidence": self.confidence,
             "missed_frames": self.missed_frames
@@ -38,7 +38,7 @@ class Track:
 def is_match(det, track):
     return (
         abs(det['range'] - track.range) < RANGE_THRESHOLD and
-        abs(det['azimuth'] - track.azimuth) < AZIMUTH_THRESHOLD
+        abs(det['aizmuth_angle'] - track.azimuth) < AZIMUTH_THRESHOLD
     )
 
 def update_tracks(detections, tracks):

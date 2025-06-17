@@ -232,7 +232,7 @@ def parse_data_packet(data, frame_id):
     print("-" * 80)
     for track in radar_tracker:
         tracked_data = track.get_state()
-        # print(f"Tracked Target: {tracked_data}")
+  
         print(f"{tracked_data['track_id']:<10} {tracked_data['range']:<8} {tracked_data['velocity']:<8} {tracked_data['azimuth']:<8} {tracked_data['classification']:<10} {tracked_data['signal_strength']:<20} {tracked_data['confidence']:<10} {tracked_data['missed_frames']:<10}")
 
         

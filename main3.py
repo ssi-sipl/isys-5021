@@ -72,8 +72,6 @@ def parse_data_packet(data, frame_id):
         target_data = target_list[i * target_size:(i + 1) * target_size]
         signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
 
-        print(f"Target {i+1}: Signal Strength: {signal_strength}, Range: {range_}, Velocity: {velocity}, Azimuth: {azimuth}")
-        print("-" * 50)
     
 
         
@@ -85,6 +83,8 @@ def parse_data_packet(data, frame_id):
         if signal_strength < SIGNAL_STRENGTH_THRESHOLD:
             continue
 
+        print(f"Target {i+1}: Signal Strength: {signal_strength}, Range: {range_}, Velocity: {velocity}, Azimuth: {azimuth}")
+        print("-" * 50)
  
 
 

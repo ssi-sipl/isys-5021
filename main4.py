@@ -228,7 +228,7 @@ def parse_data_packet(data, frame_id):
         print(f"Raw Targets: {len(raw_detections)}, Tracked Targets: {len(radar_tracker)}")     
         print(f"{'Track ID':<10} {'Range(m)':<8} {'Speed(m/s)':<8} {'Angle(deg)':<8} {'Class':<10} {'Signal Strength(dB)':<20} {'Confidence':<10} {'Missed Frames':<10}")
         
-        print("-" * 80)
+        print("-" * 100)
     for track in radar_tracker:
 
         tracked_data = track.get_state()
@@ -239,7 +239,7 @@ def parse_data_packet(data, frame_id):
 
         if DEBUG_MODE:
             print(f"{tracked_data['track_id']:<10} {tracked_data['range']:<8} {tracked_data['velocity']:<8} {tracked_data['azimuth']:<8} {tracked_data['classification']:<20} {tracked_data['signal_strength']:<20} {tracked_data['confidence']:<10} {tracked_data['missed_frames']:<10}")
-            print("-" * 80)
+            print("-" * 100)
 
         final_data.append(tracked_data)
 

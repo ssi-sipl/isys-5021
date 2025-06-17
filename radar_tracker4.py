@@ -36,7 +36,7 @@ class Track:
 
     @property
     def azimuth(self):
-        return self.data.get('aizmuth_angle', 0)
+        return self.data.get('azimuth', 0)
 
     @property
     def signal_strength(self):
@@ -45,7 +45,7 @@ class Track:
 def is_match(det, track):
     return (
         abs(det['range'] - track.range) < RANGE_THRESHOLD and
-        abs(det['aizmuth_angle'] - track.azimuth) < AZIMUTH_THRESHOLD
+        abs(det['azimuth'] - track.azimuth) < AZIMUTH_THRESHOLD
     )
 
 def update_tracks(detections, tracks):

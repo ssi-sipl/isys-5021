@@ -10,7 +10,7 @@ import pytz
 from datetime import datetime
 import paho.mqtt.client as mqtt
 from Classification.CLASSIFICATION_PIPELINE import classification_pipeline
-from config import *
+from config4 import *
 import serial
 from radar_tracker4 import update_tracks, Track
 
@@ -18,7 +18,7 @@ radar_tracker = []  # List of Track objects
 
 ist_timezone = pytz.timezone('Asia/Kolkata')
 
-targets_data = []  # List to store valid targets
+final_data = []  # List to store valid targets
 
 
 # Attempt to initialize the serial connection
@@ -96,19 +96,12 @@ if SEND_MQTT:
 
 def save_to_json():
     with open(OUTPUT_FILE, "w") as file:
-        json.dump(targets_data, file, indent=4)
+        json.dump(final_data, file, indent=4)
     print(f"Data saved to {OUTPUT_FILE}")
 
 def signal_handler(sig, frame):
     print("\nCtrl+C detected! Saving data and exiting...")
     save_to_json()
-    
-    # Save tracked targets
-    tracked_targets = [track.get_state() for track in radar_tracker.tracks]
-    with open("tracked_targets.json", "w") as file:
-        json.dump(tracked_targets, file, indent=4)
-    print("Tracked targets saved to tracked_targets.json")
-    
     # Disconnect MQTT
     if SEND_MQTT:
         print("Disconnecting from MQTT broker...")
@@ -179,11 +172,16 @@ def parse_data_packet(data, frame_id):
         target_data = target_list[i * target_size:(i + 1) * target_size]
         signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
         
-        if not( SIGNAL_STRENGTH_THRESHOLD < signal_strength ):
+        if not( MIN_SIGNAL_STRENGTH < signal_strength < MAX_SIGNAL_STRENGTH):
             continue
+        
+        if ( DETECT_ONLY_STATIC):
+            if not( velocity == 0) :
+                continue
 
-        if not( velocity == 0):
-            continue
+        if ( DETECT_ONLY_MOVING):
+            if not( velocity != 0) :
+                continue
 
         # Calculate the x and y position of the target
         azimuth_angle_radians = math.radians(azimuth)
@@ -221,24 +219,30 @@ def parse_data_packet(data, frame_id):
         }
 
         raw_detections.append(target_info)
-        targets_data.append(target_info)
     
     global radar_tracker
     radar_tracker = update_tracks(raw_detections, radar_tracker)
 
-    print(f"Frame ID: {frame_id}")
-    print(f"Detected Targets: {len(raw_detections)}, Tracked Targets: {len(radar_tracker)}")     
-
-
-    print(f"{'Track ID':<10} {'Range(m)':<8} {'Speed(m/s)':<8} {'Angle(deg)':<8} {'Class':<10} {'Signal Strength(dB)':<20} {'Confidence':<10} {'Missed Frames':<10}")
-    
-    print("-" * 80)
-    for track in radar_tracker:
-        tracked_data = track.get_state()
-  
-        print(f"{tracked_data['track_id']:<10} {tracked_data['range']:<8} {tracked_data['velocity']:<8} {tracked_data['azimuth']:<8} {tracked_data['classification']:<10} {tracked_data['signal_strength']:<20} {tracked_data['confidence']:<10} {tracked_data['missed_frames']:<10}")
-
+    if DEBUG_MODE:
+        print(f"Frame ID: {frame_id}")
+        print(f"Detected Targets: {len(raw_detections)}, Tracked Targets: {len(radar_tracker)}")     
+        print(f"{'Track ID':<10} {'Range(m)':<8} {'Speed(m/s)':<8} {'Angle(deg)':<8} {'Class':<10} {'Signal Strength(dB)':<20} {'Confidence':<10} {'Missed Frames':<10}")
         
+        print("-" * 80)
+    for track in radar_tracker:
+
+        tracked_data = track.get_state()
+        if SEND_MQTT:
+            publish_target(tracked_data)
+        if SEND_UART:
+            transmit_target_uart(tracked_data)
+
+        if DEBUG_MODE:
+            print(f"{tracked_data['track_id']:<10} {tracked_data['range']:<8} {tracked_data['velocity']:<8} {tracked_data['azimuth']:<8} {tracked_data['classification']:<10} {tracked_data['signal_strength']:<20} {tracked_data['confidence']:<10} {tracked_data['missed_frames']:<10}")
+            print("-" * 80)
+
+        final_data.append(tracked_data)
+
         
 # Process Packet
 def process_packet(header_data, data_packet):

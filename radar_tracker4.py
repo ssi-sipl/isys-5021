@@ -2,12 +2,13 @@
 
 import math
 import itertools
+from config4 import *
 
 track_id_counter = itertools.count(1)
 
-RANGE_THRESHOLD = 1.0      # meters
-AZIMUTH_THRESHOLD = 5.0    # degrees
-SIGNAL_STRENGTH_MIN = 0.005
+# RANGE_THRESHOLD = 1.0      # meters
+# AZIMUTH_THRESHOLD = 5.0    # degrees
+# SIGNAL_STRENGTH_MIN = 0.005
 
 class Track:
     def __init__(self, detection):
@@ -49,10 +50,10 @@ def is_match(det, track):
     )
 
 def update_tracks(detections, tracks):
-    filtered = [d for d in detections if d['signal_strength'] >= SIGNAL_STRENGTH_MIN]
+    # filtered = [d for d in detections if d['signal_strength'] >= SIGNAL_STRENGTH_MIN]
     updated_tracks = []
 
-    for det in filtered:
+    for det in detections:
         matched = False
         for track in tracks:
             if is_match(det, track):

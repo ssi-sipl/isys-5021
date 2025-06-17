@@ -225,7 +225,7 @@ def parse_data_packet(data, frame_id):
 
     if DEBUG_MODE:
         print(f"Frame ID: {frame_id}")
-        print(f"Detected Targets: {len(raw_detections)}, Tracked Targets: {len(radar_tracker)}")     
+        print(f"Raw Targets: {len(raw_detections)}, Tracked Targets: {len(radar_tracker)}")     
         print(f"{'Track ID':<10} {'Range(m)':<8} {'Speed(m/s)':<8} {'Angle(deg)':<8} {'Class':<10} {'Signal Strength(dB)':<20} {'Confidence':<10} {'Missed Frames':<10}")
         
         print("-" * 80)

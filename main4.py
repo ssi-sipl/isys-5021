@@ -182,6 +182,9 @@ def parse_data_packet(data, frame_id):
         if not( SIGNAL_STRENGTH_THRESHOLD < signal_strength ):
             continue
 
+        if not( velocity == 0):
+            continue
+
         # Calculate the x and y position of the target
         azimuth_angle_radians = math.radians(azimuth)
         x = range_ * math.cos(azimuth_angle_radians)

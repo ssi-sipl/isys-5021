@@ -238,7 +238,7 @@ def parse_data_packet(data, frame_id):
             transmit_target_uart(tracked_data)
 
         if DEBUG_MODE:
-            print(f"{tracked_data['track_id']:<10} {tracked_data['range']:<8} {tracked_data['velocity']:<8} {tracked_data['azimuth']:<8} {tracked_data['classification']:<10} {tracked_data['signal_strength']:<25} {tracked_data['confidence']:<10} {tracked_data['missed_frames']:<10}")
+            print(f"{tracked_data['track_id']:<10} {tracked_data['range']:<8} {tracked_data['velocity']:<8} {tracked_data['azimuth']:<8} {tracked_data['classification']:<20} {tracked_data['signal_strength']:<20} {tracked_data['confidence']:<10} {tracked_data['missed_frames']:<10}")
             print("-" * 80)
 
         final_data.append(tracked_data)

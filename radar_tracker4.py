@@ -1,0 +1,67 @@
+# tracker.py
+
+import math
+import itertools
+
+track_id_counter = itertools.count(1)
+
+RANGE_THRESHOLD = 1.0      # meters
+AZIMUTH_THRESHOLD = 5.0    # degrees
+SIGNAL_STRENGTH_MIN = 0.005
+
+class Track:
+    def __init__(self, detection):
+        self.track_id = next(track_id_counter)
+        self.range = detection['range']
+        self.azimuth = detection['azimuth']
+        self.signal_strength = detection['signal_strength']
+        self.missed_frames = 0
+        self.confidence = 1
+
+    def update(self, detection):
+        self.range = detection['range']
+        self.azimuth = detection['azimuth']
+        self.signal_strength = detection['signal_strength']
+        self.missed_frames = 0
+        self.confidence += 1
+
+    def get_state(self):
+        return {
+            "track_id": self.track_id,
+            "range": self.range,
+            "azimuth": self.azimuth,
+            "signal_strength": self.signal_strength,
+            "confidence": self.confidence,
+            "missed_frames": self.missed_frames
+        }
+
+def is_match(det, track):
+    return (
+        abs(det['range'] - track.range) < RANGE_THRESHOLD and
+        abs(det['azimuth'] - track.azimuth) < AZIMUTH_THRESHOLD
+    )
+
+def update_tracks(detections, tracks):
+    filtered = [d for d in detections if d['signal_strength'] >= SIGNAL_STRENGTH_MIN]
+    updated_tracks = []
+
+    for det in filtered:
+        matched = False
+        for track in tracks:
+            if is_match(det, track):
+                track.update(det)
+                matched = True
+                updated_tracks.append(track)
+                break
+        if not matched:
+            new_track = Track(det)
+            updated_tracks.append(new_track)
+
+    for track in tracks:
+        if track not in updated_tracks:
+            track.missed_frames += 1
+            track.confidence -= 1
+            if track.confidence > 0:
+                updated_tracks.append(track)
+
+    return [t for t in updated_tracks if t.confidence > 0]

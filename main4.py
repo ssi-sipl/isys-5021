@@ -212,7 +212,7 @@ def parse_data_packet(data, frame_id):
             'frame_id': frame_id,
             'timestamp': str(ist_timestamp),
             'signal_strength': round(signal_strength, 2),
-            'velocity': round(velocity, 2), # speed
+            'velocity': velocity, # speed
             'direction': "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing",
             'classification': classification,
             'latitude': round(object_lat, 6),

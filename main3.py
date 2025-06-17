@@ -148,6 +148,7 @@ def parse_data_packet(data, frame_id):
         #     print(f"{target['signal_strength']:<20} {target['range']:<10.1f} {target['velocity']:<10.1f} "
         #           f"{target['aizmuth_angle']:<15.1f} {target['direction']:<10}")
         # print("-" * 80)
+        pass
 
 
 
@@ -156,17 +157,16 @@ def parse_data_packet(data, frame_id):
 def main():
     header_size = 256
     data_packet_size = 1012
-    
+
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
         sock.bind((LOCAL_IP, LOCAL_PORT))
         print(f"Listening on {LOCAL_IP}:{LOCAL_PORT}...")
-        
+
         while True:
             header_data, addr = sock.recvfrom(header_size)
             data_packet, addr = sock.recvfrom(data_packet_size)
             if header_data and data_packet:
                 # print("Packet Received")
-                
                 process_packet(header_data, data_packet)
             # print("-" * 50)
             

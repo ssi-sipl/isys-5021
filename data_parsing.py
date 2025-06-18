@@ -17,9 +17,9 @@ while True:
     
     header_data, addr = sock.recvfrom(header_size)
     print(f"Received header data from {len(header_data)} bytes from {addr}")
-    print(header_data.hex())  # For debugging raw header data
+    # print(header_data.hex())  # For debugging raw header data
     data_packet, addr = sock.recvfrom(data_packet_size)
     print(f"Received data packet from {len(data_packet)} bytes from {addr}")
-    print(data_packet.hex())  # For debugging raw data packet
+    # print(data_packet.hex())  # For debugging raw data packet
 
     print("-" * 40)

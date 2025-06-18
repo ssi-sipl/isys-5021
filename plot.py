@@ -8,14 +8,15 @@ import websockets
 import json
 import time
 
+# --- Dash App Setup ---
 app = dash.Dash(__name__)
 app.title = "Radar Tracker UI"
 
-# Stores live tracks with last seen timestamp
+# --- Global Track Storage ---
 live_tracks = {}
 
 # Replace with your actual RPi IP
-RASPBERRY_PI_IP = "192.168.1.42"
+RASPBERRY_PI_IP = "192.168.1.47"
 WS_PORT = 8765
 WS_URI = f"ws://{RASPBERRY_PI_IP}:{WS_PORT}"
 
@@ -41,15 +42,16 @@ def start_ws_client():
                                 "distance": distance,
                                 "last_seen": time.time()
                             }
-
             except Exception as e:
                 print("🔁 Reconnecting to radar...", e)
                 await asyncio.sleep(2)
 
-    asyncio.run(listen())
+    def run_loop():
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(listen())
 
-# Start WebSocket client thread
-threading.Thread(target=start_ws_client, daemon=True).start()
+    threading.Thread(target=run_loop, daemon=True).start()
 
 # --- Dash Layout ---
 app.layout = html.Div([
@@ -58,7 +60,7 @@ app.layout = html.Div([
     dcc.Interval(id='interval-component', interval=1000, n_intervals=0)
 ])
 
-# --- Dash Callback to Update Plot ---
+# --- Plot Update Callback ---
 @app.callback(
     Output('radar-plot', 'figure'),
     Input('interval-component', 'n_intervals')
@@ -77,7 +79,7 @@ def update_radar_plot(n):
     for tid, info in live_tracks.items():
         thetas.append(info["azimuth"])
         rs.append(info["distance"])
-        labels.append(f"{tid[:6]}")  # Shorten track_id for display
+        labels.append(f"{tid[:6]}")
 
     fig = go.Figure()
     fig.add_trace(go.Scatterpolar(
@@ -91,21 +93,23 @@ def update_radar_plot(n):
 
     fig.update_layout(
         polar=dict(
-            radialaxis=dict(range=[0, 150], showgrid=True),
+            radialaxis=dict(range=[0, 150], showgrid=True, ticksuffix=" m"),
             angularaxis=dict(
                 direction="clockwise",
                 rotation=90,
                 tickmode="array",
                 tickvals=[-75, -45, 0, 45, 75],
-                ticktext=["-75°", "-45°", "0°", "45°", "75°"]
+                ticktext=["-75°", "-45°", "0°", "45°", "75°"],
+                showline=True
             )
         ),
         showlegend=False,
         template="plotly_dark",
-        margin=dict(t=20, l=0, r=0, b=0)
+        margin=dict(t=20, l=0, r=0, b=0),
     )
     return fig
 
-# --- Run Server ---
+# --- Start Everything ---
 if __name__ == '__main__':
+    start_ws_client()  # Start WS listener before Dash app
     app.run(debug=True)

@@ -75,7 +75,7 @@ while True:
                 })
         # print them
         for idx, t in enumerate(targets, start=1):
-            if (5<t['signal_dB']):
+            if (5<t['signal_dB'] and 0<t['range_m']<5 ):
                 print(f"Target {idx:2d}:  signal={t['signal_dB']:.2f} dB, "
                     f"range={t['range_m']:.2f} m, "
                     f"vel={t['velocity_m_s']:.2f} m/s, "

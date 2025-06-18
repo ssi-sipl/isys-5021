@@ -23,7 +23,7 @@ sock.bind((UDP_IP, UDP_PORT))
 #  16   bytesPerTarget      uint16
 #  18   nrOfDataPackets     uint16
 # (the remaining 256–20 = 236 bytes are reserved/padding)
-HEADER_STRUCT = '<HHHHHHIHHH'  
+HEADER_STRUCT = '<HHHHHHIHH'
 #  ^ little-endian: H=uint16, I=uint32
 
 while True:

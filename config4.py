@@ -12,6 +12,8 @@ SEND_UART = False
 SERIAL_PORT = "/dev/ttyUSB0"  # Change if necessary
 BAUD_RATE = 57600  # Must match receiver settings
 
+SEND_WEBSOCKET = False
+
 # Radar Configuration
 RADAR_ID = "radar-isys5021"
 AREA_ID = "area-1"

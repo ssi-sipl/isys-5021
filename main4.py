@@ -13,12 +13,54 @@ from Classification.CLASSIFICATION_PIPELINE import classification_pipeline
 from config4 import *
 import serial
 from radar_tracker4 import update_tracks, Track
+import asyncio
+import websockets
+import random
+import time
+import threading
+
+
+connected_clients = set()
 
 radar_tracker = []  # List of Track objects
 
 ist_timezone = pytz.timezone('Asia/Kolkata')
 
 final_data = []  # List to store valid targets
+
+# Handles each new WebSocket connection
+async def ws_handler(websocket, path):
+    print("Client connected:", websocket.remote_address)
+    connected_clients.add(websocket)
+    try:
+        while True:
+            await asyncio.sleep(1)  # Keep connection alive
+    except websockets.ConnectionClosed:
+        print("Client disconnected:", websocket.remote_address)
+    finally:
+        connected_clients.remove(websocket)
+
+def start_ws_server():
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    loop = asyncio.get_event_loop()
+    ws_server = websockets.serve(ws_handler, "0.0.0.0", 8765)
+    print("✅ WebSocket server started at ws://0.0.0.0:8765")
+    loop.run_until_complete(ws_server)
+    loop.run_forever()
+
+async def send_ws_data(data):
+    if connected_clients:
+        msg = json.dumps(data)
+        await asyncio.gather(*(client.send(msg) for client in connected_clients))
+
+def trigger_ws_send(data):
+    try:
+        loop = asyncio.get_event_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+    loop.call_soon_threadsafe(asyncio.create_task, send_ws_data(data))
 
 
 # Attempt to initialize the serial connection
@@ -245,8 +287,11 @@ def parse_data_packet(data, frame_id):
         tracked_data = track.get_state()
         if SEND_MQTT:
             publish_target(tracked_data)
+
         if SEND_UART:
             transmit_target_uart(tracked_data)
+        if SEND_WEBSOCKET:
+            trigger_ws_send(tracked_data)
 
         if DEBUG_MODE:
             print(f"{tracked_data['track_id']:<10} {tracked_data['range']:<8} {tracked_data['velocity']:<8} {tracked_data['azimuth']:<8} {tracked_data['classification']:<20} {tracked_data['signal_strength']:<20} {tracked_data['confidence']:<10} {tracked_data['missed_frames']:<10}")
@@ -276,6 +321,8 @@ def process_packet(header_data, data_packet):
 def main():
     header_size = 256
     data_packet_size = 1012
+
+    threading.Thread(target=start_ws_server, daemon=True).start()
     
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
         sock.bind((LOCAL_IP, LOCAL_PORT))

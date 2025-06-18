@@ -23,6 +23,7 @@ LOCAL_PORT = 2050
 # Tracker Configuration
 RANGE_THRESHOLD = 1.0      # meters
 AZIMUTH_THRESHOLD = 5.0   # degrees
+MAX_MISSED_FRAMES = 5  # Maximum missed frames before track is removed
 
 # Define thresholds for valid detection
 MIN_SIGNAL_STRENGTH = 4  # Minimum valid signal strength (in dB)

@@ -69,7 +69,7 @@ def update_tracks(detections, tracks):
         if track not in updated_tracks:
             track.missed_frames += 1
             track.confidence -= 1
-            if track.confidence > 0:
+            if track.confidence > 0 and track.missed_frames <= MAX_MISSED_FRAMES:
                 updated_tracks.append(track)
 
-    return [t for t in updated_tracks if t.confidence > 0]
+    return [t for t in updated_tracks if t.confidence > 0 or t.missed_frames <= MAX_MISSED_FRAMES]

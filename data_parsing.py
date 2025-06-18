@@ -11,20 +11,11 @@ DATA_PACKET_SIZE = 1012
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((UDP_IP, UDP_PORT))
 
-# Define the binary‐layout of the first part of the header.
-# Offsets (bytes) within the 256‑byte header:
-#   0   frameID             uint16
-#   2   FWmajor             uint16
-#   4   FWfix               uint16
-#   6   FWminor             uint16
-#   8   nrOfDetections      uint16
-#  10   nrOfTargets         uint16
-#  12   crc                 uint32
-#  16   bytesPerTarget      uint16
-#  18   nrOfDataPackets     uint16
-# (the remaining 256–20 = 236 bytes are reserved/padding)
+# Header: 6×uint16 + uint32 + 2×uint16 = 9 fields
 HEADER_STRUCT = '<HHHHHHIHH'
-#  ^ little-endian: H=uint16, I=uint32
+
+# Data packet: uint16 frameID, uint16 packetNum, then 42×6 floats
+DATA_STRUCT = '<' + 'H' + 'H' + '6f'*42
 
 while True:
     # 1) receive header
@@ -33,7 +24,7 @@ while True:
         print("Warning: incomplete header received")
         continue
 
-    # 2) unpack header fields
+    # 2) unpack header
     (
         frame_id,
         fw_major,
@@ -46,21 +37,46 @@ while True:
         nr_of_data_packets
     ) = struct.unpack_from(HEADER_STRUCT, header_data, 0)
 
-    print(f"Header:")
-    print(f"  Frame ID           = {frame_id}")
-    print(f"  Firmware version   = {fw_major}.{fw_fix}.{fw_minor}")
-    print(f"  Detections reported= {nr_of_detections}")
-    print(f"  Targets reported   = {nr_of_targets}")
-    print(f"  Bytes per target   = {bytes_per_target}")
-    print(f"  Data packets to follow = {nr_of_data_packets}")
-    print(f"  CRC                = 0x{crc:08X}")
+    print(f"\n=== HEADER ===")
+    print(f"Frame ID             = {frame_id}")
+    print(f"Firmware version     = {fw_major}.{fw_fix}.{fw_minor}")
+    print(f"Detections reported  = {nr_of_detections}")
+    print(f"Targets reported     = {nr_of_targets}")
+    print(f"Bytes per target     = {bytes_per_target}")
+    print(f"Data packets to follow = {nr_of_data_packets}")
+    print(f"CRC                  = 0x{crc:08X}")
 
-    # 3) now you know how many data packets to read:
-    for i in range(nr_of_data_packets):
+    # 3) read and decode each data packet
+    for pkt_idx in range(1, nr_of_data_packets + 1):
         data_packet, addr = sock.recvfrom(DATA_PACKET_SIZE)
         if len(data_packet) != DATA_PACKET_SIZE:
             print(f"Warning: expected {DATA_PACKET_SIZE} bytes, got {len(data_packet)}")
-        else:
-            print(f"Received data packet #{i+1} ({len(data_packet)} bytes)")
+            continue
 
-    print("-" * 40)
+        # unpack into a flat tuple: (frameID, packetNum, f1, f2, …)
+        vals = struct.unpack(DATA_STRUCT, data_packet)
+        dp_frame_id, packet_num = vals[0], vals[1]
+        raw_floats = vals[2:]
+
+        print(f"\n--- Data Packet {pkt_idx}/{nr_of_data_packets} ---")
+        print(f"Packet frame ID = {dp_frame_id}, packet number = {packet_num}")
+
+        # build list of up to 42 targets
+        targets = []
+        for i in range(42):
+            base = i * 6
+            sig, rng, vel, ang, _, _ = raw_floats[base:base+6]
+            if i < nr_of_targets:  # only report the actual targets
+                targets.append({
+                    'signal_dB':        sig,
+                    'range_m':          rng,
+                    'velocity_m_s':     vel,
+                    'angle_deg':        ang
+                })
+        # print them
+        for idx, t in enumerate(targets, start=1):
+            print(f"Target {idx:2d}:  signal={t['signal_dB']:.2f} dB, "
+                  f"range={t['range_m']:.2f} m, "
+                  f"vel={t['velocity_m_s']:.2f} m/s, "
+                  f"angle={t['angle_deg']:.2f}°")
+    print("=" * 40)

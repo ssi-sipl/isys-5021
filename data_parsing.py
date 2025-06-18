@@ -75,8 +75,9 @@ while True:
                 })
         # print them
         for idx, t in enumerate(targets, start=1):
-            print(f"Target {idx:2d}:  signal={t['signal_dB']:.2f} dB, "
-                  f"range={t['range_m']:.2f} m, "
-                  f"vel={t['velocity_m_s']:.2f} m/s, "
-                  f"angle={t['angle_deg']:.2f}°")
+            if (5<t['signal_dB']):
+                print(f"Target {idx:2d}:  signal={t['signal_dB']:.2f} dB, "
+                    f"range={t['range_m']:.2f} m, "
+                    f"vel={t['velocity_m_s']:.2f} m/s, "
+                    f"angle={t['angle_deg']:.2f}°")
     print("=" * 40)

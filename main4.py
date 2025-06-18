@@ -41,13 +41,20 @@ async def ws_handler(websocket, path):
         connected_clients.remove(websocket)
 
 def start_ws_server():
-    asyncio.set_event_loop(asyncio.new_event_loop())
-    loop = asyncio.get_event_loop()
-    ws_server = websockets.serve(ws_handler, "0.0.0.0", 8765)
-    print("✅ WebSocket server started at ws://0.0.0.0:8765")
-    loop.run_until_complete(ws_server)
-    loop.run_forever()
+    async def launch_server():
+        try:
+            server = await websockets.serve(ws_handler, "0.0.0.0", 8765)
+            print("✅ WebSocket server started at ws://0.0.0.0:8765")
+            await server.wait_closed()
+        except Exception as e:
+            print(f"❌ Failed to start WebSocket server: {e}")
+            sys.exit(1)
 
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(launch_server())
+    loop.run_forever()
+    
 async def send_ws_data(data):
     if connected_clients:
         msg = json.dumps(data)
@@ -322,7 +329,8 @@ def main():
     header_size = 256
     data_packet_size = 1012
 
-    threading.Thread(target=start_ws_server, daemon=True).start()
+    if SEND_WEBSOCKET:
+        threading.Thread(target=start_ws_server, daemon=True).start()
     
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
         sock.bind((LOCAL_IP, LOCAL_PORT))

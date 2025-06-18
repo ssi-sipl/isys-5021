@@ -2,57 +2,82 @@ import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output
 import plotly.graph_objects as go
-import random
 import threading
-import time
 import asyncio
 import websockets
 import json
-
+import time
 
 app = dash.Dash(__name__)
 app.title = "Radar Tracker UI"
 
-# Simulated track storage
+# Stores live tracks with last seen timestamp
 live_tracks = {}
 
-def generate_fake_radar_data():
-    """ Simulate radar detections updating every second """
-    while True:
-        frame_tracks = {}
-        for i in range(random.randint(2, 6)):
-            track_id = random.randint(1, 10)
-            azimuth = random.uniform(-75, 75)
-            distance = random.uniform(5, 100)
-            frame_tracks[track_id] = (azimuth, distance)
-        # Replace global
+# Replace with your actual RPi IP
+RASPBERRY_PI_IP = "192.168.1.42"
+WS_PORT = 8765
+WS_URI = f"ws://{RASPBERRY_PI_IP}:{WS_PORT}"
+
+# --- WebSocket Client ---
+def start_ws_client():
+    async def listen():
         global live_tracks
-        live_tracks = frame_tracks
-        time.sleep(1)
+        while True:
+            try:
+                async with websockets.connect(WS_URI) as ws:
+                    print(f"✅ Connected to radar at {WS_URI}")
+                    while True:
+                        msg = await ws.recv()
+                        data = json.loads(msg)
 
-# Start the radar simulation in a background thread
-threading.Thread(target=generate_fake_radar_data, daemon=True).start()
+                        track_id = data.get("track_id")
+                        azimuth = data.get("aizmuth_angle")
+                        distance = data.get("distance")
 
+                        if track_id and azimuth is not None and distance is not None:
+                            live_tracks[track_id] = {
+                                "azimuth": azimuth,
+                                "distance": distance,
+                                "last_seen": time.time()
+                            }
+
+            except Exception as e:
+                print("🔁 Reconnecting to radar...", e)
+                await asyncio.sleep(2)
+
+    asyncio.run(listen())
+
+# Start WebSocket client thread
+threading.Thread(target=start_ws_client, daemon=True).start()
+
+# --- Dash Layout ---
 app.layout = html.Div([
     html.H3("Real-Time Radar Tracker"),
     dcc.Graph(id='radar-plot', style={"height": "90vh"}),
     dcc.Interval(id='interval-component', interval=1000, n_intervals=0)
 ])
 
+# --- Dash Callback to Update Plot ---
 @app.callback(
     Output('radar-plot', 'figure'),
     Input('interval-component', 'n_intervals')
 )
 def update_radar_plot(n):
-    # Clean up and format data
+    now = time.time()
     thetas = []
     rs = []
     labels = []
 
-    for track_id, (azimuth, distance) in live_tracks.items():
-        thetas.append(azimuth)
-        rs.append(distance)
-        labels.append(f"Track {track_id}")
+    # Remove stale tracks older than 3 seconds
+    expired = [tid for tid, info in live_tracks.items() if now - info["last_seen"] > 3]
+    for tid in expired:
+        del live_tracks[tid]
+
+    for tid, info in live_tracks.items():
+        thetas.append(info["azimuth"])
+        rs.append(info["distance"])
+        labels.append(f"{tid[:6]}")  # Shorten track_id for display
 
     fig = go.Figure()
     fig.add_trace(go.Scatterpolar(
@@ -81,5 +106,6 @@ def update_radar_plot(n):
     )
     return fig
 
+# --- Run Server ---
 if __name__ == '__main__':
     app.run(debug=True)

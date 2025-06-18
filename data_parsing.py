@@ -22,4 +22,26 @@ while True:
     print(f"Received data packet from {len(data_packet)} bytes from {addr}")
     # print(data_packet.hex())  # For debugging raw data packet
 
+    data_packet, addr = sock.recvfrom(data_packet_size)
+    print(f"Received data packet from {len(data_packet)} bytes from {addr}")
+    # print(data_packet.hex())  # For debugging raw data packet
+    data_packet, addr = sock.recvfrom(data_packet_size)
+    print(f"Received data packet from {len(data_packet)} bytes from {addr}")
+    # print(data_packet.hex())  # For debugging raw data packet
+    data_packet, addr = sock.recvfrom(data_packet_size)
+    print(f"Received data packet from {len(data_packet)} bytes from {addr}")
+    # print(data_packet.hex())  # For debugging raw data packet
+    data_packet, addr = sock.recvfrom(data_packet_size)
+    print(f"Received data packet from {len(data_packet)} bytes from {addr}")
+    # print(data_packet.hex())  # For debugging raw data packet
+    data_packet, addr = sock.recvfrom(data_packet_size)
+    print(f"Received data packet from {len(data_packet)} bytes from {addr}")
+    # print(data_packet.hex())  # For debugging raw data packet
+    data_packet, addr = sock.recvfrom(data_packet_size)
+    print(f"Received data packet from {len(data_packet)} bytes from {addr}")
+    # print(data_packet.hex())  # For debugging raw data packet
+    data_packet, addr = sock.recvfrom(data_packet_size)
+    print(f"Received data packet from {len(data_packet)} bytes from {addr}")
+    # print(data_packet.hex())  # For debugging raw data packet
+
     print("-" * 40)

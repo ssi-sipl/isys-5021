@@ -29,9 +29,9 @@ SERIAL_PORT = "/dev/ttyUSB0"
 BAUD_RATE = 57600
 
 def save_to_json():
-    with open("FirmwareV2_Final_Data.json", "w") as file:
+    with open("FirmwareV2_Final_Data2.json", "w") as file:
         json.dump(final_data, file, indent=4)
-    print(f"Data saved to FirmwareV2_Final_Data.json")
+    print(f"Data saved to FirmwareV2_Final_Data2.json")
 
 def signal_handler(sig, frame):
     print("\nCtrl+C detected! Saving data and exiting...")
@@ -190,39 +190,40 @@ while True:
 
 
         ist_timestamp = datetime.now(ist_timezone)
+        # data = {
+        #     "radar_id": "radar-pune",
+        #     "area_id": "area-1",
+        #     "frame_id": 20375,
+        #     "timestamp": str(ist_timestamp)  ,
+        #     "signal_strength": 0,
+        #     "velocity": 0,
+        #     "speed": 0,
+        #     "direction": "Static",
+        #     "classification": "person",
+        #     "latitude": 34.011483,
+        #     "longitude": 74.01246,
+        #     "range": r,
+        #     "distance": r,
+        #     "aizmuth_angle": angle,
+        #     "x": x,
+        #     "y": y,
+        #     "age": 0,
+        #     "last_seen": "",
+        #     "tracked_classification": "person",
+        #     "track_id": obj.id,
+        #     "zone": 0,
+        # }
+
+
         data = {
             "radar_id": "radar-pune",
             "area_id": "area-1",
-            "frame_id": 20375,
-            "timestamp": str(ist_timestamp)  ,
-            "signal_strength": 0,
-            "velocity": 0,
-            "speed": 0,
-            "direction": "Static",
-            "classification": "person",
-            "latitude": 34.011483,
-            "longitude": 74.01246,
-            "range": r,
-            "distance": r,
-            "aizmuth_angle": angle,
-            "x": x,
-            "y": y,
-            "age": 0,
-            "last_seen": "",
-            "tracked_classification": "person",
             "track_id": obj.id,
-            "zone": 0,
+            "range":r,
+            "angle": angle,
+            "timestamp": str(ist_timestamp)
         }
-
         final_data.append(data)
-
-        # data = {
-        #     "track_id": obj.id,
-        #     "range":r,
-        #     "angle": angle,
-        #     "timestamp": str(ist_timestamp)
-        # }
-        # print(data)
 
         transmit_target_uart(data)
 

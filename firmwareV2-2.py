@@ -145,7 +145,7 @@ while True:
             std_angle = statistics.stdev([t['angle_deg'] for t in cluster_targets])
         except statistics.StatisticsError:
             std_range = 0.0  # in case all range values are sames
-        if std_range > 0.5 or std_angle > 3:
+        if std_range > 0.2 or std_angle > 1:
             continue  # too spread out → likely reflection/noise
 
         # Passed all filters → real objects

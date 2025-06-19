@@ -89,15 +89,15 @@ while True:
             cluster_targets = [t for t in targets if t['cluster_id'] == cid]
             if len(cluster_targets) < 2:
                 continue
-            avg_range = sum(t['range_m'] for t in cluster_targets) / len(cluster_targets)
-            avg_angle = sum(t['angle_deg'] for t in cluster_targets) / len(cluster_targets)
-            avg_velocity = sum(t['velocity_m_s'] for t in cluster_targets) / len(cluster_targets)
-            avg_signal   = sum(t['signal_dB']     for t in cluster_targets) / len(cluster_targets)
+            # avg_range = sum(t['range_m'] for t in cluster_targets) / len(cluster_targets)
+            # avg_angle = sum(t['angle_deg'] for t in cluster_targets) / len(cluster_targets)
+            # avg_velocity = sum(t['velocity_m_s'] for t in cluster_targets) / len(cluster_targets)
+            # avg_signal   = sum(t['signal_dB']     for t in cluster_targets) / len(cluster_targets)
             
-            print(f"Cluster {cid}: avg_range = {avg_range:.2f} m, "
-      f"avg_angle = {avg_angle:.2f}°, "
-      f"avg_velocity = {avg_velocity:.2f} m/s, "
-      f"avg_signal = {avg_signal:.2f} dB")
+    #         print(f"Cluster {cid}: avg_range = {avg_range:.2f} m, "
+    #   f"avg_angle = {avg_angle:.2f}°, "
+    #   f"avg_velocity = {avg_velocity:.2f} m/s, "
+    #   f"avg_signal = {avg_signal:.2f} dB")
 
             avg_x = np.mean([t['range_m'] * math.cos(math.radians(t['angle_deg'])) for t in cluster_targets])
             avg_y = np.mean([t['range_m'] * math.sin(math.radians(t['angle_deg'])) for t in cluster_targets])

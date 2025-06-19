@@ -231,7 +231,7 @@ def parse_data_packet(data, frame_id):
         target_data = target_list[i * target_size:(i + 1) * target_size]
         signal_strength, range_, velocity, azimuth, reserved1, reserved2 = struct.unpack(target_format, target_data)
         
-        if not( signal_strength < 1 and not range_ < 3):
+        if not( signal_strength < 1 and range_ < 3):
             continue
 
         

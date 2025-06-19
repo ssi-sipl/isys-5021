@@ -103,7 +103,7 @@ while True:
             avg_y = np.mean([t['range_m'] * math.sin(math.radians(t['angle_deg'])) for t in cluster_targets])
 
             # Create Norfair detection
-            detections.append(Detection(points=np.array([avg_x, avg_y])))
+            detections.append(Detection(points=np.array([avg_x, avg_y]),data={"velocity": np.mean([t['velocity_m_s'] for t in cluster_targets]), "signal_dB": np.mean([t['signal_dB'] for t in cluster_targets])}))
     else:
         # fallback if no clusters
         for t in targets:
@@ -118,10 +118,15 @@ while True:
 
     print("\n✅ Tracked Objects:")
     for obj in tracked_objects:
-        print(obj)
-        # x, y = obj.estimate[0]
-        # r = math.sqrt(x**2 + y**2)
-        # angle = math.degrees(math.atan2(y, x))
-        # print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°")
+        x, y = obj.estimate[0]
+        r = math.sqrt(x**2 + y**2)
+        angle = math.degrees(math.atan2(y, x))
+
+        velocity = obj.last_detection.data["velocity"] if obj.last_detection else None
+        signal = obj.last_detection.data["signal"] if obj.last_detection else None
+
+        print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, "
+            f"Velocity={velocity:.2f} m/s, Signal={signal:.2f} dB")
+
 
     print("=" * 40)

@@ -174,8 +174,7 @@ while True:
             velocity = obj.last_detection.data["velocity_m_s"] if obj.last_detection else None
             signal = obj.last_detection.data["signal_dB"] if obj.last_detection else None
         else:
-            velocity = None
-            signal = None
+            continue
 
 
         ist_timestamp = datetime.now(ist_timezone)

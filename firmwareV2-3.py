@@ -197,11 +197,12 @@ while True:
             "track_id": obj.id,
             "zone": 0,
         }
+        print(data)
 
         transmit_target_uart(data)
 
-        print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, "
-            f"Velocity={velocity:.2f} m/s, Signal={signal:.2f} dB")
+        # print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, "
+        #     f"Velocity={velocity:.2f} m/s, Signal={signal:.2f} dB")
 
 
     print("=" * 40)

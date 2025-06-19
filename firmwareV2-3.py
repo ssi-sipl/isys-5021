@@ -118,9 +118,10 @@ while True:
 
     print("\n✅ Tracked Objects:")
     for obj in tracked_objects:
-        x, y = obj.estimate[0]
-        r = math.sqrt(x**2 + y**2)
-        angle = math.degrees(math.atan2(y, x))
-        print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°")
+        print(obj)
+        # x, y = obj.estimate[0]
+        # r = math.sqrt(x**2 + y**2)
+        # angle = math.degrees(math.atan2(y, x))
+        # print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°")
 
     print("=" * 40)

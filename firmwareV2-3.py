@@ -4,7 +4,7 @@ import math
 import numpy as np
 from sklearn.cluster import DBSCAN
 from norfair import Detection, Tracker
-import datetime
+from datetime import datetime
 import pytz
 import serial
 import json
@@ -197,7 +197,7 @@ while True:
             "track_id": obj.id,
             "zone": 0,
         }
-        
+
         transmit_target_uart(data)
 
         print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, "

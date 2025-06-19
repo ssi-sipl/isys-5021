@@ -122,8 +122,8 @@ while True:
         r = math.sqrt(x**2 + y**2)
         angle = math.degrees(math.atan2(y, x))
 
-        velocity = obj.last_detection.data["velocity"] if obj.last_detection else None
-        signal = obj.last_detection.data["signal"] if obj.last_detection else None
+        velocity = obj.last_detection.data["velocity_m_s"] if obj.last_detection else None
+        signal = obj.last_detection.data["signal_dB"] if obj.last_detection else None
 
         print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, "
             f"Velocity={velocity:.2f} m/s, Signal={signal:.2f} dB")

@@ -4,10 +4,16 @@ import math
 import numpy as np
 from sklearn.cluster import DBSCAN
 from norfair import Detection, Tracker
-from norfair.distances import euclidean
 
-# Norfair Tracker
-tracker = Tracker(distance_function=euclidean, distance_threshold=1.5)
+# Define your own Euclidean distance function
+def euclidean(detection: Detection, tracked_object):
+    return np.linalg.norm(detection.points - tracked_object.estimate)
+
+# Initialize the tracker
+tracker = Tracker(
+    distance_function=euclidean,
+    distance_threshold=1  # Tune this based on your radar's scale
+)
 
 # Radar setup
 UDP_IP = "192.168.252.2"

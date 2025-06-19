@@ -4,6 +4,12 @@ import math
 import numpy as np
 from sklearn.cluster import DBSCAN
 from norfair import Detection, Tracker
+import datetime
+import pytz
+import serial
+import json
+
+ist_timezone = pytz.timezone('Asia/Kolkata')
 
 # Define your own Euclidean distance function
 def euclidean(detection: Detection, tracked_object):
@@ -14,6 +20,48 @@ tracker = Tracker(
     distance_function=euclidean,
     distance_threshold=1  # Tune this based on your radar's scale
 )
+
+SERIAL_PORT = "/dev/ttyUSB0"
+BAUD_RATE = 57600
+
+try:
+    ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+    print("Serial Port Opened!")
+except serial.SerialException as e:
+    print(f"[ERROR] Failed to open serial port {SERIAL_PORT}: {e}")
+    ser = None  # Prevents using an invalid serial object
+
+def transmit_target_uart(target):
+    if ser is None:
+        print("[ERROR] Serial port is not available. Cannot send data.")
+        return
+
+    try:
+        # Attempt to serialize the data
+        try:
+            json_data = json.dumps(target)
+        except (TypeError, ValueError) as e:
+            print(f"[ERROR] JSON serialization failed: {e}")
+            return
+        
+        # Attempt to encode the data
+        try:
+            encoded_data = (json_data + "\n").encode('utf-8')
+        except UnicodeEncodeError as e:
+            print(f"[ERROR] Encoding to UTF-8 failed: {e}")
+            return
+        
+        # Attempt to write to the serial port
+        try:
+            ser.write(encoded_data)
+            print(f"[INFO] Sent over UART: {json_data}")
+        except serial.SerialTimeoutException as e:
+            print(f"[ERROR] Serial write timeout: {e}")
+        except serial.SerialException as e:
+            print(f"[ERROR] Serial write failed: {e}")
+
+    except Exception as e:
+        print(f"[ERROR] Unexpected error in publish_target: {e}")
 
 # Radar setup
 UDP_IP = "192.168.252.2"
@@ -124,6 +172,33 @@ while True:
 
         velocity = obj.last_detection.data["velocity_m_s"] if obj.last_detection else None
         signal = obj.last_detection.data["signal_dB"] if obj.last_detection else None
+
+        ist_timestamp = datetime.now(ist_timezone)
+        data = {
+            "radar_id": "radar-pune",
+            "area_id": "area-1",
+            "frame_id": 20375,
+            "timestamp": str(ist_timestamp)  ,
+            "signal_strength": signal,
+            "velocity": velocity,
+            "speed": velocity,
+            "direction": "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing",
+            "classification": "person",
+            "latitude": 34.011483,
+            "longitude": 74.01246,
+            "range": r,
+            "distance": r,
+            "aizmuth_angle": angle,
+            "x": x,
+            "y": y,
+            "age": 0,
+            "last_seen": "",
+            "tracked_classification": "person",
+            "track_id": obj.id,
+            "zone": 0,
+        }
+        
+        transmit_target_uart(data)
 
         print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, "
             f"Velocity={velocity:.2f} m/s, Signal={signal:.2f} dB")

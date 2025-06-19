@@ -4,6 +4,7 @@ import math
 import numpy as np
 from sklearn.cluster import DBSCAN
 
+
 # Set up the socket
 UDP_IP = "192.168.252.2"  # Radar IP
 UDP_PORT = 2050           # Radar port

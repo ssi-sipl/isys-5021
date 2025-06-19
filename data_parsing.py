@@ -1,5 +1,8 @@
 import socket
 import struct
+import math
+import numpy as np
+from sklearn.cluster import DBSCAN
 
 # Set up the socket
 UDP_IP = "192.168.252.2"  # Radar IP
@@ -16,6 +19,8 @@ HEADER_STRUCT = '<HHHHHHIHH'
 
 # Data packet: uint16 frameID, uint16 packetNum, then 42×6 floats
 DATA_STRUCT = '<' + 'H' + 'H' + '6f'*42
+
+last_frame_id = None  # for frame loss detection
 
 while True:
     # 1) receive header
@@ -36,6 +41,13 @@ while True:
         bytes_per_target,
         nr_of_data_packets
     ) = struct.unpack_from(HEADER_STRUCT, header_data, 0)
+
+    # Detect frame loss
+    if last_frame_id is not None:
+        expected_id = (last_frame_id + 1) % 65536
+        if frame_id != expected_id:
+            print(f"[WARNING] Frame loss detected! Expected {expected_id}, got {frame_id}")
+    last_frame_id = frame_id
 
     print(f"\n=== HEADER ===")
     print(f"Frame ID             = {frame_id}")
@@ -68,19 +80,43 @@ while True:
             sig, rng, vel, ang, _, _ = raw_floats[base:base+6]
             
             if i < nr_of_targets:  # only report the actual targets
-                if sig < 1 and rng<3:
-                    
+                if sig < 1 and rng < 3:  # Optional filters
                     targets.append({
-                        'signal_dB':        sig,
-                        'range_m':          rng,
-                        'velocity_m_s':     vel,
-                        'angle_deg':        ang
+                        'signal_dB': sig,
+                        'range_m': rng,
+                        'velocity_m_s': vel,
+                        'angle_deg': ang
                     })
-        # print them
-        for idx, t in enumerate(targets, start=1):
-            # if (5<t['signal_dB'] and 0<t['range_m']<5 ):
-            print(f"Target {idx:2d}:  signal={t['signal_dB']:.2f} dB, "
-                    f"range={t['range_m']:.2f} m, "
-                    f"vel={t['velocity_m_s']:.2f} m/s, "
-                    f"angle={t['angle_deg']:.2f}°")
+
+        # Convert (range, angle) → (x, y) for clustering
+        coords = []
+        for t in targets:
+            r = t['range_m']
+            a = math.radians(t['angle_deg'])
+            x = r * math.cos(a)
+            y = r * math.sin(a)
+            coords.append([x, y])
+
+        coords = np.array(coords)
+
+        # Perform clustering if enough points
+        if len(coords) >= 2:
+            db = DBSCAN(eps=1.0, min_samples=1).fit(coords)
+            labels = db.labels_
+            for i, t in enumerate(targets):
+                t['cluster_id'] = labels[i]
+        else:
+            for t in targets:
+                t['cluster_id'] = -1
+
+        # Print clustered targets
+        print("\n--- Clustered Targets ---")
+        cluster_ids = set(t['cluster_id'] for t in targets)
+        for cid in sorted(cluster_ids):
+            print(f"\nCluster {cid}:")
+            for t in [t for t in targets if t['cluster_id'] == cid]:
+                print(f"  signal={t['signal_dB']:.2f} dB, "
+                      f"range={t['range_m']:.2f} m, "
+                      f"vel={t['velocity_m_s']:.2f} m/s, "
+                      f"angle={t['angle_deg']:.2f}°")
     print("=" * 40)

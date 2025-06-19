@@ -113,10 +113,19 @@ while True:
         print("\n--- Clustered Targets ---")
         cluster_ids = set(t['cluster_id'] for t in targets)
         for cid in sorted(cluster_ids):
-            print(f"\nCluster {cid}:")
-            for t in [t for t in targets if t['cluster_id'] == cid]:
-                print(f"  signal={t['signal_dB']:.2f} dB, "
-                      f"range={t['range_m']:.2f} m, "
-                      f"vel={t['velocity_m_s']:.2f} m/s, "
-                      f"angle={t['angle_deg']:.2f}°")
+            cluster_targets = [t for t in targets if t['cluster_id'] == cid]
+            avg_range = sum(t['range_m'] for t in cluster_targets) / len(cluster_targets)
+            avg_angle = sum(t['angle_deg'] for t in cluster_targets) / len(cluster_targets)
+            avg_velocity = sum(t['velocity_m_s'] for t in cluster_targets) / len(cluster_targets)
+            avg_signal   = sum(t['signal_dB']     for t in cluster_targets) / len(cluster_targets)
+            print(f"Cluster {cid}: avg_range = {avg_range:.2f} m, "
+      f"avg_angle = {avg_angle:.2f}°, "
+      f"avg_velocity = {avg_velocity:.2f} m/s, "
+      f"avg_signal = {avg_signal:.2f} dB")
+            # print(f"\nCluster {cid}:")
+            # for t in [t for t in targets if t['cluster_id'] == cid]:
+            #     print(f"  signal={t['signal_dB']:.2f} dB, "
+            #           f"range={t['range_m']:.2f} m, "
+            #           f"vel={t['velocity_m_s']:.2f} m/s, "
+            #           f"angle={t['angle_deg']:.2f}°")
     print("=" * 40)

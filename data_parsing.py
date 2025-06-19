@@ -69,6 +69,7 @@ while True:
             
             if i < nr_of_targets:  # only report the actual targets
                 if sig < 1 and rng<3:
+                    
                     targets.append({
                         'signal_dB':        sig,
                         'range_m':          rng,

@@ -54,7 +54,7 @@ def transmit_target_uart(target):
         # Attempt to write to the serial port
         try:
             ser.write(encoded_data)
-            print(f"[INFO] Sent over UART: {json_data}")
+            # print(f"[INFO] Sent over UART: {json_data}")
         except serial.SerialTimeoutException as e:
             print(f"[ERROR] Serial write timeout: {e}")
         except serial.SerialException as e:
@@ -200,8 +200,8 @@ while True:
 
         transmit_target_uart(data)
 
-        print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, "
-            f"Velocity={velocity:.2f} m/s, Signal={signal:.2f} dB")
+        # print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, "
+            # f"Velocity={velocity:.2f} m/s, Signal={signal:.2f} dB")
 
 
     print("=" * 40)

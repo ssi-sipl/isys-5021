@@ -80,13 +80,13 @@ while True:
             sig, rng, vel, ang, _, _ = raw_floats[base:base+6]
             
             if i < nr_of_targets:  # only report the actual targets
-                if sig < 1 and rng < 3:  # Optional filters
-                    targets.append({
+                # if sig < 1 and rng < 3:  # Optional filters
+                targets.append({
                         'signal_dB': sig,
                         'range_m': rng,
                         'velocity_m_s': vel,
                         'angle_deg': ang
-                    })
+                })
 
         # Convert (range, angle) → (x, y) for clustering
         coords = []

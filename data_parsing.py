@@ -66,13 +66,15 @@ while True:
         for i in range(42):
             base = i * 6
             sig, rng, vel, ang, _, _ = raw_floats[base:base+6]
+            
             if i < nr_of_targets:  # only report the actual targets
-                targets.append({
-                    'signal_dB':        sig,
-                    'range_m':          rng,
-                    'velocity_m_s':     vel,
-                    'angle_deg':        ang
-                })
+                if sig < 1 and rng<3:
+                    targets.append({
+                        'signal_dB':        sig,
+                        'range_m':          rng,
+                        'velocity_m_s':     vel,
+                        'angle_deg':        ang
+                    })
         # print them
         for idx, t in enumerate(targets, start=1):
             # if (5<t['signal_dB'] and 0<t['range_m']<5 ):

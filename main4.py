@@ -233,6 +233,7 @@ def parse_data_packet(data, frame_id):
         
         if not( MIN_SIGNAL_STRENGTH < signal_strength < MAX_SIGNAL_STRENGTH):
             continue
+
         
         if ( DETECT_ONLY_STATIC):
             if not( velocity == 0) :

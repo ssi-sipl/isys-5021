@@ -8,8 +8,12 @@ from datetime import datetime
 import pytz
 import serial
 import json
+import signal
+import sys
 
 ist_timezone = pytz.timezone('Asia/Kolkata')
+
+final_data = []
 
 # Define your own Euclidean distance function
 def euclidean(detection: Detection, tracked_object):
@@ -23,6 +27,20 @@ tracker = Tracker(
 
 SERIAL_PORT = "/dev/ttyUSB0"
 BAUD_RATE = 57600
+
+def save_to_json():
+    with open("FirmwareV2_Final_Data.json", "w") as file:
+        json.dump(final_data, file, indent=4)
+    print(f"Data saved to {"FirmwareV2_Final_Data.json"}")
+
+def signal_handler(sig, frame):
+    print("\nCtrl+C detected! Saving data and exiting...")
+    save_to_json()
+    # Disconnect MQTT
+    sys.exit(0)
+
+# Register the signal handler for graceful shutdown
+signal.signal(signal.SIGINT, signal_handler)
 
 try:
     ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
@@ -195,6 +213,15 @@ while True:
             "track_id": obj.id,
             "zone": 0,
         }
+
+        final_data.append(data)
+
+        # data = {
+        #     "track_id": obj.id,
+        #     "range":r,
+        #     "angle": angle,
+        #     "timestamp": str(ist_timestamp)
+        # }
         # print(data)
 
         transmit_target_uart(data)

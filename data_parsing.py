@@ -100,7 +100,7 @@ while True:
         coords = np.array(coords)
 
         # Perform clustering if enough points
-        if len(coords) >= 2:
+        if len(coords) >= 1:
             db = DBSCAN(eps=1.0, min_samples=1).fit(coords)
             labels = db.labels_
             for i, t in enumerate(targets):

@@ -185,7 +185,9 @@ def calculate_checksum(data, nrOfTargets, bytesPerTarget):
     return checksum
 
 # Parse Header
+last_farme_id = None
 def parse_header(data):
+    global last_farme_id
     header_format = '<HHHHHHIHH118x'
     header_size = struct.calcsize(header_format)
     
@@ -196,6 +198,14 @@ def parse_header(data):
     frame_id, fw_major, fw_fix, fw_minor, detections, targets, checksum, bytes_per_target, data_packets = struct.unpack(
         header_format, data[:header_size]
     )
+    # Check if the frame ID is valid and not a duplicate
+    if last_farme_id is not None:
+        expected_frame_id = last_farme_id + 1
+        if frame_id != expected_frame_id:
+            print(f"Warning: Frame ID mismatch. Expected {expected_frame_id}, got {frame_id}. Skipping this frame.")
+            return None
+        
+    last_farme_id = frame_id
 
     # print(f"Frame ID: {frame_id}")
     # print(f"Number of Targets: {targets}")
@@ -282,7 +292,8 @@ def parse_data_packet(data, frame_id):
     
     global radar_tracker
     radar_tracker = update_tracks(raw_detections, radar_tracker)
-
+    
+    
     if DEBUG_MODE:
         print(f"Frame ID: {frame_id}")
         print(f"Raw Targets: {len(raw_detections)}, Tracked Targets: {len(radar_tracker)}")     
@@ -305,6 +316,9 @@ def parse_data_packet(data, frame_id):
             print("-" * 100)
 
         final_data.append(tracked_data)
+    
+    raw_detections.clear()# Clear raw detections after processing
+    
 
         
 # Process Packet

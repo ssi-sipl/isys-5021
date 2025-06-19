@@ -124,18 +124,19 @@ while True:
 
         # Average signal strength
         avg_signal = sum(t['signal_dB'] for t in cluster_targets) / len(cluster_targets)
-        if avg_signal < 1.0 or avg_signal > 15.0:
-            continue  # unrealistic signal
+        # if avg_signal < 1.0 or avg_signal > 15.0:
+        #     continue  # unrealistic signal
 
         # Filter: range spread
         try:
             std_range = statistics.stdev([t['range_m'] for t in cluster_targets])
+            std_angle = statistics.stdev([t['angle_deg'] for t in cluster_targets])
         except statistics.StatisticsError:
-            std_range = 0.0  # in case all range values are same
-        if std_range > 0.5:
+            std_range = 0.0  # in case all range values are sames
+        if std_range > 0.5 or std_angle > 3:
             continue  # too spread out → likely reflection/noise
 
-        # Passed all filters → real object
+        # Passed all filters → real objects
         avg_range = sum(t['range_m'] for t in cluster_targets) / len(cluster_targets)
         avg_angle = sum(t['angle_deg'] for t in cluster_targets) / len(cluster_targets)
         avg_velocity = sum(t['velocity_m_s'] for t in cluster_targets) / len(cluster_targets)

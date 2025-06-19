@@ -16,7 +16,7 @@ print(f"Listening for data from radar at {UDP_IP}:{UDP_PORT}")
 while True:
 
     header_data, addr = sock.recvfrom(header_size)
-    print(f"Received header data from {len(header_data())} bytes from {addr}")
+    print(f"Received header data from {len(header_data)} bytes from {addr}")
     print(f"Header Data: ", header_data.hex())  # Print hex representation of header data
     # print(header_data.hex())  # For debugging raw header data
     data_packet, addr = sock.recvfrom(data_packet_size)

@@ -170,12 +170,6 @@ while True:
         r = math.sqrt(x**2 + y**2)
         angle = math.degrees(math.atan2(y, x))
 
-        if obj.last_detection and obj.last_detection.data:
-            velocity = obj.last_detection.data["velocity_m_s"] if obj.last_detection else None
-            signal = obj.last_detection.data["signal_dB"] if obj.last_detection else None
-        else:
-            continue
-
 
         ist_timestamp = datetime.now(ist_timezone)
         data = {
@@ -183,10 +177,10 @@ while True:
             "area_id": "area-1",
             "frame_id": 20375,
             "timestamp": str(ist_timestamp)  ,
-            "signal_strength": signal,
-            "velocity": velocity,
-            "speed": velocity,
-            "direction": "Static" if velocity == 0 else "Incoming" if velocity > 0 else "Outgoing",
+            "signal_strength": 0,
+            "velocity": 0,
+            "speed": 0,
+            "direction": "Static",
             "classification": "person",
             "latitude": 34.011483,
             "longitude": 74.01246,

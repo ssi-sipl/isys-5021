@@ -221,6 +221,7 @@ while True:
             "track_id": obj.id,
             "range":r,
             "angle": angle,
+            "classification": "person",
             "timestamp": str(ist_timestamp)
         }
         final_data.append(data)

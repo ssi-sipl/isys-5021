@@ -80,13 +80,13 @@ while True:
             sig, rng, vel, ang, _, _ = raw_floats[base:base+6]
             
             if i < nr_of_targets:  # only report the actual targets
-                if sig < 1 and rng < 3:  # Optional filters
-                    targets.append({
+                # if sig < 1 and rng < 3:  # Optional filters
+                targets.append({
                             'signal_dB': sig,
                             'range_m': rng,
                             'velocity_m_s': vel,
                             'angle_deg': ang
-                    })
+                })
 
         # Convert (range, angle) → (x, y) for clustering
         coords = []
@@ -100,7 +100,7 @@ while True:
         coords = np.array(coords)
 
         # Perform clustering if enough points
-        if len(coords) >= 1:
+        if len(coords) >= 2:
             db = DBSCAN(eps=1.0, min_samples=1).fit(coords)
             labels = db.labels_
             for i, t in enumerate(targets):

@@ -170,8 +170,13 @@ while True:
         r = math.sqrt(x**2 + y**2)
         angle = math.degrees(math.atan2(y, x))
 
-        velocity = obj.last_detection.data["velocity_m_s"] if obj.last_detection else None
-        signal = obj.last_detection.data["signal_dB"] if obj.last_detection else None
+        if obj.last_detection and obj.last_detection.data:
+            velocity = obj.last_detection.data["velocity_m_s"] if obj.last_detection else None
+            signal = obj.last_detection.data["signal_dB"] if obj.last_detection else None
+        else:
+            velocity = None
+            signal = None
+
 
         ist_timestamp = datetime.now(ist_timezone)
         data = {

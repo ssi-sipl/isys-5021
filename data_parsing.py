@@ -118,6 +118,8 @@ while True:
             avg_angle = sum(t['angle_deg'] for t in cluster_targets) / len(cluster_targets)
             avg_velocity = sum(t['velocity_m_s'] for t in cluster_targets) / len(cluster_targets)
             avg_signal   = sum(t['signal_dB']     for t in cluster_targets) / len(cluster_targets)
+            if not(avg_signal > 0):
+                continue
             print(f"Cluster {cid}: avg_range = {avg_range:.2f} m, "
       f"avg_angle = {avg_angle:.2f}°, "
       f"avg_velocity = {avg_velocity:.2f} m/s, "

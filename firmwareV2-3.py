@@ -105,13 +105,13 @@ while True:
             sig, rng, vel, ang, _, _ = vals[base:base+6]
             
             if i < nr_of_targets:
-                # if sig < 1 and rng < 3:
-                targets.append({
-                        'signal_dB': sig,
-                        'range_m': rng,
-                        'velocity_m_s': vel,
-                        'angle_deg': ang
-                })
+                if sig < 1 and rng < 3:
+                    targets.append({
+                            'signal_dB': sig,
+                            'range_m': rng,
+                            'velocity_m_s': vel,
+                            'angle_deg': ang
+                    })
 
     # Convert to x, y for clustering
     coords = []

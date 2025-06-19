@@ -31,7 +31,7 @@ BAUD_RATE = 57600
 def save_to_json():
     with open("FirmwareV2_Final_Data.json", "w") as file:
         json.dump(final_data, file, indent=4)
-    print(f"Data saved to {"FirmwareV2_Final_Data.json"}")
+    print(f"Data saved to FirmwareV2_Final_Data.json")
 
 def signal_handler(sig, frame):
     print("\nCtrl+C detected! Saving data and exiting...")

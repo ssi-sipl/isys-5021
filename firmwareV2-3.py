@@ -11,6 +11,8 @@ import json
 import signal
 import sys
 
+from Classification.CLASSIFICATION_PIPELINE import classification_pipeline
+
 ist_timezone = pytz.timezone('Asia/Kolkata')
 
 final_data = []
@@ -123,13 +125,15 @@ while True:
             sig, rng, vel, ang, _, _ = vals[base:base+6]
             
             if i < nr_of_targets:
-                if sig < 1 and rng < 3:
-                    targets.append({
+                # if sig < 1 and rng < 3:
+                classification = classification_pipeline(rng, vel, ang)
+                targets.append({
                             'signal_dB': sig,
                             'range_m': rng,
                             'velocity_m_s': vel,
-                            'angle_deg': ang
-                    })
+                            'angle_deg': ang,
+                            'classification': classification,
+                })
 
     # Convert to x, y for clustering
     coords = []

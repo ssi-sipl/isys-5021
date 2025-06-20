@@ -126,13 +126,12 @@ while True:
             
             if i < nr_of_targets:
                 # if sig < 1 and rng < 3:
-                classification = classification_pipeline(rng, vel, ang)
+                # classification = classification_pipeline(rng, vel, ang)
                 targets.append({
                             'signal_dB': sig,
                             'range_m': rng,
                             'velocity_m_s': vel,
                             'angle_deg': ang,
-                            'classification': classification,
                 })
 
     # Convert to x, y for clustering
@@ -161,7 +160,7 @@ while True:
                 continue
             # avg_range = sum(t['range_m'] for t in cluster_targets) / len(cluster_targets)
             # avg_angle = sum(t['angle_deg'] for t in cluster_targets) / len(cluster_targets)
-            # avg_velocity = sum(t['velocity_m_s'] for t in cluster_targets) / len(cluster_targets)
+            avg_velocity = sum(t['velocity_m_s'] for t in cluster_targets) / len(cluster_targets)
             # avg_signal   = sum(t['signal_dB']     for t in cluster_targets) / len(cluster_targets)
             
     #         print(f"Cluster {cid}: avg_range = {avg_range:.2f} m, "
@@ -171,10 +170,10 @@ while True:
 
             avg_x = np.mean([t['range_m'] * math.cos(math.radians(t['angle_deg'])) for t in cluster_targets])
             avg_y = np.mean([t['range_m'] * math.sin(math.radians(t['angle_deg'])) for t in cluster_targets])
-            tracked_classification = max(set(t['classification'] for t in cluster_targets), key=[t['classification'] for t in cluster_targets].count)
+            # tracked_classification = max(set(t['classification'] for t in cluster_targets), key=[t['classification'] for t in cluster_targets].count)
 
             # Create Norfair detection
-            detections.append(Detection(points=np.array([avg_x, avg_y]), data={"classification": tracked_classification}))
+            detections.append(Detection(points=np.array([avg_x, avg_y]), data={"velocity": avg_velocity}))
     else:
         # fallback if no clusters
         for t in targets:
@@ -220,25 +219,24 @@ while True:
         # }
 
         print(obj.last_detection.data)
+        velocity = obj.last_detection.data.get("velocity", 0)
+        
+        classification = classification_pipeline(r, velocity, angle)
 
-        if obj.last_detection and obj.last_detection.data and "classification" in obj.last_detection.data:
-            tracked_classification = obj.last_detection.data["classification"]
-        else :
-            tracked_classification = "unknown"
         data = {
             "radar_id": "radar-pune",
             "area_id": "area-1",
             "track_id": obj.id,
             "range":r,
             "angle": angle,
-            "tracked_classification": tracked_classification,
+            "tracked_classification": classification,
             "timestamp": str(ist_timestamp)
         }
         final_data.append(data)
 
         # transmit_target_uart(data)
 
-        print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, Classification={tracked_classification}")
+        print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, Classification={classification}, velocity={velocity:.2f} m/s")
 
 
     print("=" * 40)

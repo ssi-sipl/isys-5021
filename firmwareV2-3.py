@@ -218,7 +218,7 @@ while True:
         #     "zone": 0,
         # }s
 
-        if obj.last_detection is None:
+        if obj.last_detection.data is None:
             # print("Last Detection is None for object ID:", obj.id)
             velocity = 0
         else:

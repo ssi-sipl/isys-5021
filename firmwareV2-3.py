@@ -219,7 +219,7 @@ while True:
         # }s
 
         if obj.last_detection is None:
-            print("Last Detection is None for object ID:", obj.id)
+            # print("Last Detection is None for object ID:", obj.id)
             velocity = 0
         else:
             velocity = obj.last_detection.data.get("velocity", 0)

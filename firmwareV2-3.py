@@ -33,7 +33,7 @@ BAUD_RATE = 57600
 def save_to_json():
     with open("FirmwareV2_Final_Data2.json", "w") as file:
         json.dump(final_data, file, indent=4)
-    print(f"Data saved to FirmwareV2_Final_Data2.json")
+    print(f"✅ Data saved to FirmwareV2_Final_Data2.json")
 
 def signal_handler(sig, frame):
     print("\nCtrl+C detected! Saving data and exiting...")
@@ -46,14 +46,14 @@ signal.signal(signal.SIGINT, signal_handler)
 
 try:
     ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
-    print("Serial Port Opened!")
+    print("✅ Serial Port Opened!")
 except serial.SerialException as e:
-    print(f"[ERROR] Failed to open serial port {SERIAL_PORT}: {e}")
+    print(f"❎ Failed to open serial port {SERIAL_PORT}")
     ser = None  # Prevents using an invalid serial object
 
 def transmit_target_uart(target):
     if ser is None:
-        print("[ERROR] Serial port is not available. Cannot send data.")
+        print("❎ Serial port is not available. Cannot send data.")
         return
 
     try:
@@ -61,14 +61,14 @@ def transmit_target_uart(target):
         try:
             json_data = json.dumps(target)
         except (TypeError, ValueError) as e:
-            print(f"[ERROR] JSON serialization failed: {e}")
+            print(f"❎ JSON serialization failed: {e}")
             return
         
         # Attempt to encode the data
         try:
             encoded_data = (json_data + "\n").encode('utf-8')
         except UnicodeEncodeError as e:
-            print(f"[ERROR] Encoding to UTF-8 failed: {e}")
+            print(f"❎ Encoding to UTF-8 failed: {e}")
             return
         
         # Attempt to write to the serial port
@@ -76,12 +76,12 @@ def transmit_target_uart(target):
             ser.write(encoded_data)
             # print(f"[INFO] Sent over UART: {json_data}")
         except serial.SerialTimeoutException as e:
-            print(f"[ERROR] Serial write timeout: {e}")
+            print(f"❎ Serial write timeout: {e}")
         except serial.SerialException as e:
-            print(f"[ERROR] Serial write failed: {e}")
+            print(f"❎ Serial write failed: {e}")
 
     except Exception as e:
-        print(f"[ERROR] Unexpected error in publish_target: {e}")
+        print(f"❎ Unexpected error in publish_target: {e}")
 
 # Radar setup
 UDP_IP = "192.168.252.2"

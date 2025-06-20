@@ -218,7 +218,6 @@ while True:
         #     "zone": 0,
         # }
 
-        print(obj.last_detection.data)
         velocity = obj.last_detection.data.get("velocity", 0)
         
         classification = classification_pipeline(r, velocity, angle)
@@ -235,9 +234,10 @@ while True:
             "tracked_classification": classification,
             "timestamp": str(ist_timestamp)
         }
+
         final_data.append(data)
 
-        # transmit_target_uart(data)
+        transmit_target_uart(data)
 
         print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, Classification={classification}, velocity={velocity:.2f} m/s")
 

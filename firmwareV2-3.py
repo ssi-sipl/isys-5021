@@ -226,10 +226,8 @@ while True:
         
         classification = classification_pipeline(r, velocity, angle)
 
-        if classification == "bicycle":
+        if classification == "uav" or classification == "bicycle":
             classification = "person"
-        elif classification == "uav" :
-            classification = "others"
 
         data = {
             "radar_id": "radar-pune",

@@ -125,7 +125,7 @@ while True:
             sig, rng, vel, ang, _, _ = vals[base:base+6]
             
             if i < nr_of_targets:
-                if rng < 20:
+                if rng < 150:
                 # classification = classification_pipeline(rng, vel, ang)
                     targets.append({
                                 'signal_dB': sig,

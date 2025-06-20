@@ -216,7 +216,7 @@ while True:
         #     "tracked_classification": "person",
         #     "track_id": obj.id,
         #     "zone": 0,
-        # }s
+        # }
 
         if obj.last_detection.data is None:
             # print("Last Detection is None for object ID:", obj.id)
@@ -234,7 +234,7 @@ while True:
             "area_id": "area-1",
             "track_id": obj.id,
             "range":r,
-            "angle": angle,
+            "aizmuth_angle": angle,
             "tracked_classification": classification,
             "timestamp": str(ist_timestamp)
         }

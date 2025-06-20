@@ -173,7 +173,8 @@ while True:
             avg_y = np.mean([t['range_m'] * math.sin(math.radians(t['angle_deg'])) for t in cluster_targets])
 
             # Create Norfair detection
-            detections.append(Detection(points=np.array([avg_x, avg_y]),data={"velocity_m_s": np.mean([t['velocity_m_s'] for t in cluster_targets]), "signal_dB": np.mean([t['signal_dB'] for t in cluster_targets])}))
+            detections.append(Detection(points=np.array([avg_x, avg_y]),data={"classification": max(set(t['classification'] for t in cluster_targets), key=[t['classification'] for t in cluster_targets].count)
+}))
     else:
         # fallback if no clusters
         for t in targets:
@@ -217,6 +218,8 @@ while True:
         #     "track_id": obj.id,
         #     "zone": 0,
         # }
+
+        print(obj.last_detection.data)
 
 
         data = {

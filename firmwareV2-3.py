@@ -221,21 +221,24 @@ while True:
 
         print(obj.last_detection.data)
 
-
+        if obj.last_detection and obj.last_detection.data and "classification" in obj.last_detection.data:
+            tracked_classification = obj.last_detection.data["classification"]
+        else :
+            tracked_classification = "unknown"
         data = {
             "radar_id": "radar-pune",
             "area_id": "area-1",
             "track_id": obj.id,
             "range":r,
             "angle": angle,
-            "classification": "person",
+            "tracked_classification": tracked_classification,
             "timestamp": str(ist_timestamp)
         }
         final_data.append(data)
 
-        transmit_target_uart(data)
+        # transmit_target_uart(data)
 
-        print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°")
+        print(f"Track ID {obj.id}: Range={r:.2f} m, Angle={angle:.2f}°, Classification={tracked_classification}")
 
 
     print("=" * 40)

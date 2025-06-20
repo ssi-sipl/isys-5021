@@ -216,9 +216,13 @@ while True:
         #     "tracked_classification": "person",
         #     "track_id": obj.id,
         #     "zone": 0,
-        # }
+        # }s
 
-        velocity = obj.last_detection.data.get("velocity", 0)
+        if obj.last_detection is None:
+            print("Last Detection is None for object ID:", obj.id)
+            velocity = 0
+        else:
+            velocity = obj.last_detection.data.get("velocity", 0)
         
         classification = classification_pipeline(r, velocity, angle)
 
